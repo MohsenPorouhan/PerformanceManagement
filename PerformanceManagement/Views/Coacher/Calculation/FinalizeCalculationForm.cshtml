@@ -1,0 +1,128 @@
+﻿@{
+    Layout = null;
+}
+
+<form method="post" id="finalizeCalculationFrm" class="form-horizontal">
+    <div class="modal fade department modalClass" id="finalizeCalculationModal" tabindex="" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close modalclose2"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 id="sabt_hazine_personnel" class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        عقبگرد محاسبات
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+
+                        <b>در صورت نهایی کردن ، محاسبات مجدد امکان پذیر نمی باشد. آیا از نهایی کردن محاسبات انجام شده اطمینان دارید؟</b>
+
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="finalizeCalculationSubmit">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel2" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+<script>
+    $('#finalizeCalculationModal').modal('show');
+    $("#finalizeCalculationFrm").submit(function (e) {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        //debugger;
+
+        var form = $('#finalizeCalculationFrm');
+
+        //$("#articleSubmit").addClass('disabled');
+        $("#finalizeCalculationSubmit").attr("disabled", "disabled");
+        $("#cancel2").attr("disabled", "disabled");
+        $(".modalclose2").attr("disabled", "disabled");
+
+        var btn = $("#finalizeCalculationSubmit");
+        btn.button('loading');
+        //var postdata = new FormData(this);
+        //listOfSubTask = JSON.stringify(listOfSubTask);
+        //var postdata = $(this).serializeArray();
+        //postdata.append(JSON.stringify(listOfSubTask));
+        //console.log(postdata);
+        $.ajax(
+            {
+                url: '/Calculation/FinalizeCalculation',
+                //url : formURL,
+                //data: postdata,
+                //data: JSON.stringify(CoveredEmployee),
+                //data: "firstName=" + $("fn").val(),
+                //cache: false,
+                contentType: false,
+                processData: false,
+                //datatype: 'json',
+                //contentType: 'application/json; charset=utf-8',
+                type: 'POST',
+
+                success: function (data, textStatus, jqXHR) {
+                    var message = "";
+                    if (data > 0) {
+                        message += "<span>محاسبات مورد نظر با موفقیت نهایی گردید</span><br><br>";
+                        toastr.options.timeOut = "15000";
+                        toastr.options.positionClass = "toast-top-center";
+                        toastr.success(message);
+                        dt.ajax.url("/Calculation/GetCalculationScoreList");
+                        dt.ajax.reload();
+                    }
+                    else if (data == 0) {
+                        message += "<span>نهایی کردن محاسبات موفقیت آمیز نبود.</span><br><br>";
+                        toastr.options.timeOut = "15000";
+                        toastr.options.positionClass = "toast-top-center";
+                        toastr.info(message);
+                    } else if (data == -1) {
+                        message += "<span>در دوره جاری محاسبات قبلا نهایی شده است.</span><br><br>";
+                        toastr.options.timeOut = "15000";
+                        toastr.options.positionClass = "toast-top-center";
+                        toastr.info(message);
+                    } else if (data == -2) {
+                        message += "<span>محاسباتی در سیستم موجود نمی باشد لازم است ابتدا محاسبات را اجرا نمایید</span><br><br>";
+                        toastr.options.timeOut = "15000";
+                        toastr.options.positionClass = "toast-top-center";
+                        toastr.info(message);
+                    }
+
+                    //resetFormValidation();
+                    $("#finalizeCalculationFrm")[0].reset();
+                    $("#finalizeCalculationModal").modal("hide");
+                    //$("#periodDefinitionTable").DataTable().destroy();
+                    //show_dataTable();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("erorr00000");
+                    alert(jqXHR);
+                    alert(textStatus);
+                }
+            }).always(function () {
+                $("#finalizeCalculationSubmit").button('reset');
+                $("#cancel2").removeAttr("disabled");
+                $(".modalclose2").removeAttr("disabled");
+            });
+        //$.getScript('/assets/javascript/articleForm.js', function () {
+        //    ArticleForm.init(postdata);
+        //    $("#articleForm")[0].reset();
+        //});
+        e.preventDefault(e);
+
+    });
+</script>

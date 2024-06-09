@@ -1,0 +1,1272 @@
+﻿@{
+    Layout = null;
+}
+
+<form id="taskAssignmentForm" method="post" class="form-horizontal">
+    <div class="modal fade" id="task_assign" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        اختصاص اهداف و فعالیت ها به نفرات زیر مجموعه
+                    </h4>
+                </div>
+                <input type="hidden" id="numberOfSubTask" name="numberOfSubTask" />
+                <input type="hidden" id="numberOfTextTask" name="numberOfTextTask" />
+                <div class="modal-body">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            <span></span><br />
+                            پر کردن فيلدهاي ستاره دار یا قرمز رنگ مربوط به وظایف و شاخص ها اجباري مي باشد.
+                        </div>
+
+                        <div class="panel-group accordion" id="accordion3">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a class="accordion-toggle accordion-toggle-styled" data-toggle="collapse" data-target="#collapse_3_1" href="#">
+                                            انتخاب کارمند/کارمندان
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse_3_1" class="panel-collapse in">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">تعیین وظیفه از منابع:</label>
+                                                    <div class="col-md-9">
+                                                        <div class="checkbox-list">
+                                                            <label class="checkbox-inline">
+                                                                <input class="chk-click" disabled type="checkbox" value="1"> شناسنامه شغلی
+                                                            </label>
+                                                            <label class="checkbox-inline">
+                                                                <input id="subTaskCheckbox" disabled name="subTaskCheckbox" class="chk-click" type="checkbox" value="2"> وظایف شکسته شده
+                                                            </label>
+                                                            <label class="checkbox-inline">
+                                                                <input id="textCheckbox" name="textCheckbox" checked="checked" class="chk-click" type="checkbox" value="3"> متنی
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">
+                                                        انتخاب دوره
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-md-9">
+                                                        <div class="input-icon right">
+                                                            <i class="fa"></i>
+                                                            <select name="periodDefinitionId" id="periodDefinitionId" class="form-control input-medium"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label id="mojri_name_label" class="control-label col-md-3">
+                                                        انتخاب مسئولیت واحد سازمانی
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-md-9">
+                                                        <div class="input-icon right">
+                                                            <i class="fa"></i>
+                                                            <select name="departmentSupervisor" id="departmentSupervisor" class="form-control input-medium"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <!--/span-->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label id="mojri_name_label" class="control-label col-md-3">
+                                                        انتخاب معاونت
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-md-9">
+                                                        <div class="input-icon right">
+                                                            <i class="fa"></i>
+                                                            <select name="assistant" id="assistant" class="select2 select2-2 form-control input-medium" multiple></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">
+                                                        انتخاب مدیریت
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-md-9">
+                                                        <div class="input-icon right">
+                                                            <i class="fa"></i>
+                                                            <select name="management" id="management"
+                                                                    class="select2 select2-2 form-control input-medium" multiple>
+                                                                <option></option>
+                                                                <option value='0'>همه</option>
+                                                                <option value='-1'>هیچکدام</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--/span-->
+                                        </div>
+                                        <div class="row">
+                                            <!--/span-->
+                                            <div id="chairmanshipDiv" class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">
+                                                        انتخاب ریاست
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-md-9">
+                                                        <div class="input-icon right">
+                                                            <i class="fa"></i>
+                                                            <select name="chairmanship" id="chairmanship"
+                                                                    class="select2 select2-2 form-control input-medium" multiple>
+                                                                <option></option>
+                                                                <option value='0'>همه</option>
+                                                                <option value='-1'>هیچکدام</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="departmentDiv" class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">
+                                                        انتخاب واحد
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-md-9">
+                                                        <div class="input-icon right">
+                                                            <i class="fa"></i>
+                                                            <select name="department" id="department"
+                                                                    class="select2 select2-2 form-control input-medium" multiple></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--/span-->
+                                        </div>
+
+                                        <div class="row">
+                                            <div id="employeeDiv" class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">
+                                                        انتخاب کارمند/کارمندان
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-md-9">
+                                                        <div class="input-icon right">
+                                                            <i class="fa"></i>
+                                                            <select name="employee" id="employee" class="form-control select2 select2-2 input-medium" multiple>
+                                                                <option></option>
+                                                                <option value='0'>همه</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--/span-->
+                                            <!--/span-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default hidden" id="subTaskResource">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a class="accordion-toggle accordion-toggle-styled @*collapsed*@" data-toggle="collapse" data-target="#collapse_3_2" @*data-parent="#accordion3" *@ href="#">
+                                            اختصاص از وظایف شکسته شده
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse_3_2" class="panel-collapse collapse in">
+                                    <div id="subTaskCollapse" class="panel-body">
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <a href="#" id="addSubTask" class="btn green btn-add">
+                                                        افزودن زیر فعالیت <i class="fa fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="textResource" class="panel panel-default hidden">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a class="accordion-toggle accordion-toggle-styled" data-toggle="collapse" data-target="#collapse_3_3" href="#">
+                                            اختصاص وظایف به صورت متنی
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse_3_3" class="panel-collapse collapse in">
+                                    <div id="collapseTextTask" class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    @*<label class="control-label col-md-5">
+                                                        افزودن فعالیت
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>*@
+                                                    @*<div class="col-md-7 input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input id="guestInput" name="numberOfGuest" type="text" class="form-control">
+                                                        <a href="#" id="guestInput" class="btn green">
+                                                            افزودن زیر فعالیت <i class="fa fa-plus"></i>
+                                                        </a>
+                                                    </div>*@
+                                                    <a href="#" id="addTextResource" class="btn green btn-add">
+                                                        افزودن فعالیت <i class="fa fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <!-- END FORM-->
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="saveTaskAssignment">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div id="critriaPlaceHolder"></div>
+</form>
+<script type="text/html" id="appendSubTask">
+    <div class="row" index="{0}">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label col-md-2">
+                    {0}
+                    <span class="required">
+
+                    </span>
+                </label>
+                <div class="col-md-10">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select id="subTaskSelect2{0}" name="subTaskSelect2{0}" class="select2 select2-2 subTaskSelect2 form-control">
+                            @*
+                            <optgroup label="گروه 1">
+                                <option value="1">زیرفعالیت 1</option>
+                            </optgroup>*@
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @*<label class="control-label col-md-2">
+                    <span class="required">
+
+                    </span>
+                </label>*@
+                <div class="col-md-12">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <textarea id="tagEditorSubTask{0}" name="tagEditorSubTask{0}" class="form-control tag-editor-hidden-src tagEditorSubTask"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select id="participant1Select2{0}" name="participant1Select2{0}" class="select2 select2-2 participant1Select2 form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" index="{0}" class="btn btn-xs purple removeSubTaskBtnn">
+            <i class="fa fa-times"></i>
+        </a>
+    </div>
+</script>
+<script type="text/html" id="appendTextTask">
+    <div class="row" index="{0}">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label col-md-0">
+                    {0}
+                </label>
+                <div class="col-md-12">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" id="textTaskInput{0}" name="textTaskInput{0}" class="form-control textTaskInput" placeholder="تایپ وظیفه مورد نظر" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <textarea id="tagEditorTextTask{0}" name="tagEditorTextTask{0}" class="form-control tag-editor-hidden-src tagEditorCriteria"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 hidden">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select id="participant2Select2{0}" name="participant2Select2{0}" class="select2 select2-2 participant2Select2 form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group">
+                @*<label class="control-label col-md-2">
+                    <span class="required">
+
+                    </span>
+                </label>*@
+                <div class="col-md-12">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select id="relatedWithTextTask{0}" name="relatedWithTextTask{0}" class="select2 relatedWithTextTask form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <button id="criteriaBtn{0}" type="button" loadCriteria="false" index="{0}" data-toggle="modal" class="btn btn-link criteriaBtn">تعریف شاخص ها</button>
+        </div>
+
+
+        <a href="#" index="{0}" class="btn btn-xs purple removeTextTaskBtnn">
+            <i class="fa fa-times"></i>
+        </a>
+    </div>
+</script>
+<script type="text/html" id="addCriteria">
+    <div class="modal fade department modalClass" id="criteriaModal{0}" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        تعریف شاخص برای وظیفه {0}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger2" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <a href="#" id="addCriteriaBtn{0}" index="{0}" class="btn green btn-add addCriteriaBtn">
+                                        افزودن شاخص <i class="fa fa-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="criteriaRow{0}"></div>
+
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn green input-sm input-small" data-dismiss="modal">تایید</button>
+                    @*<button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>*@
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</script>
+<script type="text/html" id="addCriteriaRow">
+    <div class="row" index="{0}">
+        <!--/span-->
+        <div class="col-md-12">
+            <div class="form-group">
+                @*<label class="control-label col-md-1">
+                    عنوان
+                    <span class="required">
+                        *
+                    </span>
+                </label>*@
+                <div class="col-md-12">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" name="criteriaTitle{0}" id="criteriaTitle{0}" class="form-control criteriaTitle" placeholder="عنوان" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @*<label class="control-label col-md-3">
+                    نحوه محاسبه
+                    <span class="required">
+                        *
+                    </span>
+                </label>*@
+                <div class="col-md-12">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" name="calculationWay{0}" id="calculationWay{0}" class="form-control calculationWay" placeholder="نحوه محاسبه" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                @*<label class="control-label col-md-4">
+                    حد پذیرش
+                    <span class="required">
+                        *
+                    </span>
+                </label>*@
+                <div class="col-md-12">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" name="limitOfAdmission{0}" id="limitOfAdmission{0}" class="form-control limitOfAdmission" placeholder="حد پذیرش" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                @*<label>Checkboxes</label>*@
+                <div class="checkbox-list">
+                    <label>
+                        <input type="checkbox" name="isProcessingCriteria{0}" id="isProcessingCriteria{0}"> آیا از شاخص های شناسنامه فرآیند می باشد؟
+                    </label>
+                </div>
+            </div>
+        </div>
+        <a href="#" index="{0}" class="btn btn-xs purple removeTextCriteriaBtnn">
+            <i class="fa fa-times"></i>
+        </a>
+    </div>
+    <hr />
+</script>
+<script>
+    $("#task_assign").modal("show");
+    $('.select2-2').select2({
+        placeholder: "انتخاب کنید",
+        allowClear: true
+    });
+    var clicked = false;
+    var citeriaModalIndex = 1;
+    var citeriaRowIndex = 1;
+    var optgroupId = 0;
+    //$("#taskAssignmentBtn").click(function () {
+    $.ajax({
+        type: 'get',
+        url: '/TaskAssignment/GetDepartmentSupervisorList',
+        async: false,
+        //data: { roleId: roleId },
+        success: function (department) {
+            $("#departmentSupervisor").empty();
+            $("#departmentSupervisor").append("<option></option>");
+
+            $(department).each(function (i, d) {
+                //$("#parentName").select2("val", d.departmentId);
+                var hasPrimaryPosition = false;
+                if (d.PositionType == 1) {
+                    hasPrimaryPosition = true;
+                    $("#departmentSupervisor").append("<option selected value='" + d.EvaluationHierarchyId + "-" + d.Levell + "'>" + d.ShortName + "</option>");
+                } else {
+                    $("#departmentSupervisor").append("<option value='" + d.EvaluationHierarchyId + "-" + d.Levell + "'>" + d.ShortName + "</option>");
+                }
+                if (!hasPrimaryPosition) {
+                    $("#departmentSupervisor").val($('#departmentSupervisor').children('option').first().next().val());
+                }
+            })
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+    $.ajax({
+        type: 'get',
+        url: '/share/GetPeriodDefinition',
+        async: false,
+        //data: { roleId: roleId },
+        success: function (periodDefinition) {
+            $("#periodDefinitionId").empty();
+            $("#periodDefinitionId").append("<option></option>");
+
+            $(periodDefinition).each(function (i, p) {
+                //$("#parentName").select2("val", d.departmentId);
+                $("#periodDefinitionId").append("<option value='" + p.periodDefinitoionId + "'>" + p.periodTitle + " (" + p.periodCode + ")</option>");
+            })
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+    //$("#saveTaskAssignment").trigger("click");
+    //   clicked = true;
+    //})
+    $('#departmentSupervisor').on('change', function () {
+        $("#management").rules("add", {
+            required: false
+        });
+        $("#chairmanship").rules("add", {
+            required: false
+        });
+        $("#department").rules("add", {
+            required: false
+        });
+        $("#employee").rules("add", {
+            required: false
+        });
+        var arr = $('#departmentSupervisor').children('option:selected').val().split("-");
+        $.ajax({
+            type: 'get',
+            url: '/TaskAssignment/GetParentDepartmentList',
+            data: { departmentId: arr[0], level: arr[1] },
+            async: false,
+            success: function (data) {
+                var haveManagement = false;
+                var havechairmanship = false;
+                var haveDepartment = false;
+                $("#assistant").empty();
+                $("#assistant").removeAttr("disabled", "disabled");
+                $("#assistant").select2("val", "");
+                $("#management").empty();
+                $("#management").removeAttr("disabled", "disabled");
+                $("#management").select2("val", "");
+                $("#chairmanship").empty();
+                $("#chairmanship").removeAttr("disabled", "disabled");
+                $("#chairmanship").select2("val", "");
+                $("#department").empty();
+                $("#department").removeAttr("disabled", "disabled");
+                $("#department").select2("val", "");
+
+                $("#chairmanshipDiv").removeClass("hidden");
+                $("#departmentDiv").removeClass("hidden");
+                $("#employeeDiv").removeClass("hidden");
+                $(data).each(function (i, d) {
+                    if (d.Levell == 0) {
+                        $("#assistant").append("<option value='" + d.id + "'>" + d.text + "</option>");
+                        //$("#assistant").select2("val", d.id);
+                        $("#assistant").val(d.id).select2();
+                        $("#assistant").attr("disabled", "disabled");
+                        $("#management").rules("add", {
+                            required: true,
+                            messages: {
+                                required: "پرکردن این فیلد الزامی می باشد",
+                            }
+                        });
+                    }
+                    if (d.Levell == 1) {
+                        $("#assistant").append("<option value='" + d.id + "'>" + d.text + "</option>");
+                        //$("#assistant").select2("val", d.id);
+                        $("#assistant").val(d.id).select2();
+                        $("#assistant").attr("disabled", "disabled");
+                        $("#management").rules("add", {
+                            required: true,
+                            messages: {
+                                required: "پرکردن این فیلد الزامی می باشد",
+                            }
+                        });
+                    }
+                    if (d.Levell == 2) {
+                        $("#management").append("<option value='" + d.id + "'>" + d.text + "</option>");
+                        //$("#management").select2("val", d.id);
+                        $("#management").val(d.id).select2();
+                        $("#management").attr("disabled", "disabled");
+                        haveManagement = true;
+                        $("#chairmanship").rules("add", {
+                            required: true,
+                            messages: {
+                                required: "پرکردن این فیلد الزامی می باشد",
+                            }
+                        });
+                    }
+                    if (d.Levell == 3) {
+                        $("#chairmanship").append("<option value='" + d.id + "'>" + d.text + "</option>");
+                        //$("#chairmanship").select2("val", d.id);
+                        $("#chairmanship").val(d.id).select2();
+
+                        $("#chairmanship").attr("disabled", "disabled");
+                        havechairmanship = true;
+                        $("#department").rules("add", {
+                            required: true,
+                            messages: {
+                                required: "پرکردن این فیلد الزامی می باشد",
+                            }
+                        });
+                    }
+                    if (d.Levell == 4) {
+                        $("#department").append("<option value='" + d.id + "'>" + d.text + "</option>");
+                        //$("#department").select2("val", d.id);
+                        $("#department").val(d.id).select2();
+
+                        $("#department").attr("disabled", "disabled");
+                        haveDepartment = true;
+                        $("#employee").rules("add", {
+                            required: true,
+                            messages: {
+                                required: "پرکردن این فیلد الزامی می باشد",
+                            }
+                        });
+                    }
+                })
+                if (!haveManagement) {
+                    $("#chairmanshipDiv").addClass("hidden");
+                    $("#departmentDiv").addClass("hidden");
+                    $("#employeeDiv").addClass("hidden");
+                }
+                if (!havechairmanship) {
+                    $("#departmentDiv").addClass("hidden");
+                    $("#employeeDiv").addClass("hidden");
+                }
+                if (!haveDepartment) {
+                    $("#employeeDiv").addClass("hidden");
+                }
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+
+        $.ajax({
+            type: 'get',
+            url: '/TaskAssignment/GetDirectEmployee',
+            data:
+            {
+                departmentId: arr[0]
+                //, level: arr[1]
+            },
+            success: function (data) {
+                if (arr[1] == 0) {
+                    $("#management").empty();
+                    $("#management").select2("val", "");
+                    $(data).each(function (i, d) {
+                        $("#management").append("<option value='" + d.PeopleId + "-" + d.EvaluationHierarchyId + "'>" + d.fullname + "</option>");
+                    });
+                }
+                if (arr[1] == 1) {
+                    $("#management").empty();
+                    $("#management").select2("val", "");
+                    $(data).each(function (i, d) {
+                        $("#management").append("<option value='" + d.PeopleId + "-" + d.EvaluationHierarchyId + "'>" + d.fullname + "</option>");
+                    });
+                }
+                if (arr[1] == 2) {
+                    $("#chairmanship").empty();
+                    $("#chairmanship").select2("val", "");
+                    $(data).each(function (i, d) {
+                        $("#chairmanship").append("<option value='" + d.PeopleId + "-" + d.EvaluationHierarchyId + "'>" + d.fullname + "</option>");
+                    });
+                }
+                if (arr[1] == 3) {
+                    $("#department").empty();
+                    $("#department").select2("val", "");
+                    $(data).each(function (i, d) {
+                        $("#department").append("<option value='" + d.PeopleId + "-" + d.EvaluationHierarchyId + "'>" + d.fullname + "</option>");
+                    });
+                }
+                if (arr[1] == 4) {
+                    $("#employee").empty();
+                    $("#employee").select2("val", "");
+                    $(data).each(function (i, d) {
+                        $("#employee").append("<option value='" + d.PeopleId + "-" + d.EvaluationHierarchyId + "'>" + d.fullname + "</option>");
+                    });
+                }
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        ///Begin of load subTaskList
+        //$("select.subTaskSelect2").select2("val", "");
+        $("select.subTaskSelect2").val("").select2();
+        optgroupId = 0;
+        getSubTaskList(optgroupId++);
+        ///End of load subTaskList
+    });
+
+    var i = 1;
+    //begin    (whithout .chk-click)
+    $('#textResource').removeClass("hidden");
+    setTimeout(function () { $('#addTextResource').trigger('click') }, 2);
+    //end
+    $(".chk-click").click(function () {
+        //$(".chk-click").each(function () {
+        if ($(this).is(":checked") && $(this).val() == '1') {
+            alert('برای شناسنامه شغل هم به مانند شکست وظایف می باشد با این تفاوت که تعریف شاخص هم امکان پذیر می گردد');
+        }
+        if ($(this).is(":checked") && $(this).val() == '2') {
+            if ($('#departmentSupervisor').val() == '') {
+                $(this).prop("checked", false);
+                alert('ابتدا مسئولیت واحد سازمانی را انتخاب نمایید');
+            } else {
+                $('#subTaskResource').removeClass("hidden");
+                $('#addSubTask').trigger('click');
+            }
+        } else if ($(this).is(":unchecked") && $(this).val() == '2') {
+            $('#subTaskResource').addClass("hidden");
+            //$('#guestH3').addClass("hidden");
+            //$('#guestTable').addClass("hidden");
+            //$("#tableBody").children().remove();
+            $("#subTaskCollapse .row:gt(0)").remove();
+            i = 1;
+        }
+        if ($(this).is(":checked") && $(this).val() == '3') {
+            $('#textResource').removeClass("hidden");
+            $('#addTextResource').trigger('click');
+        } else if ($(this).is(":unchecked") && $(this).val() == '3') {
+            //$('#textTable').addClass("hidden");
+            $('#textResource').addClass("hidden");
+            //$("#textTbleBody").children().remove();
+            $("#collapseTextTask .row:gt(0)").remove();
+            $("#critriaPlaceHolder .modal ").remove();
+            j = 1;
+            citeriaModalIndex = 1;
+        }
+        //});
+    })
+
+    function getSubTaskList(optgroupIndex) {
+        var selectedResponsibility = $('#departmentSupervisor').children('option:selected').val().split("-");
+
+        $.ajax({
+            type: 'get',
+            url: '/TaskAssignment/GetParentOfSubTaskList',
+            data:
+            {
+                departmentId: selectedResponsibility[0]
+                //, level: arr[1]
+            },
+            async: false,
+            success: function (data) {
+                //$("select.subTaskSelect2").empty();
+                $("select#subTaskSelect2" + (i - 1)).append("<option></option>");
+                $(data).each(function (i2, d) {
+                    var optionGroupId = "opt" + i2 + "_" + optgroupIndex;
+                    $("select#subTaskSelect2" + (i - 1)).append("<optgroup id='" + optionGroupId + "' label='" + d.Title + "'></optgroup>");
+                    $.ajax({
+                        type: 'get',
+                        url: '/TaskAssignment/GetSubTaskList',
+                        data:
+                        {
+                            departmentId: selectedResponsibility[0]
+                            , parentDepartmentId: d.TaskId
+                        },
+                        async: false,
+                        success: function (data) {
+                            $("select#subTaskSelect2" + (i - 1) + " optgroup[id=" + optionGroupId + "]").append("<option></option>");
+                            $(data).each(function (ii, dd) {
+                                $("select#subTaskSelect2" + (i - 1) + " optgroup[id=" + optionGroupId + "]").append("<option value='" + dd.TaskId + "'>" + dd.Title + "</option>");
+                            })
+                        },
+                        error: function (status) {
+                            alert("Error");
+                        }
+                    })
+                });
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    }
+    function getParticipant(param) {
+        $.ajax({
+            type: 'get',
+            url: '/share/ParticipantList',
+            //data: { roleId: roleId },
+            async: false,
+            success: function (data) {
+                //$("select" + param).empty();
+                $("select" + param).append("<option></option>");
+
+                $(data).each(function (i, d) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("select" + param).append("<option value='" + d.EvaluationHierarchyId + '-' + d.PeopleId + "'>" + d.fullname + "</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    }
+    var template = jQuery.validator.format($.trim($("#appendSubTask").html()));
+    $("#addSubTask").click(function () {
+        $(template(i++)).appendTo("#subTaskCollapse");
+        $("#tagEditorSubTask" + (i - 1)).tagEditor({
+            placeholder: 'نیازهای آموزشی مورد نظر'
+        });
+
+        getSubTaskList(optgroupId++);
+        $('#subTaskSelect2' + (i - 1)).select2({
+            placeholder: "انتخاب زیرفعالیت",
+            allowClear: true
+        });
+
+        var participantName = "#participant1Select2" + (i - 1);
+        getParticipant(participantName);
+        $('#participant1Select2' + (i - 1)).select2({
+            placeholder: "انتخاب سایر ارزیاب",
+            allowClear: true
+        });
+
+        $('select.subTaskSelect2').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+
+    });
+
+    var j = 1;
+
+    var template2 = jQuery.validator.format($.trim($("#appendTextTask").html()));
+    var template3 = jQuery.validator.format($.trim($("#addCriteria").html()));
+    var template4 = jQuery.validator.format($.trim($("#addCriteriaRow").html()));
+
+    function getRelatedTask(param) {
+        $.ajax({
+            type: 'get',
+            url: '/TaskAssignment/RelatedTaskList',
+            data: { departmentId: $('#departmentSupervisor').children('option:selected').val().split("-")[0] },
+            async: false,
+            success: function (data) {
+                //$("select" + param).empty();
+                $("select" + param).append("<option></option>");
+
+                $(data).each(function (i, d) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("select" + param).append("<option value='" + d.taskId + "'>" + d.title + "</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    }
+    $("#addTextResource").click(function () {
+        var triggerIndex = citeriaModalIndex;
+        $(template2(j++)).appendTo("#collapseTextTask");
+        $(template3(citeriaModalIndex++)).appendTo("#critriaPlaceHolder");
+        $('#critriaPlaceHolder #addCriteriaBtn' + triggerIndex).trigger('click');
+        $("#tagEditorTextTask" + (j - 1)).tagEditor({
+            placeholder: 'نیازهای آموزشی مورد نظر'
+        });
+
+        var participantName2 = "#participant2Select2" + (j - 1);
+        getParticipant(participantName2);
+        $('#participant2Select2' + (j - 1)).select2({
+            placeholder: "انتخاب سایر ارزیاب",
+            allowClear: true
+        });
+
+        var relatedWithTask = "#relatedWithTextTask" + (j - 1);
+        getRelatedTask(relatedWithTask);
+        $('#relatedWithTextTask' + (j - 1)).select2({
+            placeholder: "در راستای فعالیت",
+            allowClear: true
+        });
+
+        $('.textTaskInput').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+        $('.relatedWithTextTask').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+        $(".textTaskInput").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/TaskAssignment/PriorTaskOfPeriod",
+                    dataType: "json",
+                    type: "get",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                console.log("Selected: " + ui.item.value + "---" + ui.item.id);
+            }
+        });
+    });
+    $("#collapseTextTask").on('click', '.criteriaBtn', function () {
+        var index = $(this).attr("index");
+        $("#criteriaModal" + index).modal('show');
+    });
+    $('#critriaPlaceHolder').on('click', '.addCriteriaBtn', function () {
+        var index = $(this).attr("index");
+
+        $(template4(citeriaRowIndex++)).appendTo($("#criteriaRow" + index));
+        $('.criteriaTitle').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+        $('.limitOfAdmission').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+        $('.calculationWay').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+    });
+    $("#taskAssignmentForm").submit(function (e) {
+        var form = $('#taskAssignmentForm');
+        var error2 = $('.alert-danger', form);
+        var success2 = $('.alert-success', form);
+        $("#numberOfSubTask").val(i - 1);
+        $("#numberOfTextTask").val(j - 1);
+
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                periodDefinitionId: {
+                    required: true
+                },
+                departmentSupervisor: {
+                    required: true
+                }
+            },
+            messages: {
+                periodDefinitionId: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                departmentSupervisor: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                success2.hide();
+                error2.show();
+                App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+            showErrors: function (errorMap, errorList) {
+                var errors = this.numberOfInvalids();
+                if (errors) {
+                    var message = errors == 1
+                        ? 'فرم مورد نظر 1 خطا دارد '
+                        : 'فرم مورد نظر ' + errors + ' خطا دارد.'
+                    message = message + ' لطفا خطا/خطاها را رفع نمایید '
+                    $(".alert-danger span ").empty().html(message);
+                    error2.show();
+                    //console.log(errorList)
+                    //console.log(errorMap)
+                    //$(errorList).each(function (i, d) {
+                    //    console.log(d.message)
+                    //})
+                } else {
+                    error2.hide();
+                }
+                this.defaultShowErrors();
+            },
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                success2.show();
+                error2.hide();
+            }
+        })
+
+        if ($("#subTaskCheckbox").is(":unchecked") && $("#textCheckbox").is(":unchecked") && clicked == true) {
+            alert('حداقل یکی از منابع مورد نظر باید در حالت انتخاب شده باشد');
+            return false;
+        }
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+
+            var CoveredEmployee = {};
+            var listOfSubTask = [];
+            var listOfTextTask = [];
+            CoveredEmployee.PeriodDefinitionId = $("#periodDefinitionId").val();
+            CoveredEmployee.AllocatorDepartmentId = $("#departmentSupervisor").val().split("-")[0];
+            if ($("#management").attr("disabled") != "disabled") {
+                CoveredEmployee.Receiver = $("#management").val();
+            } else if ($("#chairmanship").attr("disabled") != "disabled") {
+                CoveredEmployee.Receiver = $("#chairmanship").val();
+            } else if ($("#department").attr("disabled") != "disabled") {
+                CoveredEmployee.Receiver = $("#department").val();
+            } else if ($("#employee").attr("disabled") != "disabled") {
+                CoveredEmployee.Receiver = $("#employee").val();
+            }
+            var subTaskId = [];
+            var duplicateTask = true;
+            $("#subTaskCollapse div[class=row]").next().each(function (i, d) {
+                var SubTaskView = {};
+                //SubTaskView.SubTaskId = $(" #subTaskSelect2" + (i + 1)).val();
+                //SubTaskView.TrainingNeed = $(" #tagEditorSubTask" + (i + 1)).val();
+                //SubTaskView.ParticipantId = $(" #participant1Select2" + (i + 1)).val().split("-")[1];
+                //SubTaskView.ParticipantDepartmentId = $(" #participant1Select2" + (i + 1)).val().split("-")[0];
+                if (subTaskId.length > 0) {
+                    $(subTaskId).each(function (i, d2) {
+                        if (d2 == $(d).find("select[id^='subTaskSelect2']").val()) {
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.error("فعالیت های تکراری را حذف نمایید");
+                            duplicateTask = false;
+                            return false;
+                        }
+                    })
+                }
+                if (!duplicateTask) {
+                    return false;
+                }
+                subTaskId.push($(this).find("select[id^='subTaskSelect2']").val());
+
+                SubTaskView.SubTaskId = $(this).find("select[id^='subTaskSelect2']").val();
+                SubTaskView.TrainingNeed = $(this).find("textarea[id^='tagEditorSubTask']").val();
+                SubTaskView.ParticipantId = $(this).find("select[id^='participant1Select2']").val().split("-")[1];
+                SubTaskView.ParticipantDepartmentId = $(this).find("select[id^='participant1Select2']").val().split("-")[0];
+
+                listOfSubTask.push(SubTaskView);
+            })
+            if (!duplicateTask) {
+                return false;
+            }
+            CoveredEmployee.subTaskViews = listOfSubTask;
+            $("#collapseTextTask div[class=row]").next().each(function (i, d) {
+                var collapseTextTaskRowIndex = $(this).attr('index');
+                var TextTaskView = {};
+                var listOfCriteria = [];
+                //TextTaskView.TextTask = $(" #textTaskInput" + (i + 1)).val();
+                //TextTaskView.TrainingNeed = $(" #tagEditorTextTask" + (i + 1)).val();
+                //TextTaskView.ParticipantId = $(" #participant2Select2" + (i + 1)).val().split("-")[1];
+                //TextTaskView.ParticipantDepartmentId = $(" #participant2Select2" + (i + 1)).val().split("-")[0];
+
+                TextTaskView.TextTask = $(this).find("input[id^='textTaskInput']").val();
+                TextTaskView.TrainingNeed = $(this).find("textarea[id^='tagEditorTextTask']").val();
+                TextTaskView.ParticipantId = $(this).find("select[id^='participant2Select2']").val().split("-")[1];
+                TextTaskView.ParticipantDepartmentId = $(this).find("select[id^='participant2Select2']").val().split("-")[0];
+                TextTaskView.ParentTaskId = $(this).find("select[id^='relatedWithTextTask']").val();
+
+                $("#criteriaRow" + (collapseTextTaskRowIndex) + " div[class=row]").each(function (ii2, dd2) {
+                    var CriteriaView = {};
+                    CriteriaView.Title = $(dd2).find("input:eq(0)").val();
+                    CriteriaView.CalculationWay = $(dd2).find("input:eq(1)").val();
+                    CriteriaView.LimitOfAdmission = $(dd2).find("input:eq(2)").val();
+                    if ($(dd2).find("input:eq(3)").is(":checked"))
+                        CriteriaView.IsProcessingCriteria = 1;
+                    else
+                        CriteriaView.isProcessingCriteria = 0;
+
+                    listOfCriteria.push(CriteriaView);
+                })
+                TextTaskView.CriteriaViews = listOfCriteria;
+                listOfTextTask.push(TextTaskView);
+            })
+            CoveredEmployee.textTaskViews = listOfTextTask;
+            console.log(CoveredEmployee);
+            //$("#articleSubmit").addClass('disabled');
+            $("#saveTaskAssignment").attr("disabled", "disabled");
+            var btn = $("#saveTaskAssignment");
+            btn.button('loading');
+            //var postdata = new FormData(this);
+            //listOfSubTask = JSON.stringify(listOfSubTask);
+            //var postdata = $(this).serializeArray();
+            //postdata.append(JSON.stringify(listOfSubTask));
+            //console.log(postdata);
+            $.ajax(
+                {
+                    //data:postdata,
+                    url: '/TaskAssignment/TaskAssignment',
+                    //url : formURL,
+                    //data: postdata,
+                    data: JSON.stringify(CoveredEmployee),
+                    //data: "firstName=" + $("fn").val(),
+                    //cache: false,
+                    //contentType: false,
+                    //processData: false,
+                    datatype: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    type: 'POST',
+
+                    success: function (data, textStatus, jqXHR) {
+                        var message = "";
+                        var duplicate = "";
+                        if (data.result > 0) {
+                            message += "<span>اطلاعات  مورد نظر با موفقیت ثبت گردید</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success(message);
+                            dt.ajax.url("/TaskAssignment/GetAssignedTaskList");
+                            dt.ajax.reload();
+                            $("#taskAssignmentForm")[0].reset();
+                            $("#task_assign").modal("hide");
+                        }
+                        else if (data.result == 0) {
+                            message += "<span>اطلاعات  مورد نظر ثبت نگردید..</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        } else if (data.hasOwnProperty("criteriaRestriction")) {
+                            message = data.criteriaRestriction;
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        }
+                        if (data.duplicate != "") {
+                            $(data.duplicate).each(function (i, m) {
+                                duplicate += "<span>  " + m + "  </span><br><br>";
+                            })
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(duplicate);
+                        }
+                        if (data.notAuthorized == "true") {
+                            message = "کاربر گرامی جهت تخصیص با سمت سازمانی مورد نظر در بازه زمانی مجاز اقدام نمایید.";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        }
+
+                        //resetFormValidation();
+
+                        //$("#periodDefinitionTable").DataTable().destroy();
+                        //show_dataTable();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#saveTaskAssignment").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            e.preventDefault(e);
+        }
+    });
+
+    $('#subTaskCollapse').on('click', '.removeSubTaskBtnn', function () {
+        $(this).closest('div.row').remove();
+    })
+
+    $('#collapseTextTask').on('click', '.removeTextTaskBtnn', function () {
+        $('#criteriaModal' + $(this).attr('index')).remove();
+        $(this).closest('div.row').remove();
+    })
+
+    $('#critriaPlaceHolder').on('click', '.removeTextCriteriaBtnn', function () {
+        $(this).closest('div.row').next().remove();
+        $(this).closest('div.row').remove();
+    })
+    $("#saveTaskAssignment").trigger("click");
+    clicked = true;
+
+    $('#departmentSupervisor').trigger('change');
+
+</script>

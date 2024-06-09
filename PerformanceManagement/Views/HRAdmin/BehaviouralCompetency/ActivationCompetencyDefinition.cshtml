@@ -1,0 +1,193 @@
+﻿@{
+    Layout = null;
+}
+
+<form method="post" id="activationPublicCompetencyDefinitionFrm" class="form-horizontal">
+    <div class="modal fade modalClass" id="activationPublicCompetencyDefinitionModal" tabindex="" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        فعال/غیرفعال کردن @ViewBag.Title
+
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div class="row">
+                            <input type="hidden" id="behaviouralCompetencyId" name="behaviouralCompetencyId" value="@ViewBag.BehaviouralCompetencyId" />
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">
+                                        فعال/غیرفعال
+                                        <span class="required">
+
+                                        </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select id="isActivation" name="isActivation" class="select2 select2-2 form-control">
+                                                <option></option>
+                                                @if (ViewBag.IsActive == true)
+                                                {
+                                                    <option selected="selected" value="true"> فعال </option>
+                                                    <option value="false"> غیرفعال </option>
+                                                }
+                                                else if (ViewBag.IsActive == false)
+                                                {
+                                                    <option value="true"> فعال </option>
+                                                    <option selected="selected" value="false"> غیرفعال </option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="activationPublicCompetencyDefinitionBTN">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+<script>
+    $('.select2-2').select2({
+        placeholder: "انتخاب کنید",
+        allowClear: true
+    });
+
+    $("#activationPublicCompetencyDefinitionFrm").submit(function (e) {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        //debugger;
+
+        var form = $('#activationPublicCompetencyDefinitionFrm');
+
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                isActivation: {
+                    required: true
+                }
+            },
+            messages: {
+                isActivation: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+
+            //$("#articleSubmit").addClass('disabled');
+            var btn = $("#activationPublicCompetencyDefinitionBTN");
+            btn.button('loading');
+            var postdata = new FormData(this);
+            //listOfSubTask = JSON.stringify(listOfSubTask);
+            //var postdata = $(this).serializeArray();
+            //postdata.append(JSON.stringify(listOfSubTask));
+            //console.log(postdata);
+            $.ajax(
+                {
+                    //data:postdata,
+                    url: '/BehaviouralCompetency/ActivationCompetencyDefinition',
+                    //url : formURL,
+                    //data: postdata,
+                    data: postdata,
+                    //data: "firstName=" + $("fn").val(),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+
+                    success: function (data, textStatus, jqXHR) {
+                        var message = "";
+                        if (data > 0) {
+                            message += "<span>اطلاعات  مورد نظر با موفقیت ویرایش گردید</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success(message);
+                            dt.ajax.reload();
+                            $("#activationPublicCompetencyDefinitionFrm")[0].reset();
+                            $("#activationPublicCompetencyDefinitionModal").modal("hide");
+                        }
+                        else if (data == 0) {
+                            message += "<span>اطلاعات  مورد نظر ویرایش نگردید..</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#activationPublicCompetencyDefinitionBTN").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            e.preventDefault(e);
+        }
+    });
+
+    $('#activationPublicCompetencyDefinitionModal').modal('show');
+
+</script>

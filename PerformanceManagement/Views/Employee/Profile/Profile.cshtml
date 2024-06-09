@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "پروفایل";
+}
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-toastr/toastr-rtl.min.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" />
+    <link href="/assets/css/pages/profile-rtl.css" rel="stylesheet" type="text/css" />
+
+}
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <h3 class="page-title">
+            <small></small>
+
+        </h3>
+        <div class="clearfix"></div>
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/home">
+                    خانه
+                </a>
+                <i class="fa fa-angle-left"></i>
+            </li>
+            <li>
+                <a href="#">
+                    مسیر مورد نظر
+                </a>
+            </li>
+            <li class="pull-right">
+                <div id="dashboard-report-range" class="dashboard-date-range tooltips" data-placement="top" data-original-title="Change dashboard date range">
+                    <i class="fa fa-calendar"></i>
+                    <span>
+                    </span>
+                    <i class="fa fa-angle-down"></i>
+                </div>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<!-- BEGIN PAGE CONTENT-->
+<div class="row profile">
+    <div class="col-md-12">
+        <!--BEGIN TABS-->
+        
+        <div class="tabbable tabbable-custom tabbable-full-width">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#tab_1_3" data-toggle="tab">
+                        حساب کاربری
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_1_3">
+                    <div class="row profile-account">
+                        <div class="col-md-3">
+                            <ul class="ver-inline-menu tabbable margin-bottom-10">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#tab_3-3">
+                                        <i class="fa fa-lock"></i> تغییر پسورد
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="tab-content">
+                                <div class="alert alert-block alert-info fade in">
+                                    <button type="button" class="close" data-dismiss="alert"></button>
+                                    <div>کاربر گرامی با توجه به سیاست های امنیتی، تغییر پسورد مطابق با ویژگی های زیر الزامی می باشد:</div>
+                                    <ul>
+                                        <li>حداقل طول 6</li>
+                                        <li>حداقل داشتن یک رقم از ارقام 9-0</li>
+                                        <li>حداقل داشتن یکی از علائم خاص مانند  # % & و غیره</li>
+                                        <li>حداقل یک حرف انگلیسی بزرگ</li>
+                                        <li>حداقل یک حرف انگلیسی کوچک</li>
+                                    </ul>
+
+                                </div>
+                                <div id="tab_3-3" class="tab-pane active">
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--end col-md-9-->
+                    </div>
+                </div>
+                <!--end tab-pane-->
+            </div>
+        </div>
+        <!--END TABS-->
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+
+@section Plugins{
+    <script src="/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/assets/plugins/bootstrap-toastr/toastr.min.js"></script>
+    <script src="/assets/scripts/custom/ui-toastr.js"></script>
+    <script type="text/javascript" src="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
+}
+
+@section Scripts{
+    <script>
+        $.ajax(
+            {
+                url: "/Profile/ChangePassword",
+                contentType: 'aplication/json;charset=utf-8',
+                type: "GET",
+                datatype: 'html',
+
+                success: function (data, textStatus, jqXHR) {
+                    $("#tab_3-3").html(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("erorr");
+                    alert(jqXHR);
+                    alert(textStatus);
+                }
+            });
+    </script>
+}

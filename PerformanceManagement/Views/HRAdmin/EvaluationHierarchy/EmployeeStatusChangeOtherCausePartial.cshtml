@@ -1,0 +1,215 @@
+﻿@{
+    Layout = null;
+}
+<form method="post" id="EmployeeStatusChangeCauseFrm" action="/EvaluationHierarchy/EmployeeStatusChangeCause" class="form-horizontal modalClass">
+    <div class="row" id="end_date">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-5">
+                    انتخاب کارمند
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-7">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select name="choiceEmployee2" id="choiceEmployee2"
+                                class="select2 form-control input-sm input-small"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label id="mojri_name_label" class="control-label col-md-5">
+                    تاریخ پایان
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-7">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" id="effectiveEndDate" name="effectiveEndDate" class="form-control input-small datepicker12" placeholder="تاریخ پایان">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+<script>
+    $('.datepicker12').datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $('.datepicker12').datepicker("setDate", "today");
+    $('#EmployeeStatusChangeCauseFrm .select2').select2({
+        placeholder: "انتخاب کنید",
+        allowclear: true
+    });
+    $('#end_date').hide();
+    $('#cause').on('change', function () {
+        if ($('#cause').children('option:selected').val() != "1") {
+            $('#end_date').show();
+            $('.status_hide').hide();
+
+            $.ajax({
+                type: 'get',
+                url: '/EvaluationHierarchy/GetCurrentPEmployee',
+                //data: { roleid: roleid },
+                async: false,
+                success: function (people2) {
+                    $("#choiceEmployee2").empty();
+                    $("#choiceEmployee2").append("<option></option>");
+                    $(people2).each(function (i, p2) {
+                        $("#choiceEmployee2").append("<option value='" + p2.PeopleId + "'>" + p2.FirstName + " " + p2.LastName + "(" + p2.UserName + ")</option>");
+                    });
+
+                },
+                error: function (status) {
+                    alert("error");
+                }
+            })
+        }
+        else {
+            $('#end_date').hide();
+            $('.status_hide').show();
+        }
+    });
+
+    $("#employeeStatusChangeSubmit").click(function () {
+        //alert('dpCreationSubmit');
+        var cause = $('#cause').children('option:selected').val();
+        if (cause != '1') {
+            //var postdata2 = $(this).serializeArray();
+            debugger;
+            var form = $('#EmployeeStatusChangeCauseFrm');
+            form.validate({
+                //console.log($('#registerform').serializeArray());
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    effectiveEndDate: {
+                        required: true
+                    },
+                    choiceEmployee2: {
+                        required: true
+                    }
+                },
+                messages: {
+                    effectiveEndDate: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    choiceEmployee2: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    }
+                },
+                invalidHandler: function (event, validator) { //display error alert on form submit
+                    //                    success2.hide();
+                    //                    error2.show();
+                    //                    App.scrollTo(error2, -200);
+                },
+                errorPlacement: function (error, element) { // render error placement for each input type
+                    var icon = $(element).parent('.input-icon').children('i');
+                    icon.removeClass('fa-check').addClass("fa-warning");
+                    icon.attr("data-original-title", error.text()).tooltip();
+                },
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+
+                },
+
+                success: function (label, element) {
+                    var icon = $(element).parent('.input-icon').children('i');
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                    icon.removeClass("fa-warning").addClass("fa-check");
+                },
+
+                submitHandler: function (form) {
+                    //                    success2.show();
+                    //                    error2.hide();
+                }
+            })
+            if (form.valid() == false) {
+                //console.log($('#registerform').serializeArray());
+                return false;
+            } else {
+                //$("#articleSubmit").addClass('disabled');
+                $("#employeeStatusChangeSubmit").attr("disabled", "disabled");
+                var btn = $("#employeeStatusChangeSubmit");
+                btn.button('loading');
+                //var postdata = new FormData(this);
+                var postdata = $('#EmployeeStatusChangeCauseFrm').serializeArray();
+                postdata.push({ name: "cause", value: cause });
+                console.log(postdata);
+                $.ajax(
+                    {
+                        //data:postdata,
+                        url: "/EvaluationHierarchy/EmployeeStatusChangeOtherCause",
+                        //url : formURL,
+                        //                        data: postdata2,
+                        data: postdata,
+                        //data: "firstName=" + $("fn").val(),
+                        //cache: false,
+                        //contentType: false,
+                        //processData: false,
+                        type: "post",
+
+                        success: function (data, textStatus, jqXHR) {
+                            //alert("success");
+                            //alert("Good");
+                            //if ($.trim(data) === "yess")
+                            //alert("That's one I wanted. Excellent")
+                            var message = "";
+                            $(data).each(function (i, d) {
+                                if (d.saveChangeResult > 0) {
+                                    toastr.options.timeOut = "8000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.success("اطلاعات مورد نظر با موفقیت ثبت گردید.");
+                                    //$('#treeview').jstree(true).refresh(true);
+                                    $('#treeview').jstree("destroy");
+                                    show_jstree();
+                                }
+
+                            });
+                            if (data.departmentSupervisor != null) {
+                                $(data.departmentName).each(function (i, dn) {
+                                    message += "<span> اطلاعات آقای " + data.departmentSupervisor[0] + "به دلیل اینکه در واحد  " + dn + " مسئول می باشند ثبت نگردید.</span><br><br>";
+                                })
+                            }
+                            if (message != "") {
+                                toastr.options.timeOut = "15000";
+                                toastr.options.positionClass = "toast-top-center";
+                                toastr.info(message);
+                            }
+                            $("#EmployeeStatusChangeCauseFrm")[0].reset();
+                            $("#employee_status_change").modal("hide");
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("erorr");
+                            alert(jqXHR);
+                            alert(textStatus);
+                        }
+                    }).always(function () {
+                        $("#employeeStatusChangeSubmit").button('reset');
+                    });
+                //$.getScript('/assets/javascript/articleForm.js', function () {
+                //    ArticleForm.init(postdata);
+                //    $("#articleForm")[0].reset();
+                //});
+                // e.preventDefault(e);
+            }
+        }
+    });
+</script>

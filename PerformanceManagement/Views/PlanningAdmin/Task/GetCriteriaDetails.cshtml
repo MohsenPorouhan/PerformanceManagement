@@ -1,0 +1,62 @@
+﻿@{
+    Layout = null;
+}
+@model List<Criteria>
+
+<table class="table table-striped table-bordered table-hover" id="sample_dt">
+    <thead>
+        <tr>
+            <th hidden>
+                taskId
+            </th>
+            <th hidden>
+                criteriaId
+            </th>
+            <th>
+                نام شاخص
+            </th>
+            <th>
+                نوع شاخص
+            </th>
+            <th>
+                نحوه محاسبه
+            </th>
+            <th>
+                حد پذیرش
+            </th>
+            <th>
+                حذف
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string criteriaType = null;
+            switch (item.CriteriaType)
+            {
+                case 1:
+                    criteriaType = "KRI";
+                    break;
+                case 2:
+                    criteriaType = "KPI";
+                    break;
+                case 3:
+                    criteriaType = "PI";
+                    break;
+                default:
+                    break;
+            }
+        <tr>
+            <td hidden>@item.TaskId</td>
+            <td hidden>@item.CriteriaId</td>
+            <td>@item.Title</td>
+            <td>@criteriaType</td>
+            <td>@item.CalculationWay</td>
+            <td>@item.LimitOfAdmission</td>
+            <td><a href='#' onclick="CriteriaDeletion(@item.CriteriaId,'@item.Title',@item.PeriodDefinitionId)" data-toggle='modal' class=''>حذف</a></td>
+        </tr>
+        }
+
+    </tbody>
+</table>

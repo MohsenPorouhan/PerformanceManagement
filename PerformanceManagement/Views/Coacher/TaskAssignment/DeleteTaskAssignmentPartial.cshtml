@@ -1,0 +1,85 @@
+﻿@{
+    Layout = null;
+}
+@model PerformanceManagement.Models.Coacher.View.EvaluationView
+
+<form method="post" id="deleteTaskAssignmentFrm" class="form-horizontal">
+    <input type="hidden" value="@Model.EvaluationId" name="evaluationId" id="evaluationId" />
+    <input type="hidden" value="@Model.HasParticipant" name="hasParticipant" id="hasParticipant" />
+    <div class="modal fade" id="deleteTaskAssignmentModal" tabindex="" role="" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        <span>حذف وظیفه اختصاصی @Model.TaskTitle</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <b>آیا از حذف وظیفه اختصاصی مورد نظر اطمینان دارید؟</b>
+                        <!--/row-->
+                    </div>
+                    <!-- END FORM-->
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="deleteTaskAssignmentBtn">بله</button>
+                    <button type="button" class="btn red input-sm input-small" id="no" data-dismiss="modal"><i class="fa fa-times"></i>خیر</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+<script>
+    $("#deleteTaskAssignmentModal").modal('show');
+    $("#deleteTaskAssignmentFrm").submit(function (e) {
+        $("#deleteTaskAssignmentBtn").attr("disabled", "disabled");
+        var btn = $("#deleteTaskAssignmentBtn");
+        btn.button('loading');
+        var postdata = new FormData(this);
+        $.ajax({
+            //data:postdata,
+            url: "/TaskAssignment/DeleteTaskAssignment",
+            //url : formURL,
+            //data: postdata2,
+            data: postdata,
+            //data: "firstName=" + $("fn").val(),
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: "post",
+            success: function (data) {
+                if (data == 0) {
+                    toastr.options.timeOut = "15000";
+                    toastr.options.positionClass = "toast-top-center";
+                    toastr.info("وظیفه اختصاصی مورد نظر حذف نگردید");
+                } else if (data > 0) {
+                    toastr.options.timeOut = "15000";
+                    toastr.options.positionClass = "toast-top-center";
+                    toastr.success("وظیفه اختصاصی مورد نظر حذف گردید");
+                    dt.ajax.reload();
+                } else {
+                    toastr.options.timeOut = "15000";
+                    toastr.options.positionClass = "toast-top-center";
+                    toastr.info(data);
+                }
+                $("#deleteTaskAssignmentModal").modal("hide");
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        }).always(function () {
+            $("#deleteTaskAssignmentBtn").button('reset');
+        });
+        e.preventDefault(e);
+    })
+</script>

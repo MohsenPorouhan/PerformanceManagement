@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceManagement", "PerformanceManagement\PerformanceManagement.csproj", "{38B6C5CF-5D68-4C37-97BA-5722893FC1E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38B6C5CF-5D68-4C37-97BA-5722893FC1E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38B6C5CF-5D68-4C37-97BA-5722893FC1E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38B6C5CF-5D68-4C37-97BA-5722893FC1E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38B6C5CF-5D68-4C37-97BA-5722893FC1E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B8B8E417-8C10-460D-B79C-D01A834B5325}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.3.80/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = PerformanceManagement\\PerformanceManagement.csproj
+		SccProjectName1 = PerformanceManagement
+		SccLocalPath1 = PerformanceManagement
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,494 @@
+﻿@{
+    Layout = null;
+}
+
+<form method="post" id="assignmentWeightFrm" class="form-horizontal">
+    <div class="modal fade department modalClass" id="assignWeightModal" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 id="sabt_hazine_personnel" class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        تخصیص وزن
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+
+                        <div class="alert alert-block alert-info fade in">
+                            <button type="button" class="close" data-dismiss="alert"></button>
+                            <h4 class="alert-heading">روش وزن دهی</h4>
+                            <p id="weightWayInfo">
+
+                            </p>
+                        </div>
+
+                        <div id="taskRoww2"></div>
+
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="assignWeightBTN">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div id="critriaPlaceHolder2"></div>
+</form>
+<script type="text/html" id="addChildd2">
+    <fieldset>
+        <legend>{1}</legend>
+        <div class="row taskItem">
+            <!--/span-->
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-md-8">
+                        {1}
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+                    <div class="col-md-4">
+                        <div class="input-icon right">
+                            <i class="fa"></i>
+                            <input type="text" value="{7}" name="taskWeight{0}" id="taskWeight{0}" coacherLevel="{5}" taskId="{2}" evaluationId="{3}" periodDefinitionId="{4}" departmentId="{6}" departmentIdR="{8}" recieverIdP="{9}" class="form-control taskWeight input-small input-sm" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row criteriaItems" id="appendCriteriaWeightHolder{0}" index="{0}" evaluationId="{3}" taskId="{2}" loadCriteria="false"></div>
+    </fieldset>
+</script>
+<script type="text/html" id="addCriteriaRoww2">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="col-md-8">
+                {1}
+                <span class="required">
+                    *
+                </span>
+            </label>
+            <div class="col-md-4">
+                <div class="input-icon right">
+                    <i class="fa"></i>
+                    <input type="text" value="{3}" name="criteriaWeight{0}" id="criteriaWeight{0}" evaluationId="{5}" criteriaWeightId="{4}" criteriaId="{2}" coacherLevel="{3}" class="form-control criteriaWeight input-small input-sm" />
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script>
+
+    $(document).ready(function () {
+        var i = 1;
+        var index;
+        var j = 1;
+        var index2;
+        var isTrue = false;
+        var taskWeight0Value;
+        var finalResult = false;
+        var template = jQuery.validator.format($.trim($("#addChildd2").html()));
+        var taskWeightIndex = 0;
+        var template3 = jQuery.validator.format($.trim($("#addCriteriaRoww2").html()));
+
+        var row;
+        var allocatorId;
+        $.ajax({
+            type: 'get',
+            url: '/Share/GetCurrentUserInfo',
+            async: false,
+            success: function (data) {
+                allocatorId = data;
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        $("#taskAssignmentTable >tbody>tr").each(function (i, tr) {
+            row = dt.row(tr);
+            //console.log(dt.row(tr));
+            //row.child(row.data().fullName).show()
+            //alert(row.data().fullName)
+            if (row.data().Levell == 2 && row.data().allocatorRoleName != "PlanningAdmin" && (row.data().AllocatorPersonId == allocatorId || row.data().allocatorRoleName == "HRAdmin")) {
+                index = taskWeightIndex++;
+                $(template(index, row.data().Title, row.data().TaskId, row.data().EvaluationId, row.data().PeriodDefinitoionId, row.data().Levell - 1, row.data().AllocatorEvaluationHierarchyId, row.data().TaskWeight == null ? '' : row.data().TaskWeight, row.data().RecieverAllocationEvaluationHierarchyId, row.data().RecieverAllocationPersonId)).appendTo("#taskRoww2");
+
+                //$(template2(index, row.data().TaskId)).appendTo("#critriaPlaceHolder2");
+
+                if (row.data().allocatorRoleName == "HRAdmin") {
+                    if (index == 0) {
+                        isTrue = true;
+                        taskWeight0Value = row.data().TaskWeight;
+                        //$("#taskWeight" + index).val(row.data().TaskWeight);
+                        //$("#taskWeight" + index).attr("disabled", "disabled")
+                        $("#criteriaWeightBtn" + index).addClass("disabled");
+                    } else {
+                        $("#taskWeight" + index).val(row.data().TaskWeight);
+                        $("#taskWeight" + index).attr("disabled", "disabled")
+                        $("#criteriaWeightBtn" + index).addClass("disabled");
+                    }
+                }
+                finalResult = true;
+            } else if (row.data().Levell == 3 && row.data().allocatorRoleName != "PlanningAdmin" && row.data().allocatorRoleName != "HRAdmin" && row.data().AllocatorPersonId == allocatorId) {
+                index = taskWeightIndex++;
+                $(template(index, row.data().Title, row.data().TaskId, row.data().EvaluationId, row.data().PeriodDefinitoionId, row.data().Levell - 1, row.data().AllocatorEvaluationHierarchyId, row.data().TaskWeight == null ? '' : row.data().TaskWeight, row.data().RecieverAllocationEvaluationHierarchyId, row.data().RecieverAllocationPersonId)).appendTo("#taskRoww2");
+
+                //$(template2(index, row.data().TaskId)).appendTo("#critriaPlaceHolder2");
+                finalResult = true;
+            } else if (row.data().Levell > 3 && row.data().allocatorRoleName != "PlanningAdmin" && row.data().allocatorRoleName != "HRAdmin" && row.data().AllocatorPersonId == allocatorId) {
+                index = taskWeightIndex++;
+                $(template(index, row.data().Title, row.data().TaskId, row.data().EvaluationId, row.data().PeriodDefinitoionId, row.data().Levell - 1, row.data().AllocatorEvaluationHierarchyId, row.data().TaskWeight == null ? '' : row.data().TaskWeight, row.data().RecieverAllocationEvaluationHierarchyId, row.data().RecieverAllocationPersonId)).appendTo("#taskRoww2");
+
+                //$(template2(index, row.data().TaskId)).appendTo("#critriaPlaceHolder2");
+                finalResult = true;
+            }
+        })
+        if (!finalResult) {
+            alert("مجاز به وزن دهی برای وظیفه/وظیفه های کارمند مورد نظر نمی باشید.");
+        }
+        else if (finalResult) {
+            var weightWay = "";
+            var numberScaleList = [];
+            $.ajax({
+                type: 'get',
+                url: '/Share/GetTaskWeightWay',
+                data: { periodDefinitionId: row.data().PeriodDefinitoionId },
+                async: false,
+                success: function (data) {
+                    weightWay = data;
+                    if (data == 1) {
+                        $("#weightWayInfo").html("وزن دهی به صورت درصدی و بازه مجاز از 1 تا 100 می باشد.");
+                    } else if (data == 2) {
+                        $.ajax({
+                            type: 'get',
+                            url: '/Share/GetWeightLikertScale',
+                            data: { periodDefinitionId: row.data().PeriodDefinitoionId },
+                            async: false,
+                            success: function (data) {
+                                $("#weightWayInfo").html("وزن دهی به صورت طیف لیکرت می باشد. و بازه های مجاز جهت وزن دهی ");
+                                $(data).each(function (i, d) {
+                                    numberScaleList.push(d.numberScale);
+                                    $("#weightWayInfo").append(d.numberScale + ":" + d.titleScale + "  ");
+                                });
+                            },
+                            error: function (status) {
+                                alert("Error");
+                            }
+                        })
+                    }
+                },
+                error: function (status) {
+                    alert("Error");
+                }
+            })
+
+            $('#assignWeightModal').modal('show');
+
+            //$('.modalClass .select2').select2({
+            //    placeholder: "انتخاب کنید",
+            //    allowClear: true
+            //});
+
+
+
+            $("#assignWeightBTN").click(function () {
+                //alert('dpCreationSubmit');
+                //var postdata2 = $(this).serializeArray();
+                var form = $("#assignmentWeightFrm");
+                form.validate({
+                    //console.log($('#registerform').serializeArray());
+                    errorElement: 'span', //default input error message container
+                    errorClass: 'help-block', // default input error message class
+                    focusInvalid: false, // do not focus the last invalid input
+                    ignore: "",
+                    rules: {
+                        taskWeight0: {
+                            required: true,
+                        }
+                    },
+                    messages: {
+                        taskWeight0: {
+                            required: "پر کردن این فیلد الزامی می باشد"
+                        }
+                    },
+                    invalidHandler: function (event, validator) { //display error alert on form submit
+                        //                    success2.hide();
+                        //                    error2.show();
+                        //                    App.scrollTo(error2, -200);
+                    },
+                    errorPlacement: function (error, element) { // render error placement for each input type
+                        var icon = $(element).parent('.input-icon').children('i');
+                        icon.removeClass('fa-check').addClass("fa-warning");
+                        icon.attr("data-original-title", error.text()).tooltip();
+                    },
+                    highlight: function (element) { // hightlight error inputs
+                        $(element)
+                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                    },
+
+                    unhighlight: function (element) { // revert the change done by hightlight
+
+                    },
+
+                    success: function (label, element) {
+                        var icon = $(element).parent('.input-icon').children('i');
+                        $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                        icon.removeClass("fa-warning").addClass("fa-check");
+                    },
+
+                    submitHandler: function (form) {
+                        //                    success2.show();
+                        //                    error2.hide();
+                    }
+                })
+                if (form.valid() == false) {
+                    //console.log($('#registerform').serializeArray());
+                    return false;
+                } else {
+                    var listOfTasks = [];
+                    var listOfCriteria = [];
+                    $("#taskRoww2 fieldset .taskItem input[type=text]").each(function () {
+                        var WeightAssignmentView = {};
+                        WeightAssignmentView.TaskId = $(this).attr("taskId");
+                        WeightAssignmentView.TaskWeight = $(this).val();
+                        WeightAssignmentView.EvaluationId = $(this).attr("evaluationId");
+                        WeightAssignmentView.PeriodDefinitoionId = $(this).attr("periodDefinitionId");
+                        //WeightAssignmentView.AllocatorEvaluationHierarchyId = $(this).attr("departmentId");
+                        WeightAssignmentView.AllocatorEvaluationHierarchyId = $("#departmentIdDT >label>#departmentId").val();
+                        WeightAssignmentView.RecieverAllocationEvaluationHierarchyId = $(this).attr("departmentIdR");
+                        WeightAssignmentView.RecieverAllocationPersonId = $(this).attr("recieverIdP");
+
+                        //$("#critriaPlaceHolder2").find("div[id^='criteriaWeightModal'],div[taskId='3']")
+                        var criteria = $("#taskRoww2").find("div.criteriaItems[taskId='" + $(this).attr("taskId") + "'] input")
+                        $(criteria).each(function () {
+                            var CriteriaWeightView = {};
+                            CriteriaWeightView.CriteriaId = $(this).attr("criteriaId");
+                            CriteriaWeightView.Weight = $(this).val();
+                            CriteriaWeightView.CriteriaWeightId = $(this).attr("criteriaWeightId") == "null" ? null : $(this).attr("criteriaWeightId");
+                            CriteriaWeightView.EvaluationId = $(this).attr("evaluationId") == "null" ? null : $(this).attr("evaluationId");
+                            listOfCriteria.push(CriteriaWeightView);
+                        });
+                        WeightAssignmentView.CriteriaWeightViews = listOfCriteria;
+                        listOfCriteria = [];
+                        listOfTasks.push(WeightAssignmentView);
+                    });
+                    ///console.log(listOfTasks);
+                    //$("#articleSubmit").addClass('disabled');
+                    // $("#dpCreationSubmit").attr("disabled", "disabled");
+                    var btn = $("#assignWeightBTN");
+                    btn.button('loading');
+                    //var postdata = new FormData(this);
+                    //var postdata = $('#assignWeightFrm').serializeArray();
+
+                    //console.log(postdata);
+                    $.ajax(
+                        {
+                            datatype: "json",
+                            //data:postdata,
+                            url: "/TaskAssignment/WeightAssignment",
+                            //url : formURL,
+                            //                        data: postdata2,
+                            data: JSON.stringify(listOfTasks),
+                            //data: "firstName=" + $("fn").val(),
+                            //cache: false,
+                            contentType: 'application/json; charset=utf-8',
+                            //contentType: false,
+                            //processData: false,
+                            type: "POST",
+
+                            success: function (data, textStatus, jqXHR) {
+                                //if ($.trim(data) === "yess")
+                                //i = 1;
+                                //j = 1;
+                                if (data.hasOwnProperty('result') && data.result > 0) {
+                                    //$("#dpcreation")[0].reset();
+                                    $("#assignWeightModal").modal("hide")
+                                    //resetFormValidation();
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.success("اطلاعات مورد نظر با موفقیت ثبت گردید.");
+                                    dt.ajax.url("/TaskAssignment/GetAssignedTaskList");
+                                    dt.ajax.reload();
+                                } else if (data.hasOwnProperty('result') && data.result == 0) {
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.info("اطلاعات مورد نظر ثبت نگردید.");
+                                }
+                                else if (data.hasOwnProperty('result')) {
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.info(data.result);
+                                }
+                                if (data.hasOwnProperty('notAuthorized') && data.notAuthorized == "true") {
+                                    message = "کاربر گرامی جهت تخصیص با سمت سازمانی مورد نظر در بازه زمانی مجاز اقدام نمایید.";
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.info(message);
+                                }
+                                if (data.hasOwnProperty('malicious') && data.malicious == "true") {
+                                    message = "اطلاعات مورد نظر ذخیره نگردید لطفا فرم وزن دهی را بسته و مجددا تلاش نمایید در غیر اینصورت با توسعه دهنده تماس حاصل فرمایید";
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.info(message);
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert("erorr");
+                                alert(jqXHR);
+                                alert(textStatus);
+                            }
+                        }).always(function () {
+                            $("#assignWeightBTN").button('reset');
+                        });
+                    //$.getScript('/assets/javascript/articleForm.js', function () {
+                    //    ArticleForm.init(postdata);
+                    //    $("#articleForm")[0].reset();
+                    //});
+                    // e.preventDefault(e);
+                }
+            });
+            //Begin of validation of form
+            var getTaskWeightVal = $("#taskWeight0").val();
+            $("#taskWeight0").val('');
+            $("#assignWeightBTN").trigger('click');
+
+            //$("#assignmentWeightFrm").validate();
+            $('.taskWeight').each(function (i, d) {
+                $(this).rules("add", {
+                    required: true,
+                    messages: {
+                        required: "پرکردن این فیلد الزامی می باشد",
+                    }
+                });
+                $(this).rules("add", {
+                    number: true,
+                    messages: {
+                        number: "لطفا عدد وارد نمایید",
+                    }
+                });
+                if (weightWay == 1) {
+                    $(d).rules("add", {
+                        range: [1, 100],
+                        messages: {
+                            range: "لطفا عددی بین 1 تا 100 وارد نمایید",
+                        }
+                    });
+                } else if (weightWay == 2) {
+                    $(this).rules("add", {
+                        range: [Math.min.apply(Math, numberScaleList), Math.max.apply(Math, numberScaleList)],
+                        messages: {
+                            range: "لطفا عددی بین " + Math.min.apply(Math, numberScaleList) + " تا " + Math.max.apply(Math, numberScaleList) + " وارد نمایید",
+                        }
+                    });
+                }
+            });
+            //$("#assignmentWeightFrm").validate();
+
+            $(".criteriaItems").each(function () {
+                var indexx = $(this).attr("index");
+                var selector = $(this);
+                var weightValue;
+                //$("#criteriaWeightModal" + index).modal('show');
+                $.ajax({
+                    type: 'get',
+                    url: '/TaskAssignment/GetCriteriaWeightDetails',
+                    data: {
+                        taskId: $(this).attr("taskId"),
+                        evaluationId: $(this).attr("evaluationId")
+                    },
+                    async: false,
+                    success: function (data) {
+                        $(data).each(function (i, d) {
+                            index2 = j++;
+                            if (data.length == 1) {
+                                if (weightWay = 1) {
+                                    weightValue = 100;
+                                } else if (weightWay = 2) {
+                                    weightValue = 1;
+                                }
+                                $(template3(index2, d.CriteriaTitle, d.CriteriaId, weightWay, d.CriteriaWeightId, d.EvaluationId)).appendTo("#appendCriteriaWeightHolder" + indexx);
+
+                            } else {
+                                $(template3(index2, d.CriteriaTitle, d.CriteriaId, d.Weight == null ? '' : d.Weight, d.CriteriaWeightId, d.EvaluationId)).appendTo("#appendCriteriaWeightHolder" + indexx);
+
+                            }
+                            //console.log($("#criteriaWeight" + index2));
+                            $("#criteriaWeight" + index2).rules("add", {
+                                required: true,
+                                messages: {
+                                    required: "پرکردن این فیلد الزامی می باشد",
+                                }
+                            });
+                            $("#criteriaWeight" + index2).rules("add", {
+                                number: true,
+                                messages: {
+                                    number: "لطفا عدد وارد نمایید",
+                                }
+                            });
+
+                            if (weightWay == 1) {
+                                console.log(weightWay);
+                                $("#criteriaWeight" + index2).rules("add", {
+                                    range: [1, 100],
+                                    messages: {
+                                        range: "لطفا عددی بین 1 تا 100 وارد نمایید",
+                                    }
+                                });
+                            } else if (weightWay == 2) {
+                                $("#criteriaWeight" + index2).rules("add", {
+                                    range: [Math.min.apply(Math, numberScaleList), Math.max.apply(Math, numberScaleList)],
+                                    messages: {
+                                        range: "لطفا عددی بین " + Math.min.apply(Math, numberScaleList) + " تا " + Math.max.apply(Math, numberScaleList) + " وارد نمایید",
+                                    }
+                                });
+                            }
+                            //$('.criteriaWeight').each(function (i, d) {
+                            //    $(this).rules("add", {
+                            //        required: true,
+                            //        messages: {
+                            //            required: "پرکردن این فیلد الزامی می باشد",
+                            //        }
+                            //    });
+                            //});
+                        })
+                        var criteriaVal = $("#criteriaWeight1").val();
+                        $("#criteriaWeight1").val("");
+                        $("#assignWeightBTN").trigger('click');
+                        $("#criteriaWeight1").val(criteriaVal);
+
+                        $(selector).attr("loadCriteria", "true");
+                    },
+                    error: function (status) {
+                        alert("Error");
+                        console.log(status)
+                    }
+                })
+            });
+
+            $("#assignWeightBTN").trigger('click');
+            $("#taskWeight0").val(getTaskWeightVal);
+            if (isTrue) {
+                $("#taskWeight0").val(taskWeight0Value);
+                $("#taskWeight0").attr("disabled", "disabled");
+                $("#taskWeight0").prev().remove();
+            }
+
+            //End of validation of form
+        }
+    });
+</script>

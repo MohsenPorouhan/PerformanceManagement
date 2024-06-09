@@ -1,0 +1,419 @@
+﻿@{
+    Layout = null;
+}
+@model List<PerformanceManagement.Models.HRAdmin.SectionPeriod>
+@{
+    int i = 0;
+    PerformanceManagement.Util.DateTimeCustom dateTimeCustom = new PerformanceManagement.Util.DateTimeCustom();
+    var datefrom = dateTimeCustom.MiladiToShamsi(Model.FirstOrDefault().periodDefinitoion.DateFrom.Date).Substring(0, 11);
+    var dateTo = dateTimeCustom.MiladiToShamsi(Model.FirstOrDefault().periodDefinitoion.DateTo.Date).Substring(0, 11);
+}
+<form method="post" id="editPeriodFrm" class="form-horizontal">
+    <div class="modal fade department modalClass" id="editPeriodModal" tabindex="" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        ویرایش دوره زمانی @Model.FirstOrDefault().periodDefinitoion.PeriodTitle
+
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">
+                                        نام دوره
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <input type="text" periodDefinitoionId="@Model.FirstOrDefault().PeriodDefinitoionId" value="@Model.FirstOrDefault().periodDefinitoion.PeriodTitle" name="periodTitle" id="periodTitle" class="form-control periodTitle" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">
+                                        کد دوره
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <input type="text" periodDefinitoionId="@Model.FirstOrDefault().PeriodDefinitoionId" value="@Model.FirstOrDefault().periodDefinitoion.PeriodCode" name="periodCode" id="periodCode" class="form-control periodCode" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">
+                                        تاریخ شروع دوره
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <input type="text" periodDefinitoionId="@Model.FirstOrDefault().PeriodDefinitoionId" value="@datefrom" name="dateFromPeriod" id="dateFromPeriod" class="form-control dateFrom" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">
+                                        تاریخ پایان دوره
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <input type="text" periodDefinitoionId="@Model.FirstOrDefault().PeriodDefinitoionId" value="@dateTo" name="dateToPeriod" id="dateToPeriod" class="form-control dateTo" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @foreach (var item in Model)
+                        {
+                            var startDate = "";
+                            var endDate = "";
+                            switch (item.StatusCode)
+                            {
+                                case 1:
+                                    startDate = "تاریخ شروع ابتدای دوره";
+                                    endDate = "تاریخ پایان ابتدای دوره";
+                                    break;
+                                case 3:
+                                    startDate = "تاریخ شروع انتهای دوره";
+                                    endDate = "تاریخ پایان انتهای دوره";
+                                    break;
+                                case 4:
+                                    startDate = "تاریخ شروع اعتراضات";
+                                    endDate = "تاریخ پایان اعتراضات";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            if (item.StatusCode != 2)
+                            {
+                                i += 1;
+                                datefrom = dateTimeCustom.MiladiToShamsi(item.DateFrom.Date).Substring(0, 11); ;
+                                dateTo = dateTimeCustom.MiladiToShamsi(item.DateTo.Date).Substring(0, 11);
+                                <div class="row section">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">
+                                                @startDate
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-8">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" value="@datefrom" statusCode="@item.StatusCode" sectionId="@item.SectionPeriodId" name="DateFrom{@i}" id="DateFrom{@i}" class="form-control validation" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">
+                                                @endDate
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-8">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" value="@dateTo" statusCode="@item.StatusCode" sectionId="@item.SectionPeriodId" name="DateTo{@i}" id="DateTo{@i}" class="form-control validation" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="editPeriodBTN">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+<script>
+    $('#editPeriodModal').modal('show');
+    $("#dateFromPeriod").datepicker({
+        onSelect: function (dateText, inst) {
+            $("#dateToPeriod").datepicker('option', 'minDate',
+                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+        },
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $("#dateToPeriod").datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $("input[id^='DateFrom']").filter("[statusCode=1]").datepicker({
+        onSelect: function (dateText, inst) {
+            $("input[id^='DateTo']").filter("[statusCode=1]").datepicker('option', 'minDate',
+                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+        },
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $("input[id^='DateTo']").filter("[statusCode=1]").datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $("input[id^='DateFrom']").filter("[statusCode=3]").datepicker({
+        onSelect: function (dateText, inst) {
+            $("input[id^='DateTo']").filter("[statusCode=3]").datepicker('option', 'minDate',
+                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+        },
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $("input[id^='DateTo']").filter("[statusCode=3]").datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $("input[id^='DateFrom']").filter("[statusCode=4]").datepicker({
+        onSelect: function (dateText, inst) {
+            $("input[id^='DateTo']").filter("[statusCode=4]").datepicker('option', 'minDate',
+                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+        },
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $("input[id^='DateTo']").filter("[statusCode=4]").datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $("#editPeriodFrm").submit(function (e) {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        //debugger;
+
+        var form = $('#editPeriodFrm');
+
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                periodTitle: {
+                    required: true
+                },
+                periodCode: {
+                    required: true
+                },
+                dateFromPeriod: {
+                    required: true
+                },
+                dateToPeriod: {
+                    required: true
+                }
+            },
+            messages: {
+                periodTitle: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                periodCode: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                dateFromPeriod: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                dateToPeriod: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+
+            var PeriodDefinitoionView = {};
+
+            PeriodDefinitoionView.PeriodDefinitoionId = $("#periodTitle").attr("periodDefinitoionId");
+            PeriodDefinitoionView.PeriodCode = $("#periodCode").val();
+            PeriodDefinitoionView.PeriodTitle = $("#periodTitle").val();
+            PeriodDefinitoionView.PeriodFrom = $("#dateFromPeriod").val();
+            PeriodDefinitoionView.PeriodTo = $("#dateToPeriod").val();
+            PeriodDefinitoionView.InitialDateFrom = $("input[id^='DateFrom']").filter("[statusCode=1]").val();
+            PeriodDefinitoionView.InitialDateTo = $("input[id^='DateTo']").filter("[statusCode=1]").val();
+            PeriodDefinitoionView.FinalDateFrom = $("input[id^='DateFrom']").filter("[statusCode=3]").val();
+            PeriodDefinitoionView.FinalDateTo = $("input[id^='DateTo']").filter("[statusCode=3]").val();
+            PeriodDefinitoionView.ProtestDateFrom = $("input[id^='DateFrom']").filter("[statusCode=4]").val();
+            PeriodDefinitoionView.ProtestDateTo = $("input[id^='DateTo']").filter("[statusCode=4]").val();
+
+
+            console.log(PeriodDefinitoionView);
+            //$("#articleSubmit").addClass('disabled');
+            var btn = $("#editPeriodBTN");
+            btn.button('loading');
+            //var postdata = new FormData(this);
+            //listOfSubTask = JSON.stringify(listOfSubTask);
+            //var postdata = $(this).serializeArray();
+            //postdata.append(JSON.stringify(listOfSubTask));
+            //console.log(postdata);
+            $.ajax(
+                {
+                    //data:postdata,
+                    url: '/PeriodDefinition/EditPeriodDefinition',
+                    //url : formURL,
+                    //data: postdata,
+                    data: JSON.stringify(PeriodDefinitoionView),
+                    //data: "firstName=" + $("fn").val(),
+                    //cache: false,
+                    //contentType: false,
+                    //processData: false,
+                    datatype: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    type: 'POST',
+
+                    success: function (data, textStatus, jqXHR) {
+                        var message = "";
+                        if (data > 0) {
+                            message += "<span>اطلاعات  مورد نظر با موفقیت ویرایش گردید</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success(message);
+                            dt.ajax.reload();
+                            $("#editPeriodFrm")[0].reset();
+                            $("#editPeriodModal").modal("hide");
+                        }
+                        else if (data == 0) {
+                            message += "<span>اطلاعات  مورد نظر ویرایش نگردید..</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        }
+                        //$("#periodDefinitionTable").DataTable().destroy();
+                        //show_dataTable();
+                        //dt.ajax.url("/TaskAssignment/GetAssignedTaskList");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#editPeriodBTN").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            e.preventDefault(e);
+        }
+    });
+    //Begin of validation of form
+    var periodTitle = $("#periodTitle").val();
+    $("#periodTitle").val("");
+    $("#editPeriodBTN").trigger('click');
+
+    $('.validation').each(function (i, d) {
+        $(this).rules("add", {
+            required: true,
+            messages: {
+                required: "پرکردن این فیلد الزامی می باشد",
+            }
+        });
+    });
+    $("#editPeriodBTN").trigger('click');
+    $("#periodTitle").val(periodTitle);
+        //End of validation of form
+</script>

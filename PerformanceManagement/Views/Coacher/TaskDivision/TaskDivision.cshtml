@@ -1,0 +1,528 @@
+﻿@{
+    ViewData["Title"] = "مشاهده وظایف ابلاغی و شکست آن";
+}
+@section Styles{
+    @*<link rel="stylesheet" type="text/css" href="/assets/plugins/jquery-multi-select/css/multi-select-rtl.css" />*@
+<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-toastr/toastr-rtl.min.css" />
+<link rel="stylesheet" type="text/css" href="/assets/plugins/select2/select2-rtl.css" />
+    @*<link rel="stylesheet" type="text/css" href="/assets/plugins/select2v4/select2/dist/css/select2.min.css" />*@
+<link id="select2-metronic" rel="stylesheet" type="text/css" href="/assets/plugins/select2/select2-metronic-rtl.css" />
+    @*<link href="/assets/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css" />
+<link href="/assets/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css" />*@
+
+<link rel="stylesheet" href="/assets/plugins/jQuery-tagEditor-master/jquery.tag-editor.css" />
+
+<link rel="stylesheet" href="/assets/advancedDataTable/jquery.dataTables.css" />
+<link rel="stylesheet" href="/assets/advancedDataTable/buttons.dataTables.css" />
+<style>
+    .tag-editor li {
+        float: right;
+    }
+
+    .input-icon.right i {
+        left: auto !important;
+    }
+
+    .tag-editor {
+        line-height: 27px;
+        max-width: 300px;
+        overflow: auto;
+    }
+
+    .btn-sm, .btn-xs {
+        margin: 2px;
+    }
+
+    td.details-control {
+        background: url('/assets/img/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.details td.details-control {
+        background: url('/assets/img/details_close.png') no-repeat center center;
+    }
+
+    .dataTable .details td, .dataTable .details th {
+        padding: 8px;
+        background: none;
+        border: 0;
+    }
+
+    .select2-container .select2-choice > .select2-chosen {
+        /*display: block;*/
+        overflow: initial;
+    }
+</style>
+}
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <h3 class="page-title">
+            <small></small>
+
+        </h3>
+        <div class="clearfix"></div>
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/home">
+                    خانه
+                </a>
+                <i class="fa fa-angle-left"></i>
+            </li>
+            <li>
+                <a href="#">
+                    مسیر مورد نظر
+                </a>
+            </li>
+            <li class="pull-right">
+                <div id="dashboard-report-range" class="dashboard-date-range tooltips" data-placement="top" data-original-title="Change dashboard date range">
+                    <i class="fa fa-calendar"></i>
+                    <span>
+                    </span>
+                    <i class="fa fa-angle-down"></i>
+                </div>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="portlet blue box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>مشاهده وظایف ابلاغی و شکست آن
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                    <a href="#portlet-config" data-toggle="modal" class="config">
+                    </a>
+                    <a href="javascript:;" class="reload">
+                    </a>
+                    <a href="javascript:;" class="remove">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                @*<a id="taskAssignBtn" class="btn blue btn-sm pull-left" data-toggle="modal"
+                     href="#task_division">تخصیص هدف یا KPI یا برنامه عملیاتی</a>*@
+                <div class="clearfix">
+                </div>
+                <table class="table table-striped table-bordered table-hover" id="taskAssignmentTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                کد دوره
+                            </th>
+                            <th>
+                                نام دوره
+                            </th>
+                            <th>
+                                نام اختصاص دهنده
+                            </th>
+                            <th>
+                                نقش اختصاص دهنده
+                            </th>
+                            <th>
+                                واحد سازمانی اختصاص دهنده
+                            </th>
+                            <th>
+                                واحد سازمانی اختصاص گیرنده
+                            </th>
+                            <th>
+                                نوع
+                            </th>
+                            <th>
+                                عنوان هدف/KPI/برنامه عملیاتی
+                            </th>
+                            <th>
+                                وزن
+                            </th>
+                            <th>
+                                شکست به زیر فعالیت
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Plugins{
+<script src="/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+<script src="/assets/plugins/bootstrap-toastr/toastr.min.js"></script>
+<script src="/assets/scripts/custom/ui-toastr.js"></script>
+<script type="text/javascript" src="/assets/plugins/select2/select2.min.js"></script>
+
+<script src="/assets/plugins/jQuery-tagEditor-master/jquery.caret.min.js"></script>
+<script src="/assets/plugins/jQuery-tagEditor-master/jquery.tag-editor.min.js"></script>
+    @*
+<script type="text/javascript" src="/assets/plugins/select2v4/select2/dist/js/select2.min.js"></script>*@
+
+<script src="/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+
+    @*
+<script src="/assets/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
+<script src="/assets/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>*@
+
+<script src="/assets/advancedDataTable/DataTables-1.10.19.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/Buttons-for-DataTables-1.5.2.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/buttons.print.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/buttons.ColVis.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/jsZip.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/pdfmake.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/pdfmake.font.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/buttons.html5.js" type="text/javascript"></script>
+
+}
+
+@section Scripts{
+
+<script>
+
+
+    function format(d) {
+        var r;
+        $.ajax({
+            url: "/TaskDivision/GetSubTaskList",
+            type: "POST",
+            data: { taskId: d.TaskId, hierarchyId: d.RecieverAllocationEvaluationHierarchyId },
+            async: false,
+            dataType: "html",
+            success: function (result) {
+                r = result;
+            }
+        });
+        return r;
+    }
+    var dt;
+    function show_dataTable() {
+        dt = $('#taskAssignmentTable').DataTable({
+            dom: 'CT<"clearfix">lBfrtip',
+            buttons: [
+                'copy', 'csv', 'excel',
+                'pdf',
+                {
+                    extend: 'pdfHtml5',
+                    download: 'open',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                'colvis'
+            ],
+            columnDefs: [
+                {
+                    targets: [-1],
+                    visible: false
+                }
+            ],
+            "fnInitComplete": function (oSettings, json) {
+
+            },
+            "fnDrawCallback": function (oSettings) {
+
+                $('.taskDivisionBtn').on('click', function () {
+                    var tr = $(this).closest('tr');
+                    var row = dt.row(tr);
+                    $.ajax({
+                        type: 'get',
+                        url: '/TaskDivision/AddTaskDivision',
+                        async: false,
+                        data: { periodDefinitionId: row.data().PeriodDefinitoionId, departmentId: row.data().RecieverAllocationEvaluationHierarchyId },
+                        success: function (data) {
+                            $("#modalPlace").html(data);
+                        },
+                        error: function (status) {
+                            alert("Error");
+                        }
+                    })
+                    $("#taskDivisionSubmit").trigger('click');
+                    $("#taskId").empty();
+                    $("#taskId").append("<option value='" + row.data().TaskId + "'>" + row.data().Title + "</option>");
+                    $("#hierarchyId").val(row.data().RecieverAllocationEvaluationHierarchyId)
+                    $("#addSubTask").trigger('click');
+                    //if (!submitClicked) {
+                    //    $("#taskDivisionSubmit").trigger('click');
+                    //    submitClicked = true;
+                    //}
+                })
+
+                // Array to track the ids of the details displayed rows
+                var detailRows = [];
+                $('.details-control').on('click', function () {
+                    var tr = $(this).closest('tr');
+                    var row = dt.row(tr);
+                    var idx = $.inArray(tr.attr('id'), detailRows);
+
+                    if (row.child.isShown()) {
+                        tr.removeClass('details');
+                        row.child.hide();
+
+                        // Remove from the 'open' array
+                        detailRows.splice(idx, 1);
+                    }
+                    else {
+                        tr.addClass('details');
+                        row.child(format(row.data())).show();
+
+                        // Add to the 'open' array
+                        if (idx === -1) {
+                            detailRows.push(tr.attr('id'));
+                        }
+                    }
+                });
+                // On each draw, loop over the `detailRows` array and show any child rows
+                dt.on('draw', function () {
+                    $.each(detailRows, function (i, id) {
+                        $('#' + id + ' td.details-control').trigger('click');
+                    });
+                });
+            },
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            "columnDefs": [
+                { "orderable": false, "targets": [0] }
+            ],
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "/TaskDivision/GetAssignedTaskList",
+                "type": "Post",
+                "data": function (d) {
+                    d.departmentId2 = $('#departmentId').children('option:selected').val(),
+                        d.periodDefinitionIdDT2 = $('#periodDefinitionIdDT').children('option:selected').val()
+                },
+                //"contentType": 'application/json; charset=utf-8',
+                //"cache": false,
+                "dataType": "json",
+                //'data': function (data) {
+                //    data = JSON.stringify(data)
+                //    return data;
+                //}
+            },
+            "aoColumns": [
+                {
+                    "mData": "PeriodCode",
+                },
+                {
+                    "mData": "PeriodTitle"
+                },
+                {
+                    "mData": "AllocatorFullName"
+                },
+                {
+                    "mData": "allocatorRoleName",
+                    "render": function (data, type, row, meta) {
+                        if (data == "PlanningAdmin") {
+                            data = 'ادمین برنامه ریزی'
+                        }
+                        else if (data == "Coacher") {
+                            data = 'مربی'
+                        }
+                        else if (data == "HRAdmin") {
+                            data = 'ادمین سرمایه انسانی'
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "mData": "AllocatorDepartmentName"
+                },
+                {
+                    "mData": "ShortName"
+                },
+                {
+                    "mData": "Type",
+                    "render": function (data, type, row, meta) {
+                        if (data == "1") {
+                            data = 'هدف'
+                        }
+                        else if (data == "2") {
+                            data = 'KPI'
+                        }
+                        else if (data == "3") {
+                            data = 'برنامه عملیاتی'
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "mData": "Title"
+                },
+                {
+                    "mData": "TaskWeight"
+                },
+                {
+                    "mData": null,
+                    "render": function (data, type, row, meta) {
+                        data = "<a href='#' data-toggle='modal' class='taskDivisionBtn btn default btn-block disabled'>شکست به زیر فعالیت</a>";
+                        return data;
+                    }
+                },
+                {
+                    "class": "details-control",
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ""
+                }
+            ]
+        });
+
+    }
+
+    show_dataTable();
+
+    $("#taskAssignmentTable_filter").after("<div class='dataTables_filter col-md-3'><label>انتخاب رده سازمانی:<select name='departmentId' id='departmentId' class='form-control input-medium'></select></label></div>");
+
+    $("#taskAssignmentTable_filter").after("<div class='dataTables_filter'><label>انتخاب دوره:<select name='periodDefinitionIdDT' id='periodDefinitionIdDT' class='form-control input-medium'></select></label></div>");
+
+    $("#taskAssignmentTable_filter").after("<div class='clearfix'></div>");
+
+    $.ajax({
+        type: 'get',
+        url: '/share/GetPeriodDefinitionList',
+        //data: { roleId: roleId },
+        success: function (periodDefinition) {
+            $("#periodDefinitionIdDT").empty();
+            //$("#periodDefinitionIdDT").append("<option></option>");
+            var max = 0;
+            $(periodDefinition).each(function (i, p) {
+                //$("#parentName").select2("val", d.departmentId);
+                if (p.periodDefinitoionId > max) {
+                    max = p.periodDefinitoionId;
+                }
+                $("#periodDefinitionIdDT").append("<option value='" + p.periodDefinitoionId + "'>" + p.periodTitle + " (" + p.periodCode + ")</option>");
+            })
+            $("#periodDefinitionIdDT").val(max);
+            $('#periodDefinitionIdDT').trigger('change');
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+
+    $('#periodDefinitionIdDT').on('change', function () {
+        if ($('#periodDefinitionIdDT').children('option:selected').val() == "" && $('#departmentId').children('option:selected').val() != "") {
+            dt.ajax.url("/TaskDivision/GetAssignedTaskList");
+            dt.ajax.reload();
+        }
+        $.ajax({
+            type: 'get',
+            url: '/TaskDivision/GetDepartmentList',
+            data: { periodDefinitionId: $('#periodDefinitionIdDT').children('option:selected').val() },
+            success: function (periodDefinition) {
+                $("#departmentId").empty();
+                $("#departmentId").append("<option></option>");
+
+                $(periodDefinition).each(function (i, p) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#departmentId").append("<option value='" + p.recieverAllocationEvaluationHierarchyId + "'>" + p.shortName + "</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    });
+
+    $('#departmentId').on('change', function () {
+        dt.ajax.url("/TaskDivision/GetAssignedTaskList");
+        dt.ajax.reload();
+    })
+
+    function getCriterias(taskId, periodDefinitionId, departmentId) {
+        $.ajax({
+            type: 'get',
+            url: '/TaskDivision/GetCriterias',
+            data: { taskId: taskId, periodDefinitionId: periodDefinitionId, departmentId: departmentId },
+            success: function (data) {
+                $("#modalPlace").html(data);
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    }
+    var criteriaIdd, periodDefinitionIdd, departmentIdd, criteriaTitlee;
+    function deleteCriteria(criteriaId, periodDefinitionId, departmentId, criteriaTitle) {
+        criteriaIdd = criteriaId;
+        periodDefinitionIdd = periodDefinitionId;
+        departmentIdd = departmentId;
+        criteriaTitlee = criteriaTitle;
+        $("#criteriasModal").modal('hide');
+        $.ajax({
+            type: 'get',
+            url: '/TaskDivision/DeleteCriteria',
+            data: {
+                criteriaId: criteriaIdd, periodDefinitionId: periodDefinitionIdd, departmentId: departmentIdd
+            },
+            async: true,
+            success: function (data) {
+
+                $("#modalPlace").html(data);
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    }
+
+    function updateSubTaskAndCriterias(taskId, periodDefinitionId, departmentId) {
+        $.ajax({
+            type: 'get',
+            url: '/TaskDivision/UpdatetSubTaskAndCriterias',
+            data: { taskId: taskId, periodDefinitionId: periodDefinitionId, departmentId: departmentId },
+            success: function (data) {
+                if (data == 0) {
+                    toastr.options.timeOut = "15000";
+                    toastr.options.positionClass = "toast-top-center";
+                    toastr.info("برای زیر فعالیت مورد نظر شاخصی تعریف نشده");
+                } else {
+                    $("#modalPlace").html(data);
+                }
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    }
+
+    function deleteSubTask(taskIdd, periodDefinitionIdd, departmentIdd, taskTitlee) {
+        $.ajax({
+            type: 'get',
+            url: '/TaskDivision/DeleteSubTask',
+            data: {
+                taskId: taskIdd, periodDefinitionId: periodDefinitionIdd, departmentId: departmentIdd, taskTitle: taskTitlee
+            },
+            async: true,
+            success: function (data) {
+
+                $("#modalPlace").html(data);
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    }
+</script>
+}

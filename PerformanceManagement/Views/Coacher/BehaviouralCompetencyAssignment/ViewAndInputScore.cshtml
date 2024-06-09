@@ -1,0 +1,197 @@
+﻿@{
+    Layout = null;
+}
+@model ScoreCompetencyParameterView
+
+<div class="panel-body" id="scoreTbl_@Model.index">
+
+</div>
+<script>
+    //  $(document).ready(function () {
+
+    var isTrue = false;
+    var finalResult = false;
+    var coacherId;
+    var allocatorLevel;
+    var coacherLevell
+    $.ajax({
+        type: 'get',
+        url: '/Share/GetCurrentUserInfo',
+        async: false,
+        success: function (data) {
+            coacherId = data;
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+
+    var type;
+    
+    if (@Model.Levell == 2 && ((@Model.AllocatorPersonId == coacherId) || '@Model.allocatorRoleName' == "HRAdmin")) {
+        $.ajax({
+            url: '/BehaviouralCompetencyAssignment/GetScore',
+            data: {
+                evaluationBehaviouralCompetencyId: @Model.EvaluationBehaviouralCompetencyId
+                , hasParticipant: @Model.hasParticipant
+                , participantConfirmation: '@Model.participantConfirmation'
+                , type: 1
+            },
+            //contentType: 'aplication/json;charset=utf-8',
+            type: "POST",
+            datatype: 'html',
+            async: false,
+            success: function (data) {
+                $('#scoreTbl_@Model.index').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error");
+            }
+        })
+        finalResult = true;
+    }
+    else if (@Model.Levell >= 3 && ('@Model.allocatorRoleName' == "HRAdmin")) {
+        $.ajax({
+            url: '/BehaviouralCompetencyAssignment/GetScore',
+            data: {
+                evaluationBehaviouralCompetencyId: @Model.EvaluationBehaviouralCompetencyId
+                , hasParticipant: @Model.hasParticipant
+                , participantConfirmation: '@Model.participantConfirmation'
+                , type: 2
+            },
+            //contentType: 'aplication/json;charset=utf-8',
+            type: "POST",
+            datatype: 'html',
+            async: false,
+            success: function (data) {
+                $('#scoreTbl_@Model.index').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error");
+            }
+        })
+        finalResult = true;
+    }
+    else if (@Model.Levell >= 3 && '@Model.AllocatorEvaluationBehaviouralHierarchyId' == @Model.parent && '@Model.allocatorRoleName' != "HRAdmin") {
+        $.ajax({
+            url: '/BehaviouralCompetencyAssignment/GetScore',
+            data: {
+                evaluationBehaviouralCompetencyId: @Model.EvaluationBehaviouralCompetencyId
+                , hasParticipant: @Model.hasParticipant
+                , participantConfirmation: '@Model.participantConfirmation'
+                , type: 2
+            },
+            //contentType: 'aplication/json;charset=utf-8',
+            type: "POST",
+            datatype: 'html',
+            async: false,
+            success: function (data) {
+                $('#scoreTbl_@Model.index').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error");
+            }
+        })
+        finalResult = true;
+    }
+    else if (@Model.Levell >= 3 && (@Model.AllocatorPersonId == coacherId && '@Model.allocatorRoleName' != "HRAdmin")) {
+        $.ajax({
+            type: 'get',
+            url: '/Share/AllocatorLevel',
+            async: false,
+            data: {
+                coacherId: @Model.AllocatorPersonId
+                , coacherDepartmentId: '@Model.AllocatorEvaluationBehaviouralHierarchyId'
+                , departmentId: @Model.RecieverAllocationEvaluationBehaviouralHierarchyId
+                , personId: @Model.RecieverAllocationPersonId
+            },
+            success: function (data) {
+                console.log(data)
+                allocatorLevel = data[0].Levell;
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        $.ajax({
+            url: '/BehaviouralCompetencyAssignment/GetScore',
+            data: {
+                evaluationBehaviouralCompetencyId: @Model.EvaluationBehaviouralCompetencyId
+                , hasParticipant: @Model.hasParticipant
+                , participantConfirmation: '@Model.participantConfirmation'
+                , type: 4
+                , coacherLevel: (4-allocatorLevel)
+            },
+            //contentType: 'aplication/json;charset=utf-8',
+            type: "POST",
+            datatype: 'html',
+            async: false,
+            success: function (data) {
+                $('#scoreTbl_@Model.index').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error");
+            }
+        })
+        finalResult = true;
+    }
+    else {
+        $.ajax({
+            type: 'get',
+            url: '/Share/AllocatorLevel',
+            async: false,
+            data: {
+                coacherId: @Model.AllocatorPersonId
+                , coacherDepartmentId: '@Model.AllocatorEvaluationBehaviouralHierarchyId'
+                , departmentId: @Model.RecieverAllocationEvaluationBehaviouralHierarchyId
+                , personId: @Model.RecieverAllocationPersonId
+            },
+            success: function (data) {
+                allocatorLevel = data[0].Levell;
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        $.ajax({
+            type: 'get',
+            url: '/Share/AllocatorLevel',
+            async: false,
+            data: {
+                coacherId: coacherId
+                , coacherDepartmentId: $('#departmentId').children('option:selected').val()
+                , departmentId: '@Model.RecieverAllocationEvaluationBehaviouralHierarchyId'
+                , personId: @Model.RecieverAllocationPersonId
+            },
+            success: function (data) {
+                coacherLevell = data[0].Levell;
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        if (@Model.Levell >= 3 && (@Model.AllocatorPersonId != coacherId && '@Model.allocatorRoleName' != "HRAdmin" && '@Model.AllocatorEvaluationBehaviouralHierarchyId' != @Model.parent) && coacherLevell <= allocatorLevel) {
+            finalResult = true;
+            $.ajax({
+                url: '/BehaviouralCompetencyAssignment/GetScore',
+                data: {
+                    evaluationBehaviouralCompetencyId: @Model.EvaluationBehaviouralCompetencyId
+                    , hasParticipant: @Model.hasParticipant
+                    , participantConfirmation: '@Model.participantConfirmation'
+                    , type: 5
+                    , coacherLevel: (4-allocatorLevel)
+                },
+                //contentType: 'aplication/json;charset=utf-8',
+                type: "POST",
+                datatype: 'html',
+                async: false,
+                success: function (data) {
+                    $('#scoreTbl_@Model.index').html(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Error");
+                }
+            })
+        }
+    }
+</script>

@@ -1,0 +1,375 @@
+﻿@{
+    Layout = null;
+}
+
+<form method="post" id="behaviourWeightAssignmentFrm" class="form-horizontal">
+    <div class="modal fade department modalClass" id="assignWeightModal" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 id="sabt_hazine_personnel" class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        تخصیص وزن
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+
+                        <div class="alert alert-block alert-info fade in">
+                            <button type="button" class="close" data-dismiss="alert"></button>
+                            <h4 class="alert-heading">روش وزن دهی</h4>
+                            <p id="weightWayInfo">
+
+                            </p>
+                        </div>
+
+                        <div id="competencyWeightRow"></div>
+
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="assignWeightBTN">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div id="critriaPlaceHolder2"></div>
+</form>
+<script type="text/html" id="appendCompetency">
+    <div class="row">
+        <!--/span-->
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-md-8">
+                    {1}
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-4">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" value="{6}" name="competencyWeight{0}" id="competencyWeight{0}" coacherLevel="{5}" behaviouralCompetencyId="{2}" evaluationBehaviouralCompetencyId="{3}" periodDefinitionId="{4}" departmentIdR="{7}" recieverIdP="{8}" departmentId="{9}" class="form-control competencyWeight input-small input-sm" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/span-->
+    </div>
+</script>
+<script>
+
+    $(document).ready(function () {
+        var index;
+        var isTrue = false;
+        var competencyWeight0Value;
+        var finalResult = false;
+        var template = jQuery.validator.format($.trim($("#appendCompetency").html()));
+        var taskWeightIndex = 0;
+        var row;
+        var allocatorId;
+        //var allocatorDepartmentId;
+        $.ajax({
+            type: 'get',
+            url: '/Share/GetCurrentUserInfo',
+            async: false,
+            success: function (data) {
+                allocatorId = data;
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        var length = dt.rows('.selected').data().length;
+        var selector;
+        if (length > 0) {
+            selector = "#competencyAssignmentTable >tbody>tr.selected";
+        } else {
+            selector = "#competencyAssignmentTable >tbody>tr";
+        }
+       ////////////// $("#competencyAssignmentTable >tbody>tr").each(function (i, tr) {
+        $(selector).each(function (i, tr) {
+            row = dt.row(tr);
+            //console.log(dt.row(tr));
+            //row.child(row.data().fullName).show()
+            //alert(row.data().fullName)
+            //if (row.data().allocatorRoleName != "HRAdmin") {
+            //    allocatorDepartmentId = row.data().AllocatorEvaluationBehaviouralHierarchyId;
+            //}
+
+            if (row.data().Levell == 2 && row.data().allocatorRoleName != "PlanningAdmin" && (row.data().AllocatorPersonId == allocatorId || row.data().allocatorRoleName == "HRAdmin")) {
+                index = taskWeightIndex++;
+                $(template(index, row.data().Title, row.data().BehaviouralCompetencyId, row.data().EvaluationBehaviouralCompetencyId, row.data().PeriodDefinitoionId, row.data().Levell - 1, row.data().BehaviouralCompetencyWeight == null ? "" : row.data().BehaviouralCompetencyWeight, row.data().RecieverAllocationEvaluationBehaviouralHierarchyId, row.data().RecieverAllocationPersonId, row.data().AllocatorEvaluationBehaviouralHierarchyId)).appendTo("#competencyWeightRow");
+
+                if (row.data().allocatorRoleName == "HRAdmin") {
+                    if (index == 0) {
+                        isTrue = true;
+                        competencyWeight0Value = row.data().BehaviouralCompetencyWeight;
+                        //$("#competencyWeight" + index).val(row.data().TaskWeight);
+                        //$("#competencyWeight" + index).attr("disabled", "disabled")
+                    } else {
+                        $("#competencyWeight" + index).val(row.data().BehaviouralCompetencyWeight);
+                        $("#competencyWeight" + index).attr("disabled", "disabled")
+                    }
+                }
+                finalResult = true;
+            } else if (row.data().Levell == 3 && row.data().allocatorRoleName != "PlanningAdmin" && row.data().allocatorRoleName != "HRAdmin" && row.data().AllocatorPersonId == allocatorId) {
+                index = taskWeightIndex++;
+                $(template(index, row.data().Title, row.data().BehaviouralCompetencyId, row.data().EvaluationBehaviouralCompetencyId, row.data().PeriodDefinitoionId, row.data().Levell - 1, row.data().BehaviouralCompetencyWeight == null ? "" : row.data().BehaviouralCompetencyWeight, row.data().RecieverAllocationEvaluationBehaviouralHierarchyId, row.data().RecieverAllocationPersonId, row.data().AllocatorEvaluationBehaviouralHierarchyId)).appendTo("#competencyWeightRow");
+
+                finalResult = true;
+            } else if (row.data().Levell > 3 && row.data().allocatorRoleName != "PlanningAdmin" && row.data().allocatorRoleName != "HRAdmin" && row.data().AllocatorPersonId == allocatorId) {
+                index = taskWeightIndex++;
+                $(template(index, row.data().Title, row.data().BehaviouralCompetencyId, row.data().EvaluationBehaviouralCompetencyId, row.data().PeriodDefinitoionId, row.data().Levell - 1, row.data().BehaviouralCompetencyWeight == null ? "" : row.data().BehaviouralCompetencyWeight, row.data().RecieverAllocationEvaluationBehaviouralHierarchyId, row.data().RecieverAllocationPersonId, row.data().AllocatorEvaluationBehaviouralHierarchyId)).appendTo("#competencyWeightRow");
+
+                finalResult = true;
+            }
+        })
+        if (!finalResult) {
+            alert("مجاز به وزن دهی برای وظیفه/وظیفه های کارمند مورد نظر نمی باشید.");
+        }
+        else if (finalResult) {
+            var weightWay = "";
+            var numberScaleList = [];
+            $.ajax({
+                type: 'get',
+                url: '/Share/GetBehaviourWeightWay',
+                data: { periodDefinitionId: row.data().PeriodDefinitoionId },
+                async: false,
+                success: function (data) {
+                    weightWay = data;
+                    if (data == 1) {
+                        $("#weightWayInfo").html("وزن دهی به صورت درصدی و بازه مجاز از 1 تا 100 می باشد.");
+                    } else if (data == 2) {
+                        $.ajax({
+                            type: 'get',
+                            url: '/Share/GetBehaviourLikertScale',
+                            data: { periodDefinitionId: row.data().PeriodDefinitoionId },
+                            async: false,
+                            success: function (data) {
+                                $("#weightWayInfo").html("وزن دهی به صورت طیف لیکرت می باشد. و بازه های مجاز جهت وزن دهی ");
+                                $(data).each(function (i, d) {
+                                    numberScaleList.push(d.numberScale);
+                                    $("#weightWayInfo").append(d.numberScale + ":" + d.titleScale + "  ");
+                                });
+                            },
+                            error: function (status) {
+                                alert("Error");
+                            }
+                        })
+                    }
+                },
+                error: function (status) {
+                    alert("Error");
+                }
+            })
+
+            $('#assignWeightModal').modal('show');
+
+            $('.modalClass .select2').select2({
+                placeholder: "انتخاب کنید",
+                allowClear: true
+            });
+
+            $("#assignWeightBTN").click(function () {
+                //alert('dpCreationSubmit');
+                //var postdata2 = $(this).serializeArray();
+                var form = $("#behaviourWeightAssignmentFrm");
+                form.validate({
+                    //console.log($('#registerform').serializeArray());
+                    errorElement: 'span', //default input error message container
+                    errorClass: 'help-block', // default input error message class
+                    focusInvalid: false, // do not focus the last invalid input
+                    ignore: "",
+                    rules: {
+                        competencyWeight0: {
+                            required: true,
+                        },
+                    },
+                    messages: {
+                        competencyWeight0: {
+                            required: "پر کردن این فیلد الزامی می باشد"
+                        }
+                    },
+                    invalidHandler: function (event, validator) { //display error alert on form submit
+                        //                    success2.hide();
+                        //                    error2.show();
+                        //                    App.scrollTo(error2, -200);
+                    },
+                    errorPlacement: function (error, element) { // render error placement for each input type
+                        var icon = $(element).parent('.input-icon').children('i');
+                        icon.removeClass('fa-check').addClass("fa-warning");
+                        icon.attr("data-original-title", error.text()).tooltip();
+                    },
+                    highlight: function (element) { // hightlight error inputs
+                        $(element)
+                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                    },
+
+                    unhighlight: function (element) { // revert the change done by hightlight
+
+                    },
+
+                    success: function (label, element) {
+                        var icon = $(element).parent('.input-icon').children('i');
+                        $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                        icon.removeClass("fa-warning").addClass("fa-check");
+                    },
+
+                    submitHandler: function (form) {
+                        //                    success2.show();
+                        //                    error2.hide();
+                    }
+                })
+                if (form.valid() == false) {
+                    //console.log($('#registerform').serializeArray());
+                    return false;
+                } else {
+                    var listOfEvaluation = [];
+                    $("#competencyWeightRow input[type=text]").each(function () {
+                        var EvaluationCompetencyView = {};
+                        EvaluationCompetencyView.BehaviouralCompetencyId = $(this).attr("behaviouralCompetencyId");
+                        EvaluationCompetencyView.CompetencyWeight = $(this).val();
+                        EvaluationCompetencyView.EvaluationBehaviouralCompetencyId = $(this).attr("evaluationBehaviouralCompetencyId");
+                        EvaluationCompetencyView.PeriodDefinitionId = $(this).attr("periodDefinitionId");
+                        console.log($(this).attr("departmentId"));
+                        EvaluationCompetencyView.AllocatorDepartmentId = $(this).attr("departmentId") == 'null' ? 0 : $(this).attr("departmentId");
+                        EvaluationCompetencyView.AllocatorEvaluationBehaviouralHierarchyId = $("#departmentIdDT >label>#departmentId").val();
+                        EvaluationCompetencyView.RecieverAllocationEvaluationBehaviouralHierarchyId = $(this).attr("departmentIdR");
+                        EvaluationCompetencyView.RecieverAllocationPersonId = $(this).attr("recieverIdP");
+                        listOfEvaluation.push(EvaluationCompetencyView);
+                    });
+                    console.log(listOfEvaluation);
+                    //$("#articleSubmit").addClass('disabled');
+                    // $("#dpCreationSubmit").attr("disabled", "disabled");
+                    var btn = $("#assignWeightBTN");
+                    btn.button('loading');
+                    //var postdata = new FormData(this);
+                    //var postdata = $('#assignWeightFrm').serializeArray();
+
+                    //console.log(postdata);
+                    $.ajax(
+                        {
+                            datatype: "json",
+                            //data:postdata,
+                            url: "/BehaviouralCompetencyAssignment/BehaviouralWeightAssignment",
+                            //url : formURL,
+                            //                        data: postdata2,
+                            data: JSON.stringify(listOfEvaluation),
+                            //data: "firstName=" + $("fn").val(),
+                            //cache: false,
+                            contentType: 'application/json; charset=utf-8',
+                            //contentType: false,
+                            //processData: false,
+                            type: "POST",
+
+                            success: function (data, textStatus, jqXHR) {
+                                //if ($.trim(data) === "yess")
+                                //i = 1;
+                                //j = 1;
+                                if (data.result > 0) {
+                                    //$("#dpcreation")[0].reset();
+                                    $("#assignWeightModal").modal("hide")
+                                    dt.ajax.url("/BehaviouralCompetencyAssignment/GetAssignedCompetencyList");
+                                    dt.ajax.reload();
+                                    //resetFormValidation();
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.success("اطلاعات مورد نظر با موفقیت ثبت گردید.");
+                                } else if (data.result == 0) {
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.info("اطلاعات مورد نظر ثبت نگردید.");
+                                }
+                                else {
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.info(data.result);
+                                }
+                                if (data.notAuthorized == "true") {
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.info("کاربر گرامی جهت وزن دهی با سمت سازمانی مورد نظر در بازه زمانی مجاز اقدام نمایید.");
+                                }
+                                if (data.hasOwnProperty('malicious') && data.malicious == "true") {
+                                    message = "اطلاعات مورد نظر ذخیره نگردید لطفا فرم وزن دهی را بسته و مجددا تلاش نمایید در غیر اینصورت با توسعه دهنده تماس حاصل فرمایید";
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.info(message);
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert("erorr");
+                                alert(jqXHR);
+                                alert(textStatus);
+                            }
+                        }).always(function () {
+                            $("#assignWeightBTN").button('reset');
+                        });
+                    //$.getScript('/assets/javascript/articleForm.js', function () {
+                    //    ArticleForm.init(postdata);
+                    //    $("#articleForm")[0].reset();
+                    //});
+                    // e.preventDefault(e);
+                }
+            });
+            //Begin of validation of form
+            var competencyWeight = $("#competencyWeight0").val();
+            $("#competencyWeight0").val("");
+            $("#assignWeightBTN").trigger('click');
+            //$("#behaviourWeightAssignmentFrm").validate();
+            $('.competencyWeight').each(function (i, d) {
+                $(this).rules("add", {
+                    required: true,
+                    messages: {
+                        required: "پرکردن این فیلد الزامی می باشد",
+                    }
+                });
+                $(this).rules("add", {
+                    number: true,
+                    messages: {
+                        number: "لطفا عدد وارد نمایید",
+                    }
+                });
+                if (weightWay == 1) {
+                    $(d).rules("add", {
+                        range: [1, 100],
+                        messages: {
+                            range: "لطفا عددی بین 1 تا 100 وارد نمایید",
+                        }
+                    });
+                } else if (weightWay == 2) {
+                    $(this).rules("add", {
+                        range: [Math.min.apply(Math, numberScaleList), Math.max.apply(Math, numberScaleList)],
+                        messages: {
+                            range: "لطفا عددی بین " + Math.min.apply(Math, numberScaleList) + " تا " + Math.max.apply(Math, numberScaleList) + " وارد نمایید",
+                        }
+                    });
+                }
+            });
+            //$("#behaviourWeightAssignmentFrm").validate();
+            $("#assignWeightBTN").trigger('click');
+            $("#competencyWeight0").val(competencyWeight);
+            //if (isTrue) {
+            //    $("#competencyWeight0").val(competencyWeight0Value);
+            //    $("#competencyWeight0").attr("disabled", "disabled");
+            //    $("#competencyWeight0").prev().remove();
+            //}
+            //End of validation of form
+        }
+    });
+</script>

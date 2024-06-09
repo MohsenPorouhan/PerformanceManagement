@@ -1,0 +1,424 @@
+﻿@{
+    ViewData["Title"] = "تایید/عدم تایید چارت";
+}
+@section Styles{
+<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-toastr/toastr-rtl.min.css" />
+<link rel="stylesheet" type="text/css" href="/assets/plugins/jstree/dist/themes/default/style.min.css" />
+}
+
+<div class="modal fade" id="chart_confirmation" tabindex="" role="" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <button type="button" id="modal-close" class="close"
+                        data-dismiss="modal" aria-hidden="true"></button>
+                <h4 id="sabt_hazine_personnel" class="modal-title">
+                    <i class="fa fa-file-o"></i>
+                    تایید چارت
+                </h4>
+            </div>
+            <form method="post" id="confirm_form" class="form-horizontal">
+                <div class="modal-body">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <b>چارت مورد نظر مورد تایید می باشد؟</b>
+                        <!--/row-->
+                    </div>
+                    <!-- END FORM-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">
+                                    انتخاب دوره
+                                    <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <div class="col-md-7">
+                                    <div class="input-icon right">
+                                        <i class="fa"></i>
+                                        <select name="periodDefinitionId" id="periodDefinitionId" class="form-control"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="yes">بله</button>
+                    <button type="button" class="btn red input-sm input-small" id="no" data-dismiss="modal"><i class="fa fa-times"></i>خیر</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <h3 class="page-title">
+            <small></small>
+
+        </h3>
+        <div class="clearfix"></div>
+
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="index.html">
+                    خانه
+                </a>
+                <i class="fa fa-angle-left"></i>
+            </li>
+            <li>
+                <a href="#">
+                    مسیر مورد نظر
+                </a>
+            </li>
+            <li class="pull-right">
+                <div id="dashboard-report-range" class="dashboard-date-range tooltips" data-placement="top" data-original-title="Change dashboard date range">
+                    <i class="fa fa-calendar"></i>
+                    <span>
+                    </span>
+                    <i class="fa fa-angle-down"></i>
+                </div>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="portlet blue box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>تایید چارت
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                    <a href="#portlet-config" data-toggle="modal" class="config">
+                    </a>
+                    <a href="javascript:;" class="reload">
+                    </a>
+                    <a href="javascript:;" class="remove">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                @*<a id="" class="btn blue btn-sm pull-left" data-toggle="modal"
+                   href="#chart_confirmation">تایید/عدم تایید چارت</a>*@
+
+                <div class="clearfix">
+                </div>
+
+                <ul id="navTab" class="nav nav-tabs">
+                    @*dynamically generated*@
+                </ul>
+                <div id="tabContent" class="tab-content">
+                    @*dynamically generated*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Plugins{
+<script src="/assets/plugins/jstree/dist/jstree.min.js"></script>
+    @*
+<script src="/assets/scripts/custom/ui-tree.js"></script>*@
+
+<script src="/assets/plugins/bootstrap-toastr/toastr.min.js"></script>
+<script src="/assets/scripts/custom/ui-toastr.js"></script>
+<script src="/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+}
+
+@section Scripts{
+<script>
+    function resetFormValidation() {
+        //$(".select2-chosen").html("");
+        //Begin of reset form validation
+        $(".input-icon .fa-warning").addClass('fa').removeClass('fa-warning');
+        $(".input-icon .fa-check").addClass('fa').removeClass('fa-check');
+        $(".alert-danger").hide();
+        $('.form-group').removeClass('has-error');
+        $('.form-group').removeClass('has-success');
+        //End of reset form validation
+    }
+    $.ajax({
+        type: 'get',
+        url: '/Share/GetPeriodDefinition',
+        //data: { roleId: roleId },
+        success: function (periodDefinition) {
+            $("#periodDefinitionId").empty();
+            $("#periodDefinitionId").append("<option></option>");
+
+            $(periodDefinition).each(function (i, p) {
+                //$("#parentName").select2("val", d.departmentId);
+                $("#periodDefinitionId").append("<option value='" + p.periodDefinitoionId + "'selected>" + p.periodTitle + " (" + p.periodCode + ")</option>");
+            })
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+    $("#no").click(function () {
+        $.ajax(
+            {
+                url: "/ChartConfirmation/ChartDenialPartial",
+                contentType: 'aplication/json;charset=utf-8',
+                type: "GET",
+                datatype: 'html',
+
+                success: function (data, textStatus, jqXHR) {
+                    debugger;
+                    //$("#department_creation").html(data);
+                    $("#modalPlace").html(data);
+                    //$.getScript('/assets/scripts/core/app.js', function () {
+                    //    App.init();
+                    //});
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("erorr");
+                    alert(jqXHR);
+                    alert(textStatus);
+                }
+            });
+    });
+
+    function show_jstree(evaluationHierarchyId, i) {
+        $('#treeview' + i).jstree({
+            'core': {
+                "themes": {
+                    "responsive": false
+                },
+                'data': {
+                    'url': function (node) {
+
+                        //return node.id === '#' ? "/Department/GetRoot" : "/Department/GetChildren/" + node.id;
+                        return "/ChartConfirmation/GetRoot?evaluationHierarchyId=" + evaluationHierarchyId;
+                    },
+                    'data': function (node) {
+                        return { 'id': node.id };
+                    }
+                }
+            },
+            "types": {
+                "default": {
+                    "icon": "fa fa-folder icon-warning icon-lg"
+                },
+                "file": {
+                    "icon": "fa fa-file icon-warning icon-lg"
+                }
+            },
+            "state": { "key": "demo3" },
+            "plugins": ["state", "types"]
+        });
+
+        $('#treeview' + i).on('loaded.jstree', function (e, data) {
+            $(this).jstree("open_all");
+        }).jstree();
+    }
+
+    $.ajax({
+        type: 'get',
+        url: '/ChartConfirmation/GetNumberOfChart',
+        //data: { roleId: roleId },
+        success: function (data) {
+            //alert(data.recordsTotal);
+            var j = 0;
+            $(data.chartsInformation).each(function (i, p) {
+                if (p.PositionType == 1) {
+                    $("#navTab").append("<li class='active'><a id='a" + ((i + 1)) + "' href = '#tab_1_" + (i + 1) + "' data-toggle='tab'> نمایش چارت " + p.ShortName + " </a> </li>");
+                    $("#tabContent").append("<div class='tab-pane active' id='tab_1_" + (i + 1) + "'> <div class='tree-demo' id='treeview" + (i + 1) + "'></div> </div>");
+                    show_jstree(p.EvaluationHierarchyId, (i + 1));
+                }
+                else {
+                    $("#navTab").append("<li><a id='a" + ((i + 1)) + "' href = '#tab_1_" + ((i + 1)) + "' data-toggle='tab'> نمایش چارت " + p.ShortName + " </a> </li>");
+                    //$("#tabContent").append("<div class='tab-pane active' id='tab_1_" + ((i + 1)) + "'> <div class='tree-demo' id='treeview" + ((i + 1)) + "'></div></div>");
+                    //show_jstree(p.EvaluationHierarchyId, ((i + 1)));
+                }
+                if (p.PositionType == 2 && data.recordsTotal == 1) {
+                    $("#tabContent").append("<div class='tab-pane active' id='tab_1_" + ((i + 1)) + "'> <div class='tree-demo' id='treeview" + ((i + 1)) + "'></div></div>");
+                    show_jstree(p.EvaluationHierarchyId, ((i + 1)));
+                }
+                j = i;
+            })
+            if ((j + 1) > 1) {
+                //$("#navTab>li>a:eq(1)").trigger("click");
+                //$('#treeview1').jstree(true).redraw(true);
+                //$("#navTab>li>a:first").trigger("click");
+                $(data.chartsInformation).each(function (i, p) {
+                    $("#a" + (i + 1)).click(function () {
+                       // if (i == 0) {
+                           // $('#treeview1').jstree(true).redraw(true);
+                        //}
+                       // else {
+                            $("#tabContent").append("<div class='tab-pane active' id='tab_1_" + ((i + 1)) + "'> <div class='tree-demo' id='treeview" + (((i + 1))) + "'></div></div>");
+                            //$('#treeview1').jstree("destroy");
+                            show_jstree(p.EvaluationHierarchyId, (((i + 1))));
+                            //$('#treeview2').jstree(true).refresh(true);
+                            $('#treeview' + (i + 1)).jstree(true).redraw(true);
+                       // }
+                    })
+                })
+                //$("#a1").click(function () {
+                //    //$("#tabContent").append("<div class='tab-pane active' id='tab_1_" + ((1)) + "'> <div class='tree-demo' id='treeview" + ((1)) + "'></div></div>");
+                //    //$('#treeview1').jstree("destroy");
+                //    //alert("sdsddd");
+                //    //$('#treeview1>ul').remove();
+                //    //show_jstree(1, ((1)));
+                //    //$('#treeview1').jstree(true).refresh();
+                //    $('#treeview1').jstree(true).redraw(true);
+                //})
+                //$("#a2").click(function () {
+                //    $("#tabContent").append("<div class='tab-pane active' id='tab_1_" + ((2)) + "'> <div class='tree-demo' id='treeview" + ((2)) + "'></div></div>");
+                //    //$('#treeview1').jstree("destroy");
+                //    show_jstree(9, ((2)));
+                //    //$('#treeview2').jstree(true).refresh(true);
+                //    $('#treeview2').jstree(true).redraw(true);
+                //})
+                //$("#a3").click(function () {
+                //    $("#tabContent").append("<div class='tab-pane active' id='tab_1_" + ((3)) + "'> <div class='tree-demo' id='treeview" + ((3)) + "'></div></div>");
+                //    //$('#treeview1').jstree("destroy");
+                //    show_jstree(2, ((3)));
+                //    //$('#treeview2').jstree(true).refresh(true);
+                //    $('#treeview3').jstree(true).redraw(true);
+                //})
+            }
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+
+    $("#confirm_form").submit(function (e) {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        //debugger;
+        var form = $('#confirm_form');
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                periodDefinitionId: {
+                    required: true
+                }
+            },
+            messages: {
+                periodDefinitionId: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+            //$("#articleSubmit").addClass('disabled');
+            $("#yes").attr("disabled", "disabled");
+            var btn = $("#yes");
+            btn.button('loading');
+            var postdata = new FormData(this);
+            //var postdata = $('#dpcreation').serializeArray();
+
+            console.log(postdata);
+            $.ajax(
+                {
+                    //data:postdata,
+                    url: "/ChartConfirmation/AddChartConfirmation",
+                    //url : formURL,
+                    //data: postdata2,
+                    data: postdata,
+                    //data: "firstName=" + $("fn").val(),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: "post",
+
+                    success: function (data, textStatus, jqXHR) {
+                        //alert(data);
+                        //if ($.trim(data) === "yess")
+                        //alert("That's one I wanted. Excellent")
+                        //alert(data);
+                        var message = ""
+                        if (data > 0) {
+                            message += "<span>اطلاعات  مورد نظر با موفقیت ثبت گردید</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success(message);
+                        }
+                        else if (data == 0) {
+                            message += "<span>اطلاعات  مورد نظر ثبت نگردید..</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        }
+
+                        $("#confirm_form")[0].reset();
+                        resetFormValidation();
+                        $("#chart_confirmation").modal("hide");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#yes").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            e.preventDefault(e);
+        }
+    });
+    $('#chart_confirmation').on('hidden.bs.modal', function () {
+        $("#confirm_form")[0].reset();
+        resetFormValidation();
+    });
+</script>
+}

@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+}
+@model List<PerformanceManagement.Models.HRAdmin.View.RelatedExtendSectionView>
+
+<table class="table table-striped table-bordered table-hover" id="sample_dt">
+    <thead>
+        <tr>
+            <th hidden>
+                ExtendSectionPeriodId
+            </th>
+            <th hidden>
+                SectionPeriodId
+            </th>
+            <th hidden>
+                PeriodDefinitoionId
+            </th>
+            <th>
+                شروع تمدید
+            </th>
+            <th>
+                پایان تمدید
+            </th>
+            <th>
+                شروع اولیه
+            </th>
+            <th>
+                پایان اولیه
+            </th>
+            <th>
+                نوع
+            </th>
+            <th>
+
+            </th>
+            <th>
+                ویرایش
+            </th>
+            <th>
+                حذف
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            DateTimeCustom dateTimeCustom = new DateTimeCustom();
+            string data = null;
+            string sectionType = null;
+            string dateFrom = null;
+            string dateTo = null;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td hidden>@item.ExtendSectionPeriodId</td>
+                <td hidden>@item.SectionPeriodId</td>
+                <td hidden>@item.PeriodDefinitoionId</td>
+                <td>@{ dateFrom = dateTimeCustom.MiladiToShamsi(item.DateFrom.Date).Substring(0, 11);} @dateFrom</td>
+                <td>@{ dateTo = dateTimeCustom.MiladiToShamsi(item.DateTo.Date).Substring(0, 11);} @dateTo</td>
+                <td>@{ data = dateTimeCustom.MiladiToShamsi(item.PrimarySectionDateFrom.Date).Substring(0, 11);} @data</td>
+                <td>@{ data = dateTimeCustom.MiladiToShamsi(item.PrimarySectionDateTo.Date).Substring(0, 11);} @data</td>
+                <td>
+                    @{
+                        switch (item.StatusCode)
+                        {
+                            case 1:
+                                data = "ابتدای دوره";
+                                sectionType = "ابتدای دوره";
+                                break;
+                            case 2:
+                                data = "حین دوره";
+                                sectionType = "حین دوره";
+                                break;
+                            case 3:
+                                data = "";
+                                sectionType = "پایان دوره";
+                                <a href='#' onclick='GetExtendScoreSchedule(@item.ExtendSectionPeriodId)' data-toggle='modal' class='extendScoreScheduleBtn'>پایان دوره</a>
+                                break;
+                            case 4:
+                                data = "اعتراضات";
+                                sectionType = "اعتراضات";
+                                break;
+                            default:
+                                data = "";
+                                break;
+                        };
+                    }
+                    @data
+                </td>
+                <td><a href='#' onclick="GetRelatedPeopleWithExtendSectionPeriod(@item.ExtendSectionPeriodId)" data-toggle='modal' class='relatedPeopleWithExtendSectionPeriodBtn'>کارمندان</a></td>
+                <td><a href='#' onclick="ExtendSectionEdition(@item.ExtendSectionPeriodId,'@dateFrom','@dateTo','@sectionType','@item.PeriodTitle',@item.StatusCode)" data-toggle='modal' class=''>ویرایش</a></td>
+                <td><a href='#' onclick="ExtendSectionDeletion(@item.ExtendSectionPeriodId,'@sectionType','@item.PeriodTitle')" data-toggle='modal' class=''>حذف</a></td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+

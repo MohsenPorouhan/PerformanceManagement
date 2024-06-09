@@ -1,0 +1,261 @@
+﻿@{
+    Layout = null;
+}
+<div class="clearfix">
+</div>
+<table class="table table-striped table-hover table-bordered" id="subSetProtestationTbl">
+    <thead>
+        <tr>
+            <th>
+                کد دوره
+            </th>
+            <th>
+                عنوان دوره
+            </th>
+            <th>
+                کارمند
+            </th>
+            <th>
+                واحد کارمند
+            </th>
+            <th>
+                شرح
+            </th>
+            <th>
+                وضعیت پذیرش
+            </th>
+            <th>
+                قابل مشاهده <br>سلسله مراتب
+            </th>
+            <th width="300px">
+                مخاطبان
+            </th>
+            <th>
+                سطح مربیان
+            </th>
+            <th>
+                جزییات
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    function protestationResponseView2(dd) {
+        var r;
+        $.ajax({
+            url: "/ProtestAddressee/GetProtestationResponseList2",
+            type: "POST",
+            data: { protestId2: dd.ProtestId },
+            async: false,
+            dataType: "html",
+            success: function (result) {
+                r = result;
+            }
+        });
+        return r;
+    }
+    var dt2;
+    function show_dataTable2() {
+        dt2 = $('#subSetProtestationTbl').DataTable({
+            dom: 'CT<"clearfix">lBfrtip',
+            buttons: [
+                'copy', 'csv', 'excel',
+                'pdf',
+                {
+                    extend: 'pdfHtml5',
+                    download: 'open',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                'colvis'
+            ],
+            columnDefs: [
+                {
+                    targets: [-1],
+                    visible: false
+                }
+            ],
+            "fnInitComplete": function (oSettings, json) {
+
+            },
+            "fnDrawCallback": function (oSettings) {
+                // Array to track the ids of the details displayed rows
+                var detailRows2 = [];
+                $('.details-control2').on('click', function () {
+                    var tr2 = $(this).closest('tr');
+                    var row2 = dt2.row(tr2);
+                    var idx2 = $.inArray(tr2.attr('id'), detailRows2);
+
+                    if (row2.child.isShown()) {
+                        tr2.removeClass('details');
+                        row2.child.hide();
+
+                        // Remove from the 'open' array
+                        detailRows2.splice(idx2, 1);
+                    }
+                    else {
+                        tr2.addClass('details');
+                        row2.child(protestationResponseView2(row2.data())).show();
+
+                        // Add to the 'open' array
+                        if (idx2 === -1) {
+                            detailRows2.push(tr2.attr('id'));
+                        }
+                    }
+                });
+                // On each draw, loop over the `detailRows` array and show any child rows
+                dt2.on('draw', function () {
+                    $.each(detailRows2, function (i, id) {
+                        $('#' + id + ' td.details-control2').trigger('click');
+                    });
+                });
+            },
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            "columnDefs": [
+                { "orderable": false, "targets": [0] }
+            ],
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "/SubsetProtestation/GetSubsetProtestationList",
+                "type": "Post",
+                "data": function (d) {
+                    d.periodDefinitionIdDT = $('#periodDefinitionIdDT2').children('option:selected').val(),
+                        d.departmentIdDT = $('#departmentId2').children('option:selected').val()
+                },
+                //"contentType": 'application/json; charset=utf-8',
+                //"cache": false,
+                "dataType": "json",
+                //'data': function (data) {
+                //    data = JSON.stringify(data)
+                //    return data;
+                //}
+            },
+            "aoColumns": [
+                {
+                    "mData": "PeriodCode",
+                },
+                {
+                    "mData": "PeriodTitle",
+                },
+                {
+                    "mData": "text",
+                },
+                {
+                    "mData": "EmployeeDepartmentName",
+                },
+                {
+                    "mData": "Description"
+                },
+                {
+                    "mData": "Confirmation",
+                    "render": function (data, type, row, meta) {
+                        if (data == null) {
+                            data = "نامشخص";
+                        } else if (data == true) {
+                            data = "تایید";
+                        } else if (data == false) {
+                            data = "عدم تایید";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "mData": "VisibilityToHierarchy",
+                    "render": function (data, type, row, meta) {
+                        if (data == true) {
+                            data = "باشد";
+                        } else if (data == false) {
+                            data = "نباشد";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "mData": "FullName"
+                },
+                {
+                    "mData": "CoacherLevel"
+                },
+                {
+                    "class": "details-control2",
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ""
+                }
+            ]
+        });
+    }
+    show_dataTable2();
+
+    $("#subSetProtestationTbl_filter").after("<div id='departmentIdDT2' class='dataTables_filter input-DT'><label>رده سازمانی:<select name='departmentId2' id='departmentId2' class='form-control input-medium'></select></label></div>");
+
+    $("#subSetProtestationTbl_filter").after("<div class='dataTables_filter input-DT'><label>دوره:<select name='periodDefinitionIdDT2' id='periodDefinitionIdDT2' class='form-control input---medium'></select></label></div>");
+
+    $("#subSetProtestationTbl_filter").after("<div class='clearfix'></div>");
+
+    $.ajax({
+        type: 'get',
+        url: '/share/GetPeriodDefinitionFromEvaluation',
+        //data: { roleId: roleId },
+        success: function (periodDefinition) {
+            $("#periodDefinitionIdDT2").empty();
+            //$("#periodDefinitionIdDT2").append("<option></option>");
+            var max = 0;
+            $(periodDefinition).each(function (i, p) {
+                //$("#parentName").select2("val", d.departmentId);
+                if (p.periodDefinitoionId > max) {
+                    max = p.periodDefinitoionId;
+                }
+                $("#periodDefinitionIdDT2").append("<option value='" + p.periodDefinitoionId + "'>" + p.periodTitle + " (" + p.periodCode + ")</option>");
+            })
+            $("#periodDefinitionIdDT2").val(max);
+            $('#periodDefinitionIdDT2').trigger('change');
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+    $('#periodDefinitionIdDT2').on('change', function () {
+        $.ajax({
+            type: 'get',
+            url: '/EmployeeTaskAssignment/GetDepartmentList',
+            //data: { periodDefinitionId: $('#periodDefinitionIdDT2').children('option:selected').val() },
+            success: function (DepartmentResponsibilty) {
+
+                $("#departmentId2").empty();
+                $("#departmentId2").append("<option></option>");
+                //dt.ajax.url("/ParticipantTaskAssignment/GetAssignedTaskList");
+                //dt.ajax.reload();
+                $(DepartmentResponsibilty).each(function (i, p) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#departmentId2").append("<option value='" + p.EvaluationHierarchyId + "'>" + p.ShortName + "</option>");
+                    if (p.PositionType == 1) {
+                        $("#departmentId2").val(p.EvaluationHierarchyId);
+                        //$("#departmentId").trigger('change');
+                    }
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    });
+    $('#departmentId2').on('change', function () {
+        //dt2.ajax.url("/Protest/GetProtestList");
+        dt2.ajax.reload();
+    });
+</script>

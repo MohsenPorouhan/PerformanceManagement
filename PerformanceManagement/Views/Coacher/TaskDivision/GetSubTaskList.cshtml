@@ -1,0 +1,46 @@
+﻿@{
+    Layout = null;
+}
+@model List<PerformanceManagement.Models.Task>
+<table class="table table-striped table-bordered table-hover" id="sample_dt">
+    <thead>
+        <tr>
+            <th hidden>
+                taskId
+            </th>
+            <th hidden>
+                parentTaskId
+            </th>
+            <th hidden>
+                EvaluationHierarchyId
+            </th>
+            <th>
+                نام زیر فعالیت
+            </th>
+            <th>
+                شاخص ها
+            </th>
+            <th>
+                ویرایش
+            </th>
+            <th>
+                حذف
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td hidden>@item.TaskId</td>
+            <td hidden>@item.ParentTaskId</td>
+            <td hidden>@item.EvaluationHierarchyId</td>
+            <td>@item.Title</td>
+            <td><a href='#' onclick="getCriterias(@item.TaskId,@item.PeriodDefinitoionId,@item.EvaluationHierarchyId)" data-toggle='modal' class='criteriaOfTaskDivisionBtn'>شاخص ها</a></td>
+            <td><a href='#' onclick="updateSubTaskAndCriterias(@item.TaskId,@item.PeriodDefinitoionId,@item.EvaluationHierarchyId)" data-toggle='modal' class='subTaskAndCriteriasBtn'>ویرایش</a></td>
+            <td><a href='#' onclick="deleteSubTask(@item.TaskId,@item.PeriodDefinitoionId,@item.EvaluationHierarchyId,'@item.Title')" data-toggle='modal' class='deleteSubTaskBtn'>حذف</a></td>
+        </tr>
+        }
+
+    </tbody>
+</table>

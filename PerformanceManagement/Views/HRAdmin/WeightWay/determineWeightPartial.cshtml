@@ -1,0 +1,322 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="modal fade" id="determineWeight" tabindex="" role="basic"
+     aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <button type="button" id="modal-close" class="close"
+                        data-dismiss="modal" aria-hidden="true"></button>
+                <h4 id="sabt_hazine_personnel" class="modal-title">
+                    <i class="fa fa-file-o"></i>
+                    تعیین شیوه وزن دهی نمره عملکرد و وظایف و شایستگی رفتاری
+                </h4>
+            </div>
+            <form id="determineWeightForm" method="post" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        روش وزن دهی شایستگی رفتاری
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select name="competencyWeight" id="competencyWeight" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        روش وزن دهی وظایف
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select name="taskWeight" id="taskWeight" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        روش وزن دهی نمره عملکرد
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select name="scoreWeight" id="scoreWeight" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        انتخاب دوره
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select name="periodDefinitionId" id="periodDefinitionId" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <!-- END FORM-->
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="determineWeightSaveBtn">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#determineWeight').modal('show');
+        $.ajax({
+            type: 'get',
+            url: '/WeightWay/GetCompetencyLikert',
+            //data: { roleId: roleId },
+            success: function (competencyLikert) {
+                $("#competencyWeight").empty();
+                $("#competencyWeight").append("<option></option>");
+                $("#competencyWeight").append("<option value='1000001'>درصدی</option>");
+
+                $(competencyLikert).each(function (i, c) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#competencyWeight").append("<option value='" + c.likertScaleId + "'>" + c.name + "</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+
+        $.ajax({
+            type: 'get',
+            url: '/WeightWay/GetTaskLikert',
+            //data: { roleId: roleId },
+            success: function (competencyLikert) {
+                $("#taskWeight").empty();
+                $("#taskWeight").append("<option></option>");
+                $("#taskWeight").append("<option value='1000001'>درصدی</option>");
+
+                $(competencyLikert).each(function (i, c) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#taskWeight").append("<option value='" + c.likertScaleId + "'>" + c.name + "</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+
+        $.ajax({
+            type: 'get',
+            url: '/WeightWay/GetScoreLikert',
+            //data: { roleId: roleId },
+            success: function (competencyLikert) {
+                $("#scoreWeight").empty();
+                $("#scoreWeight").append("<option></option>");
+                $("#scoreWeight").append("<option value='1000001'>درصدی</option>");
+                $(competencyLikert).each(function (i, c) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#scoreWeight").append("<option value='" + c.likertScaleId + "'>" + c.name + "</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        $.ajax({
+            type: 'get',
+            url: '/WeightWay/GetPeriodDefinition',
+            //data: { roleId: roleId },
+            success: function (periodDefinition) {
+                $("#periodDefinitionId").empty();
+                $("#periodDefinitionId").append("<option></option>");
+
+                $(periodDefinition).each(function (i, p) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#periodDefinitionId").append("<option value='" + p.periodDefinitoionId + "'>" + p.periodTitle + " (" + p.periodCode + ")</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        $("#determineWeightForm").submit(function (e) {
+            //alert('dpCreationSubmit');
+            //var postdata2 = $(this).serializeArray();
+            //debugger;
+            var form = $('#determineWeightForm');
+            form.validate({
+                //console.log($('#registerform').serializeArray());
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    competencyWeight: {
+                        required: true
+                    },
+                    taskWeight: {
+                        required: true
+                    },
+                    scoreWeight: {
+                        required: true
+                    },
+                    periodDefinitionId: {
+                        required: true
+                    }
+                },
+                messages: {
+                    competencyWeight: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    taskWeight: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    scoreWeight: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    periodDefinitionId: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    }
+                },
+                invalidHandler: function (event, validator) { //display error alert on form submit
+                    //                    success2.hide();
+                    //                    error2.show();
+                    //                    App.scrollTo(error2, -200);
+                },
+                errorPlacement: function (error, element) { // render error placement for each input type
+                    var icon = $(element).parent('.input-icon').children('i');
+                    icon.removeClass('fa-check').addClass("fa-warning");
+                    icon.attr("data-original-title", error.text()).tooltip();
+                },
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+
+                },
+
+                success: function (label, element) {
+                    var icon = $(element).parent('.input-icon').children('i');
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                    icon.removeClass("fa-warning").addClass("fa-check");
+                },
+
+                submitHandler: function (form) {
+                    //                    success2.show();
+                    //                    error2.hide();
+                }
+            })
+            if (form.valid() == false) {
+                debugger
+                //console.log($('#registerform').serializeArray());
+                return false;
+            } else {
+                //$("#articleSubmit").addClass('disabled');
+                $("#determineWeightSaveBtn").attr("disabled", "disabled");
+                var btn = $("#determineWeightSaveBtn");
+                btn.button('loading');
+                var postdata = new FormData(this);
+                //var postdata = $('#dpcreation').serializeArray();
+
+                console.log(postdata);
+                $.ajax(
+                    {
+                        //data:postdata,
+                        url: "/WeightWay/AssignWeightWayToPeriod",
+                        //url : formURL,
+                        //data: postdata2,
+                        data: postdata,
+                        //data: "firstName=" + $("fn").val(),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        type: "post",
+
+                        success: function (data, textStatus, jqXHR) {
+                            //alert(data);
+                            //if ($.trim(data) === "yess")
+                            //alert("That's one I wanted. Excellent")
+                            //alert(data);
+                            var message = ""
+                            if (data > 0) {
+                                message += "<span>اطلاعات  مورد نظر با موفقیت ثبت گردید</span><br><br>";
+                            }
+                            else if (data == 0) {
+                                message += "<span>اطلاعات  مورد نظر ثبت نگردید..</span><br><br>";
+                            }
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success(message);
+                            $("#determineWeightForm")[0].reset();
+                            
+                            $("#determineWeight").modal("hide");
+                            $("#weightWayTable").DataTable().destroy();
+                            show_dataTable();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("erorr00000");
+                            alert(jqXHR);
+                            alert(textStatus);
+                        }
+                    }).always(function () {
+                        $("#determineWeightSaveBtn").button('reset');
+                    });
+                //$.getScript('/assets/javascript/articleForm.js', function () {
+                //    ArticleForm.init(postdata);
+                //    $("#articleForm")[0].reset();
+                //});
+                e.preventDefault(e);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,63 @@
+﻿@{
+    Layout = null;
+}
+@model List<PerformanceManagement.Models.Coacher.View.ProtestResponseView>
+
+<table class="table table-striped table-bordered table-hover" id="sample_dt">
+    <thead>
+        <tr>
+            <th>
+                پاسخ
+            </th>
+            <th>
+                نام پاسخ دهنده
+            </th>
+            <th>
+                واحد سازمانی پاسخ دهنده
+            </th>
+            <th>
+                نقش
+            </th>
+            <th>
+                سطح پاسخ دهنده نسبت به کارمند
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Response</td>
+                <td>@item.CoacherFullName</td>
+                <td>@item.CoacherDepartmentName</td>
+                <td>
+                    @{
+                        string roleName = null;
+                        switch (item.RoleName)
+                        {
+                            case "Coacher":
+                                roleName = "مربی";
+                                break;
+                            case "Employee":
+                                roleName = "کارمند";
+                                break;
+                            case "PlanningAdmin":
+                                roleName = "ادمین برنامه ریزی";
+                                break;
+                            case "HRAdmin":
+                                roleName = "ادمین سرمایه انسانی";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    @roleName
+                </td>
+                <td>@item.CoacherLevel</td>
+                @*<td><a href='#' onclick="getCriterias(@item.TaskId)" data-toggle='modal' class='criteriaOfTaskDivisionBtn'>شاخص ها</a></td>*@
+            </tr>
+        }
+
+    </tbody>
+</table>
+

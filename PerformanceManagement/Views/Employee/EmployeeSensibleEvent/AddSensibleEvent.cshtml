@@ -1,0 +1,427 @@
+﻿@{
+    Layout = null;
+}
+
+<form id="sensibleEventFrm" method="post" class="form-horizontal">
+    <div class="modal fade" id="sensibleEventModal" tabindex="" role="" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 id="sabt_hazine_personnel" class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        ثبت وقایع حساس کارمند
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <!-- BEGIN FORM-->
+                    <!-- <form name="mojri_tarh" id="mojri_tarh_sabt" action="mojri_tarh.php?action=add_mojri&admin=$admin&seed=$seed&cod_tarh=$cod_tarh&mojri_code=$mojri_code" method="POST" class="form-horizontal">-->
+                    <!-- <input name="family" type="hidden" value="<?php //echo $cod_tarh;?>" class="form-control" placeholder="">-->
+                    <!--<input id="cod_tarh" name="cod_tarh" type="hidden"
+                           class="form-control" value="">
+                    <input id="cod_hazine" name="cod_hazine" type="hidden"
+                                                                 class="form-control">-->
+                    <div class="form-body">
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label id="mojri_name_label" class="control-label col-md-3">
+                                        سمت
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select name="employeeDepartmentId" id="employeeDepartmentId" class="form-control input-medium"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="form-section"></h3>
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        عنوان
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <input id="title" name="title"
+                                                   type="text" class="form-control input-sm input-small" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label id="activity_type_label" class="control-label col-md-5">
+                                        نوع واقعه
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <i class="fa"></i>
+                                            <select id="eventType" name="eventType" class="form-control input-sm input-small">
+                                                <option></option>
+                                                <option value="1">مثبت</option>
+                                                <option value="2">منفی</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class='form-group'>
+                                    <label class="control-label col-md-5">
+                                        تاریخ واقعه حساس
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <input id="sensibleEventDate" name="sensibleEventDate" type="text" class="form-control input-sm input-small sensibleEventDate" placeholder="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        ارتباط با شایستگی رفتاری
+                                        <span class="required">
+
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+
+                                        <i class="fa"></i>
+                                        <select id="behaviourCompetencyId" name="behaviourCompetencyId"
+                                                class="select2 form-control input-sm input-small" multiple></select>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        ارتباط با وظیفه
+                                        <span class="required">
+
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <i class="fa"></i>
+                                        <select id="taskId" name="taskId" class="select2 form-control input-sm input-small" multiple></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">
+                                        شرح
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-10">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <textarea id="description" name="description" class="form-control" rows="3">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <!--<p id="help-block1" class="help-block">
+                                        تعداد فايلهاي ارسالي حداکثر 12 عدد مي باشد
+                                    </p>-->
+                                    <label class="control-label col-md-5">
+                                        فایل ضمیمه
+                                        <span class="required">
+
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <input type="file" id="fupload" name="fupload" accept="application/msword,application/pdf,.docx,.zip,.jpg,.jpeg,.pptx">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--/span-->
+                        <!--/row-->
+                    </div>
+                    <!-- END FORM-->
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="sensibleEventSubmit">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+
+<script>
+    $('#sensibleEventModal').modal('show');
+    $('.select2').select2({
+        placeholder: "انتخاب کنید",
+        allowClear: true
+    });
+
+    $('.sensibleEventDate').datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+
+    $.ajax({
+        type: 'get',
+        url: '/EmployeeTaskAssignment/GetDepartmentList',
+        //data: { periodDefinitionId: $('#periodDefinitionIdDT').children('option:selected').val() },
+        success: function (DepartmentResponsibilty) {
+
+            $("#employeeDepartmentId").empty();
+            $("#employeeDepartmentId").append("<option></option>");
+            //dt.ajax.url("/ParticipantTaskAssignment/GetAssignedTaskList");
+            //dt.ajax.reload();
+            $(DepartmentResponsibilty).each(function (i, p) {
+                //$("#parentName").select2("val", d.departmentId);
+                $("#employeeDepartmentId").append("<option value='" + p.EvaluationHierarchyId + "-" + p.PeopleId + "'>" + p.ShortName + "</option>");
+                if (p.PositionType == 1) {
+                    $("#employeeDepartmentId").val(p.EvaluationHierarchyId + "-" + p.PeopleId);
+                    $("#employeeDepartmentId").trigger('change');
+                }
+            })
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+
+    $('#employeeDepartmentId').on('change', function () {
+        $.ajax({
+            type: 'get',
+            url: '/EmployeeSensibleEvent/GetTaskListOfEmployee',
+            data: {
+                employeeDepartmentId: $('#employeeDepartmentId').children('option:selected').val().split("-")[0],
+                employeeId: $('#employeeDepartmentId').children('option:selected').val().split("-")[1],
+            },
+            async: false,
+            success: function (data) {
+                $("#taskId").empty();
+                $("#taskId").append("<option></option>");
+
+                $(data).each(function (i, d) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#taskId").append("<option value='" + d.TaskId + "-" + d.EvaluationId + "'>" + d.Title + "</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        $.ajax({
+            type: 'get',
+            url: '/EmployeeSensibleEvent/GetCompetencyListOfEmployee',
+            data: {
+                employeeDepartmentId: $('#employeeDepartmentId').children('option:selected').val().split("-")[0],
+                employeeId: $('#employeeDepartmentId').children('option:selected').val().split("-")[1],
+            },
+            async: false,
+            success: function (data) {
+                $("#behaviourCompetencyId").empty();
+                $("#behaviourCompetencyId").append("<option></option>");
+
+                $(data).each(function (i, d) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#behaviourCompetencyId").append("<option value='" + d.BehaviouralCompetencyId + "-" + d.EvaluationBehaviouralCompetencyId + "'>" + d.Title + "</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    });
+
+    $("#sensibleEventFrm").submit(function (e) {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        //debugger;
+
+        var form = $('#sensibleEventFrm');
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                title: {
+                    required: true
+                },
+                eventType: {
+                    required: true
+                },
+                sensibleEventDate: {
+                    required: true
+                },
+                employeeDepartmentId: {
+                    required: true
+                },
+                description: {
+                    required: true
+                }
+            },
+            messages: {
+                title: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                eventType: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                sensibleEventDate: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                employeeDepartmentId: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                description: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+            //$("#articleSubmit").addClass('disabled');
+            $("#sensibleEventSubmit").attr("disabled", "disabled");
+
+            var btn = $("#sensibleEventSubmit");
+            btn.button('loading');
+            var postdata = new FormData(this);
+            //listOfSubTask = JSON.stringify(listOfSubTask);
+            //var postdata = $(this).serializeArray();
+            //postdata.append(JSON.stringify(listOfSubTask));
+            //console.log(postdata);
+            $.ajax(
+                {
+                    url: '/EmployeeSensibleEvent/AddSensibleEvent',
+                    //url : formURL,
+                    data: postdata,
+                    //data: JSON.stringify(CoveredEmployee),
+                    //data: "firstName=" + $("fn").val(),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    //datatype: 'json',
+                    //contentType: 'application/json; charset=utf-8',
+                    type: 'POST',
+
+                    success: function (data, textStatus, jqXHR) {
+                        var message = "";
+                        if (data > 0) {
+                            message += "<span>اطلاعات مورد نظر با موفقیت ثبت گردید.</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success(message);
+                            dt.ajax.url("/EmployeeSensibleEvent/GetSensibleEventList");
+                            dt.ajax.reload();
+                        }
+                        else if (data == 0) {
+                            message += "<span>ثبت اطلاعات موفقبت آمیز نبود</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        }
+
+                        //resetFormValidation();
+                        $("#sensibleEventFrm")[0].reset();
+                        $("#sensibleEventModal").modal("hide");
+                        //$("#periodDefinitionTable").DataTable().destroy();
+                        //show_dataTable();
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#sensibleEventSubmit").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            e.preventDefault(e);
+        }
+    });
+</script>

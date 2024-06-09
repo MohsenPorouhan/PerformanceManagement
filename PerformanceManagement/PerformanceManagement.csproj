@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20191124101426_add-05.cs" />
+    <Compile Remove="Migrations\20191124101426_add-05.Designer.cs" />
+    <Compile Remove="Migrations\20191207051248_add-10.cs" />
+    <Compile Remove="Migrations\20191207051248_add-10.Designer.cs" />
+    <Compile Remove="Migrations\20191207051653_add-10.cs" />
+    <Compile Remove="Migrations\20191207051653_add-10.Designer.cs" />
+    <Compile Remove="Migrations\20191214123935_add-11.cs" />
+    <Compile Remove="Migrations\20191214123935_add-11.Designer.cs" />
+    <Compile Remove="Migrations\20191222043914_add-14.cs" />
+    <Compile Remove="Migrations\20191222043914_add-14.Designer.cs" />
+    <Compile Remove="Migrations\20200113072734_add-20.cs" />
+    <Compile Remove="Migrations\20200113072734_add-20.Designer.cs" />
+    <Compile Remove="Migrations\20200114084151_add-21.cs" />
+    <Compile Remove="Migrations\20200114084151_add-21.Designer.cs" />
+    <Compile Remove="Migrations\20200201110720_add-21.cs" />
+    <Compile Remove="Migrations\20200201110720_add-21.Designer.cs" />
+    <Compile Remove="Migrations\20200512064514_add-36.cs" />
+    <Compile Remove="Migrations\20200512064514_add-36.Designer.cs" />
+    <Compile Remove="Migrations\20200512065212_add-36.cs" />
+    <Compile Remove="Migrations\20200512065212_add-36.Designer.cs" />
+    <Compile Remove="Migrations\20200514095019_add-38.cs" />
+    <Compile Remove="Migrations\20200514095019_add-38.Designer.cs" />
+    <Compile Remove="Migrations\20200705053139_add-50.cs" />
+    <Compile Remove="Migrations\20200705053139_add-50.Designer.cs" />
+    <Compile Remove="Migrations\20200706040843_add-50.cs" />
+    <Compile Remove="Migrations\20200706040843_add-50.Designer.cs" />
+    <Compile Remove="Migrations\20200725092734_add-59.cs" />
+    <Compile Remove="Migrations\20200725092734_add-59.Designer.cs" />
+    <Compile Remove="Migrations\20200729035438_add-64.cs" />
+    <Compile Remove="Migrations\20200729035438_add-64.Designer.cs" />
+    <Compile Remove="Migrations\20201005062035_add-74.cs" />
+    <Compile Remove="Migrations\20201005062035_add-74.Designer.cs" />
+    <Compile Remove="Migrations\20201102045834_add-77.cs" />
+    <Compile Remove="Migrations\20201102045834_add-77.Designer.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.60.6" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.HttpOverrides" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="NETCore.MailKit" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.json" Version="12.0.2" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\coacherUploads\" />
+    <Folder Include="wwwroot\employeeUploads\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\guideFile\competencyModel.pdf" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,87 @@
+﻿@{
+    Layout = null;
+}
+<div class="modal fade department modalClass" id="scoreAssignmentModal" tabindex="" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <button type="button" id="modal-close" class="close"
+                        data-dismiss="modal" aria-hidden="true"></button>
+                <h4 id="sabt_hazine_personnel" class="modal-title">
+                    <i class="fa fa-file-o"></i>
+                    مشاهده نمره
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-body" id="scoreTbl">
+
+                </div>
+                <!-- END FORM-->
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn green input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>بستن</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script>
+    //  $(document).ready(function () {
+
+    var isTrue = false;
+    var finalResult = false;
+    var row;
+    var type;
+    var length = dt.rows('.selected').data().length;
+    var selector;
+    if (length > 0) {
+        selector = "#taskAssignmentTable >tbody>tr.selected";
+    } else {
+        selector = "#taskAssignmentTable >tbody>tr";
+    }
+    var criteriaCount;
+    $(selector).each(function (i, tr) {
+        row = dt.row(tr);
+
+        $.ajax({
+            type: 'get',
+            url: '/Share/CriteiaCount',
+            data: { taskId: row.data().TaskId },
+            async: false,
+            success: function (data) {
+                criteriaCount = data;
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        $.ajax({
+            url: '/AssignTask/GetScore',
+            data: {
+                evaluationId: row.data().EvaluationId
+                , hasCriteria: criteriaCount
+                , type: 1
+            },
+            //contentType: 'aplication/json;charset=utf-8',
+            type: "POST",
+            datatype: 'html',
+            async: false,
+            success: function (data) {
+                $('#scoreTbl').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error");
+            }
+        })
+        finalResult = true;
+
+    })
+    if (!finalResult) {
+        alert("مجاز به مشاهده نمرات وظیفه مورد نظر نمی باشید.");
+    } else if (finalResult) {
+        $('#scoreAssignmentModal').modal('show');
+    }
+</script>

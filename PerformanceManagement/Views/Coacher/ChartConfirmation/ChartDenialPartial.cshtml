@@ -1,0 +1,200 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="modal fade" id="refute" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">عدم تایید</h4>
+            </div>
+            <form method="post" id="denialForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">
+                                    انتخاب دوره
+                                    <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <div class="col-md-5">
+                                    <div class="input-icon right">
+                                        <i class="fa"></i>
+                                        <select name="periodDefinitionId2" id="periodDefinitionId2" class="form-control"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label id="activity_type_label" class="control-label col-md-2">
+                                    علت را شرح نمایید
+                                    <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <div class="col-md-10">
+                                    <div class="input-icon right">
+                                        <i class="fa"></i>
+                                        <textarea name="causeDescription" id="causeDescription" class="form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="refuteBtn" class="btn blue">ذخیره</button>
+                    <button type="button" class="btn default" data-dismiss="modal">انصراف</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#refute').modal('show');
+
+        $.ajax({
+            type: 'get',
+            url: '/Share/GetPeriodDefinition',
+            //data: { roleId: roleId },
+            success: function (periodDefinition) {
+                $("#periodDefinitionId2").empty();
+                $("#periodDefinitionId2").append("<option></option>");
+
+                $(periodDefinition).each(function (i, p) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#periodDefinitionId2").append("<option value='" + p.periodDefinitoionId + "'selected>" + p.periodTitle + " (" + p.periodCode + ")</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+
+        $("#denialForm").submit(function (e) {
+            //alert('dpCreationSubmit');
+            //var postdata2 = $(this).serializeArray();
+            //debugger;
+            var form = $('#denialForm');
+            form.validate({
+                //console.log($('#registerform').serializeArray());
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    periodDefinitionId2: {
+                        required: true
+                    },
+                    causeDescription: {
+                        required: true
+                    }
+                },
+                messages: {
+                    periodDefinitionId2: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    causeDescription: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    }
+                },
+                invalidHandler: function (event, validator) { //display error alert on form submit
+                    //                    success2.hide();
+                    //                    error2.show();
+                    //                    App.scrollTo(error2, -200);
+                },
+                errorPlacement: function (error, element) { // render error placement for each input type
+                    var icon = $(element).parent('.input-icon').children('i');
+                    icon.removeClass('fa-check').addClass("fa-warning");
+                    icon.attr("data-original-title", error.text()).tooltip();
+                },
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+
+                },
+
+                success: function (label, element) {
+                    var icon = $(element).parent('.input-icon').children('i');
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                    icon.removeClass("fa-warning").addClass("fa-check");
+                },
+
+                submitHandler: function (form) {
+                    //                    success2.show();
+                    //                    error2.hide();
+                }
+            })
+            if (form.valid() == false) {
+                //console.log($('#registerform').serializeArray());
+                return false;
+            } else {
+                //$("#articleSubmit").addClass('disabled');
+                $("#refuteBtn").attr("disabled", "disabled");
+                var btn = $("#refuteBtn");
+                btn.button('loading');
+                var postdata = new FormData(this);
+                //var postdata = $('#dpcreation').serializeArray();
+
+                console.log(postdata);
+                $.ajax(
+                    {
+                        //data:postdata,
+                        url: "/ChartConfirmation/AddChartDenial",
+                        //url : formURL,
+                        //data: postdata2,
+                        data: postdata,
+                        //data: "firstName=" + $("fn").val(),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        type: "post",
+
+                        success: function (data, textStatus, jqXHR) {
+                            //if ($.trim(data) === "yess")
+                            var message = ""
+                            if (data > 0) {
+                                message += "<span>اطلاعات  مورد نظر با موفقیت ثبت گردید</span><br><br>";
+                                toastr.options.timeOut = "15000";
+                                toastr.options.positionClass = "toast-top-center";
+                                toastr.success(message);
+                            }
+                            else if (data == 0) {
+                                message += "<span>اطلاعات  مورد نظر ثبت نگردید..</span><br><br>";
+                                toastr.options.timeOut = "15000";
+                                toastr.options.positionClass = "toast-top-center";
+                                toastr.info(message);
+                            }
+
+                            $("#refute").modal("hide");
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("erorr00000");
+                            alert(jqXHR);
+                            alert(textStatus);
+                        }
+                    }).always(function () {
+                        $("#refuteBtn").button('reset');
+                    });
+                //$.getScript('/assets/javascript/articleForm.js', function () {
+                //    ArticleForm.init(postdata);
+                //    $("#articleForm")[0].reset();
+                //});
+                e.preventDefault(e);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,474 @@
+﻿@{
+    Layout = null;
+}
+<form method="post" id="addScheduleFrm" class="form-horizontal">
+    <input type="hidden" id="periodDefinitionId" name="periodDefinitionId" />
+    <div class="modal fade" id="addScheduleModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 id="sabt_hazine_personnel" class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        زمان بندی نمره دهی
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- BEGIN FORM-->
+
+                    <div class="form-body">
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <fieldset>
+                            <legend>خود ارزیابی</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class='form-group'>
+                                        <label class="control-label col-md-5">
+                                            تاریخ شروع
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" name="selfScoreDateFrom" id="selfScoreDateFrom" class="form-control input-sm input-small selfScoreDateFrom" placeholder="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class='form-group'>
+                                        <label id="activity_type_label" class="control-label col-md-5">
+                                            تاریخ پایان
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" id="selfScoreDateTo" name="selfScoreDateTo" class="form-control input-sm input-small selfScoreDateTo" placeholder="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>سایرارزیاب</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class='form-group'>
+                                        <label class="control-label col-md-5">
+                                            تاریخ شروع
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" id="participantScoreDateFrom" name="participantScoreDateFrom" class="form-control input-sm input-small participantScoreDateFrom" placeholder="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class='form-group'>
+                                        <label class="control-label col-md-5">
+                                            تاریخ پایان
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" id="participantScoreDateTo" name="participantScoreDateTo" class="form-control input-sm input-small participantScoreDateTo" placeholder="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>مربی سطح 1 و بالاتر از سطح 2(غیر مستقیم)</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class='form-group'>
+                                        <label class="control-label col-md-5">
+                                            تاریخ شروع
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" id="coacher1ScoreDateFrom" name="coacher1ScoreDateFrom" class="form-control input-sm input-small coacher1ScoreDateFrom" placeholder="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class='form-group'>
+                                        <label class="control-label col-md-5">
+                                            تاریخ پایان
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" id="coacher1ScoreDateTo" name="coacher1ScoreDateTo" class="form-control input-sm input-small coacher1ScoreDateTo" placeholder="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>مربی سطح2</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class='form-group'>
+                                        <label class="control-label col-md-5">
+                                            تاریخ شروع
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" id="coacher2ScoreDateFrom" name="coacher2ScoreDateFrom" class="form-control input-sm input-small coacher2ScoreDateFrom" placeholder="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class='form-group'>
+                                        <label class="control-label col-md-5">
+                                            تاریخ پایان
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" id="coacher2ScoreDateTo" name="coacher2ScoreDateTo" class="form-control input-sm input-small coacher2ScoreDateTo" placeholder="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <!--/span-->
+                        <!--/row-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn green input-sm input-small" id="addScheduleBtn">ذخيره</button>
+                        <button type="button" class="btn red input-sm input-small" id="cancel" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                    </div>
+
+                    <!-- END FORM-->
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+<script>
+    $('.selfScoreDateFrom').datepicker({
+        onSelect: function (dateText, inst) {
+            $('.selfScoreDateTo').datepicker('option', 'minDate',
+                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+        },
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $('.selfScoreDateTo').datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $('#participantScoreDateFrom').datepicker({
+        onSelect: function (dateText, inst) {
+            $('#participantScoreDateTo').datepicker('option', 'minDate',
+                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+        },
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $('#participantScoreDateTo').datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $('#coacher1ScoreDateFrom').datepicker({
+        onSelect: function (dateText, inst) {
+            $('#coacher1ScoreDateTo').datepicker('option', 'minDate',
+                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+        },
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $('#coacher1ScoreDateTo').datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $('#coacher2ScoreDateFrom').datepicker({
+        onSelect: function (dateText, inst) {
+            $('#coacher2ScoreDateTo').datepicker('option', 'minDate',
+                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+        },
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $('#coacher2ScoreDateTo').datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+
+    $('#addScheduleModal').modal('show');
+
+    $("#addScheduleFrm").submit(function (e) {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        //debugger;
+        var form = $('#addScheduleFrm');
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                selfScoreDateFrom: {
+                    required: true
+                },
+                selfScoreDateTo: {
+                    required: true
+                },
+                participantScoreDateFrom: {
+                    required: true
+                },
+                participantScoreDateTo: {
+                    required: true
+                },
+                coacher1ScoreDateFrom: {
+                    required: true
+                },
+                coacher1ScoreDateTo: {
+                    required: true
+                },
+                coacher2ScoreDateFrom: {
+                    required: true
+                },
+                coacher2ScoreDateTo: {
+                    required: true
+                }
+            },
+            messages: {
+                selfScoreDateFrom: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                selfScoreDateTo: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                participantScoreDateFrom: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                participantScoreDateTo: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                coacher1ScoreDateFrom: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                coacher1ScoreDateTo: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                coacher2ScoreDateFrom: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                coacher2ScoreDateTo: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+            //$("#articleSubmit").addClass('disabled');
+            $("#addScheduleBtn").attr("disabled", "disabled");
+            var btn = $("#addScheduleBtn");
+            btn.button('loading');
+            var postdata = new FormData(this);
+            //var postdata = $('#dpcreation').serializeArray();
+
+            $.ajax(
+                {
+                    //data:postdata,
+                    url: actionUrl,
+                    //url : formURL,
+                    //data: postdata2,
+                    data: postdata,
+                    //data: "firstName=" + $("fn").val(),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: "post",
+
+                    success: function (data, textStatus, jqXHR) {
+                        //alert(data);
+                        //if ($.trim(data) === "yess")
+                        //alert("That's one I wanted. Excellent")
+                        //alert(data);
+                        var result = "";
+
+                        if (data == 0) {
+                            result = "<span>اطلاعات مورد نظر ثبت نگردید</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(result);
+                        }
+                        else if (data >= 1) {
+                            result = "<span>اطلاعات  مورد نظر با موفقیت ثبت گردید.</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success(result);
+                            dt.ajax.reload();
+                            $("#addScheduleModal").modal("hide");
+                        }
+                        else if (data == "duplication") {
+                            result = "<span>اطلاعات مورد نظر در دوره جاری تکراری می باشد.</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(result);
+                        }
+                        else if (data == "invalidationDate") {
+                            result = "<span>زمان بندی مورد نظر می بایست در بازه انتهای دوره تعریف و همچنین تاریخ شروع از تاریخ پایان بزرگتر باشد.</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(result);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#addScheduleBtn").button('reset');
+                });
+            e.preventDefault(e);
+        }
+    });
+
+    function GetRelatedScoreScheduleJsonFormat(periodDefinitoionId) {
+        $.ajax(
+            {
+                url: "/ScoreSchedule/GetRelatedScoreScheduleJsonFormat",
+                contentType: 'aplication/json;charset=utf-8',
+                type: "GET",
+                datatype: 'html',
+                async: false,
+                data: {
+                    periodDefinitionId: periodDefinitoionId
+                },
+                success: function (data, textStatus, jqXHR) {
+                    actionUrl = "/ScoreSchedule/EditScoreSchedule";
+                    $("#periodDefinitionId").val(periodDefinitoionId);
+                    $(data).each(function (i, d) {
+                        switch (d.scoreScheduleTypeId) {
+                            case 1:
+                                $("#selfScoreDateFrom").val(moment(d.dateFrom, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'));
+                                $("#selfScoreDateTo").val(moment(d.dateTo, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'));
+                                break;
+                            case 2:
+                                $("#participantScoreDateFrom").val(moment(d.dateFrom, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'));
+                                $("#participantScoreDateTo").val(moment(d.dateTo, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'));
+                                break;
+                            case 3:
+                                $("#coacher1ScoreDateFrom").val(moment(d.dateFrom, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'));
+                                $("#coacher1ScoreDateTo").val(moment(d.dateTo, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'));
+                                break;
+                            case 4:
+                                $("#coacher2ScoreDateFrom").val(moment(d.dateFrom, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'));
+                                $("#coacher2ScoreDateTo").val(moment(d.dateTo, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'));
+                                break;
+                            default:
+                                break;
+                        }
+                    })
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("erorr");
+                    alert(jqXHR);
+                    alert(textStatus);
+                }
+            });
+    }
+
+
+</script>

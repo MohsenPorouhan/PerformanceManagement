@@ -1,0 +1,355 @@
+﻿@{
+    Layout = null;
+}
+<div class="modal fade" id="personelAssignModal" tabindex="" role="basic"
+     aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <button type="button" id="modal-close" class="close"
+                        data-dismiss="modal" aria-hidden="true"></button>
+                <h4 id="sabt_hazine_personnel" class="modal-title">
+                    <i class="fa fa-file-o"></i>
+                    انتصاب پرسنل
+                </h4>
+            </div>
+            <form id="personalAssignForm" method="post" class="form-horizontal">
+                <div class="modal-body">
+                    <!-- BEGIN FORM-->
+                    <!-- <form name="mojri_tarh" id="mojri_tarh_sabt" action="mojri_tarh.php?action=add_mojri&admin=$admin&seed=$seed&cod_tarh=$cod_tarh&mojri_code=$mojri_code" method="POST" class="form-horizontal">-->
+                    <!-- <input name="family" type="hidden" value="<?php //echo $cod_tarh;?>" class="form-control" placeholder="">-->
+                    <!--<input id="cod_tarh" name="cod_tarh" type="hidden"
+                           class="form-control" value="">
+                    <input id="cod_hazine" name="cod_hazine" type="hidden"
+                                                                 class="form-control">-->
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label id="mojri_name_label" class="control-label col-md-5">
+                                        نام واحد سازمانی
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select name="departmentId" id="departmentId"
+                                                    class="select2 form-control input-sm input-small">
+                                                @*
+                                                    <option></option>
+                                                    <option value="1">مدیر عامل</option>*@
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label id="mojri_name_label" class="control-label col-md-5">
+                                        واحد اصلی/فرعی
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select name="positionType" id="positionType"
+                                                    class="select2 form-control input-sm input-small">
+                                                <option></option>
+                                                <option value="1">واحد اصلی</option>
+                                                <option value="2">واحد فرعی</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        رده سازمانی
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select name="positionId" id="positionId"
+                                                    class="select2 form-control input-sm input-small">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        انتخاب کارمند/کارمندان
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select id="employeesList" name="employeesList" class="form-control select2" multiple>
+                                                @*
+                                                    <option value="1">محسن پروهان</option>*@
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <!-- END FORM-->
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="personalAssignBtn">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script>
+    $('#personelAssignModal').modal('show');
+    $(".modal-dialog").draggable({
+        handle: ".modal-header"
+    });
+    $(".modal-header").css("cursor", "move");
+    $('#personelAssignModal .select2').select2({
+        placeholder: "انتخاب کنید",
+        allowClear: true
+    });
+    $.ajax({
+        type: 'get',
+        url: '/EvaluationHierarchy/GetPoolDepartment',
+        //data: { roleId: roleId },
+        success: function (department) {
+            $("#departmentId").empty();
+            $("#departmentId").append("<option></option>");
+            debugger;
+
+            $(department).each(function (i, d) {
+                //$("#parentName").select2("val", d.departmentId);
+                $("#departmentId").append("<option value='" + d.departmentId + "'>" + d.shortName + "</option>");
+            })
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+
+    $.ajax({
+        type: 'get',
+        url: '/EvaluationHierarchy/GetCurrentPEmployee',
+        //data: { roleId: roleId },
+        success: function (people) {
+            $("#employeesList").empty();
+            $("#employeesList").append("<option></option>");
+            debugger;
+
+            $(people).each(function (i, p) {
+                //$("#parentName").select2("val", d.departmentId);
+                $("#employeesList").append("<option value='" + p.PeopleId + "'>" + p.FirstName + " " + p.LastName + "(" + p.UserName + ")</option>");
+            })
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+    $.ajax({
+        type: 'get',
+        url: '/EvaluationHierarchy/GetPositionList',
+        //data: { roleId: roleId },
+        success: function (people) {
+            $("#positionId").empty();
+            $("#positionId").append("<option></option>");
+            debugger;
+
+            $(people).each(function (i, p) {
+                $("#positionId").append("<option value='" + p.jobId + "'>" + p.title + "</option>");
+            })
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+    $("#personalAssignForm").submit(function (e) {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        //debugger;
+        var form = $('#personalAssignForm');
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                departmentId: {
+                    required: true
+                },
+                employeesList: {
+                    required: true
+                },
+                positionType: {
+                    required: true
+                },
+                positionId: {
+                    required: true
+                }
+            },
+            messages: {
+                departmentId: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                employeesList: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                positionType: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                positionId: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+            //$("#articleSubmit").addClass('disabled');
+            $("#personalAssignBtn").attr("disabled", "disabled");
+            var btn = $("#personalAssignBtn");
+            btn.button('loading');
+            var postdata = new FormData(this);
+            //var postdata = $('#dpcreation').serializeArray();
+
+            console.log(postdata);
+            $.ajax(
+                {
+                    //data:postdata,
+                    url: "/EvaluationHierarchy/personalAssign",
+                    //url : formURL,
+                    //                        data: postdata2,
+                    data: postdata,
+                    //data: "firstName=" + $("fn").val(),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: "post",
+
+                    success: function (data, textStatus, jqXHR) {
+                        //alert(data);
+                        //if ($.trim(data) === "yess")
+                        //alert("That's one I wanted. Excellent")
+                        var result = "";
+                        var message = ""
+                        $(data).each(function (i, d) {
+                            if (d.saveChangeResult == 0) {
+                                message += "<span>اطلاعات مورد نظر ثبت نگردید</span><br><br>";
+                                if (d.message2 == "false") {
+                                    message += "<span>اطلاعات مورد نظر به دلیل اینکه واحد انتخاب شده یگانه می باشد و اطلاعات پرسنل به صورت لیست ارسال گردیده، ثبت نگردید</span><br><br>";
+                                }
+                            }
+                            else if (d.saveChangeResult >= 1) {
+                                result += "<span>اطلاعات" + d.saveChangeResult + " نفر با موفقیت ثبت گردید.</span><br><br>";
+                                toastr.options.timeOut = "15000";
+                                toastr.options.positionClass = "toast-top-center";
+                                toastr.success(result);
+                            }
+                            if (d.message != null) {
+                                $(d.message).each(function (i, m) {
+                                    message += "<span>اطلاعات آقای " + m + "به دلیل عدم انتصاب یک نفر به دو واحد اصلی ثبت نگردید</span><br>";
+
+                                })
+                            }
+                            if (d.duplicationEvaluationHierarchy != null) {
+                                $(d.duplicationEvaluationHierarchy).each(function (i, m) {
+                                    message += "<span>اطلاعات آقای " + m + "به دلیل تکراری بودن(به واحد مورد نظر قبلا انتصاب داده شده) ثبت نگردید</span><br>";
+
+                                })
+                            }
+                            if (d.departmentType != null) {
+                                $(d.departmentType).each(function (i, m) {
+                                    message += "<span>اطلاعات آقای " + m + "به دلیل اینکه فقط 1 کارمند را می توان به واحد مورد نظر انتصاب داد ثبت نگردید</span><br>";
+
+                                })
+                            }
+                        })
+                        if (message != "") {
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        }
+                        //$('#treeview').jstree(true).refresh(true);
+                        $('#treeview').jstree("destroy");
+                        show_jstree();
+                        $("#personalAssignForm")[0].reset();
+                        $("#personelAssignModal").modal("hide")
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#personalAssignBtn").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            e.preventDefault(e);
+        }
+    });
+
+</script>

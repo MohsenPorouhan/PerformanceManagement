@@ -1,0 +1,214 @@
+﻿@{
+    ViewData["Title"] = "صفحه اصلی";
+}
+@section Styles{
+    <link href="/assets/css/pages/timeline-rtl.css" rel="stylesheet" type="text/css" />
+
+    <link href="assets/css/pages/promo-rtl.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/animate.css" rel="stylesheet" type="text/css" />
+}
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <h3 class="page-title">
+            <small></small>
+
+        </h3>
+        <div class="clearfix"></div>
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/home">
+                    خانه
+                </a>
+                <i class="fa fa-angle-left"></i>
+            </li>
+            <li>
+                <a href="#">
+                    مسیر مورد نظر
+                </a>
+            </li>
+            <li class="pull-right">
+                <div id="dashboard-report-range" class="dashboard-date-range tooltips" data-placement="top" data-original-title="Change dashboard date range">
+                    <i class="fa fa-calendar"></i>
+                    <span>
+                    </span>
+                    <i class="fa fa-angle-down"></i>
+                </div>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<!-- BEGIN DASHBOARD STATS -->
+@*<div class="row">
+        <div class="col-md-12">
+            <h2>جهت تست مدیریت فاوا و مدیریت منابع انسانی</h2>
+        </div>
+    </div>*@
+
+<div class="block-carousel">
+    <div id="promo_carousel" class="carousel slide">
+        <div class="container">
+            <div class="carousel-inner">
+                <div class="active item">
+                    <div class="row">
+                        <div class="col-md-7 margin-bottom-20 margin-top-20 animated rotateInUpRight">
+                            <h1>به نرم افزار مدیریت عملکرد خوش آمدید.</h1>
+                            
+                        </div>
+                        <div class="col-md-5 animated rotateInDownLeft">
+                            <a href="/home">
+                                <img src="/assets/img/DashboardGallery/2.jpg" alt="" class="img-responsive">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="row">
+                        <div class="col-md-5 animated rotateInUpRight">
+                            <a href="/home">
+                                <img src="/assets/img/DashboardGallery/1.jpg" alt="" class="img-responsive">
+                            </a>
+                        </div>
+                        <div class="col-md-7 margin-bottom-20 animated rotateInDownLeft">
+                            <h1>پیتر دراکر</h1>
+                            <h5>
+                                هر آنچه را نتوانید اندازه گیری کنید، نمی توانید کنترل کنید و هر آنچه را که نتوانید کنترل کنید نمی توانید آن را مدیریت کنید.
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control left" href="#promo_carousel" data-slide="prev">
+                <i class="m-icon-big-swapleft"></i>
+            </a>
+            <a class="carousel-control right" href="#promo_carousel" data-slide="next">
+                <i class="m-icon-big-swapright"></i>
+            </a>
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#promo_carousel" data-slide-to="0" class="active">
+                </li>
+                <li data-target="#promo_carousel" data-slide-to="1">
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+@*<div class="row">
+    <div class="col-md-12">
+        <ul class="timeline">
+            <li class="timeline-yellow">
+                <div class="timeline-time">
+                    <span class="date">
+                        1399/02/01
+                    </span>
+                    <span class="time">
+                        8:00
+                    </span>
+                </div>
+                <div class="timeline-icon">
+                    <i class="fa fa-comments"></i>
+                </div>
+                <div class="timeline-body">
+                    <h2>شروع ابتدای دوره</h2>
+                    <div class="timeline-content">
+                        محتوای پیام مورد نظر
+                    </div>
+                    <div class="timeline-footer">
+                        <a href="#" class="nav-link pull-right">
+                            بیشتر بخوانید <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li class="timeline-blue">
+                <div class="timeline-time">
+                    <span class="date">
+                        1399/03/01
+                    </span>
+                    <span class="time">
+                        8:00
+                    </span>
+                </div>
+                <div class="timeline-icon">
+                    <i class="fa fa-comments"></i>
+                </div>
+                <div class="timeline-body">
+                    <h2>شروع حین دوره</h2>
+                    <div class="timeline-content">
+                        محتوای پیام مورد نظر
+                    </div>
+                    <div class="timeline-footer">
+                        <a href="#" class="nav-link pull-right">
+                            بیشتر بخوانید <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li class="timeline-green">
+                <div class="timeline-time">
+                    <span class="date">
+                        1399/07/01
+                    </span>
+                    <span class="time">
+                        08:00
+                    </span>
+                </div>
+                <div class="timeline-icon">
+                    <i class="fa fa-comments"></i>
+                </div>
+                <div class="timeline-body">
+                    <h2>شروع انتهای دوره</h2>
+                    <div class="timeline-content">
+                        محتوای پیام مورد نظر
+                    </div>
+                    <div class="timeline-footer">
+                        <a href="#" class="nav-link">
+                            بیشتر بخوانید  <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li class="timeline-purple">
+                <div class="timeline-time">
+                    <span class="date">
+                        1399/08/01
+                    </span>
+                    <span class="time">
+                        08:00
+                    </span>
+                </div>
+                <div class="timeline-icon">
+                    <i class="fa fa-comments"></i>
+                </div>
+                <div class="timeline-body">
+                    <h2>شروع اعتراضات</h2>
+                    <div class="timeline-content">
+                        <div class="scroller" data-height="50px" data-always-visible="1" data-rail-visible1="1">
+                            <p>
+                                محتوای پیام
+                            </p>
+                        </div>
+                    </div>
+                    <div class="timeline-footer">
+                        <a href="#" class="btn blue">
+                            بیشتر بخوانید  <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>*@
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+}

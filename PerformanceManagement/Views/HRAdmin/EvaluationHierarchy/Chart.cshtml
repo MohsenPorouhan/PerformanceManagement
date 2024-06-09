@@ -1,0 +1,310 @@
+﻿@{
+    ViewData["Title"] = "چارت";
+}
+@section Styles{
+<link rel="stylesheet" type="text/css" href="/assets/plugins/jstree/dist/themes/default/style.min.css" />
+<link rel="stylesheet" type="text/css" href="/assets/plugins/select2/select2-rtl.css" />
+<link id="select2-metronic" rel="stylesheet" type="text/css" href="/assets/plugins/select2/select2-metronic-rtl.css" />
+<link rel="stylesheet" type="text/css" href="/assets/plugins/jquery-multi-select/css/multi-select-rtl.css" />
+<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-toastr/toastr-rtl.min.css" />
+<link href="/assets/plugins/persian-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<style>
+    .btn-sm, .btn-xs {
+        margin: 2px;
+    }
+
+    .select2-container .select2-choice > .select2-chosen {
+        /*display: block;*/
+        overflow: initial;
+    }
+</style>
+}
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <h3 class="page-title">
+            <small></small>
+
+        </h3>
+        <div class="clearfix"></div>
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="index.html">
+                    خانه
+                </a>
+                <i class="fa fa-angle-left"></i>
+            </li>
+            <li>
+                <a href="#">
+                    مسیر مورد نظر
+                </a>
+            </li>
+            <li class="pull-right">
+                <div id="dashboard-report-range" class="dashboard-date-range tooltips" data-placement="top" data-original-title="Change dashboard date range">
+                    <i class="fa fa-calendar"></i>
+                    <span>
+                    </span>
+                    <i class="fa fa-angle-down"></i>
+                </div>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<!--These partial pages are modal-->
+@*<partial name="/Views/HRAdmin/department/DepartmentCreationPartial.cshtml" />*@
+@*<partial name="/Views/HRAdmin/department/PersonalAssignPartial.cshtml" />
+<partial name="/Views/HRAdmin/department/EmployeeStatusChangePartial.cshtml" />*@
+@*<partial name="DepartmentCreationPartial" />*@
+
+@*<partial name="DepartmentCreationPartial" />*@
+@*<partial name="PersonalAssignPartial" />*@
+@*<partial name="EmployeeStatusChangePartial" />*@
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet blue box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>ایجاد و بروزرسانی چارت
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                    <a href="#portlet-config" data-toggle="modal" class="config">
+                    </a>
+                    <a href="javascript:;" class="reload">
+                    </a>
+                    <a href="javascript:;" class="remove">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <a id="dept_creation" class="btn blue btn-sm pull-left" data-toggle="modal"
+                   @*href="#department_creation" *@>تغییر وضعیت واحد سازمانی</a>
+
+                <a id="personel_assign" class="btn blue btn-sm pull-left" data-toggle="modal"
+                   @*href="#personel_assign" *@>انتصاب پرسنل</a>
+
+                <a id="employee_status_changeBtn" class="btn blue btn-sm pull-left" data-toggle="modal"
+                   @*href="#employee_status_change" *@>تغییر وضعیت کارمند</a>
+
+                <a id="delete_departmentBtn" class="btn blue btn-sm pull-left" data-toggle="modal">حذف واحد سازمانی</a>
+
+                <a id="edit_departmentBtn" class="btn blue btn-sm pull-left" data-toggle="modal">ویرایش واحد سازمانی</a>
+
+                <div class="clearfix">
+                </div>
+
+                <div class="tree-demo" id='treeview'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Plugins{
+<script src="/assets/plugins/jstree/dist/jstree.min.js"></script>
+
+    @*
+<script src="/assets/scripts/custom/ui-tree.js"></script>*@
+
+<script type="text/javascript" src="/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/assets/plugins/select2/select2.min.js"></script>
+
+<script type="text/javascript" src="/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+<script src="/assets/plugins/bootstrap-toastr/toastr.min.js"></script>
+<script src="/assets/scripts/custom/ui-toastr.js"></script>
+<script src="/assets/plugins/persian-datepicker/jquery.ui.datepicker-cc.all.min.js" type="text/javascript"></script>
+}
+
+@section Scripts{
+<script>
+    //UITree.init();
+    //$('body').on('change', '.select2', function () {
+
+    //});
+    //$('.select2').select2({
+    //    placeholder: "انتخاب کنید",
+    //    allowclear: true
+    //});
+    function show_jstree() {
+        $('#treeview').jstree({
+            'core': {
+                "themes": {
+                    "responsive": false
+                },
+                'data': {
+                    'url': function (node) {
+
+                        //return node.id === '#' ? "/Department/GetRoot" : "/Department/GetChildren/" + node.id;
+                        //return "/EvaluationHierarchy/GetRootOld";
+                        return "/EvaluationHierarchy/GetRoot";
+                    },
+                    'data': function (node) {
+                        return {
+                            'id': node.id,
+                        };
+                    }
+                }
+            },
+            "types": {
+                "default":
+                {
+                    "icon": "fa fa-folder icon-warning icon-lg"
+                },
+                "file": {
+                    "icon": "fa fa-file icon-warning icon-lg"
+                }
+            },
+            "state": { "key": "demo3" },
+            "plugins": ["state", "types"]
+        });
+
+        $('#treeview').on('loaded.jstree', function (e, data) {
+            $(this).jstree("open_all");
+        }).jstree();
+
+        $('#treeview').bind('loaded.jstree', function (e, dataa) {
+            for (var d in dataa.instance._model.data) {
+                if (d != '#' && dataa.instance._model.data[d].original.positionType == 2) {
+                    dataa.instance.set_icon(dataa.instance._model.data[d], "fa fa-folder icon-danger icon-lg");
+
+                    var text = "<b class='text-danger'>" + dataa.instance.get_text(dataa.instance._model.data[d]) + "</b>";
+                    dataa.instance.set_text(dataa.instance._model.data[d], text);
+                }
+            }
+        }).jstree();
+    }
+
+    //$('.supervisor_change').hide();
+    // $('#department_cause').on('change', function ()
+
+    show_jstree();
+    $('#treeview').on('changed.jstree', function (e, data) {
+        if (data.action == "select_node") {
+            console.log("=> selected node: " + data.node.id);
+            console.log("=> selected node: " + data.node.original.positionType);
+        }
+    }).jstree();
+
+    //var i = 2;
+
+    $("#dept_creation").click(function () {
+        $.ajax(
+            {
+                url: "/EvaluationHierarchy/DepartmentCreationPartial",
+                contentType: 'aplication/json;charset=utf-8',
+                type: "GET",
+                datatype: 'html',
+
+                success: function (data, textStatus, jqXHR) {
+                    debugger;
+                    //$("#department_creation").html(data);
+                    $("#modalPlace").html(data);
+                    //$.getScript('/assets/scripts/core/app.js', function () {
+                    //    App.init();
+                    //});
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("erorr");
+                    alert(jqXHR);
+                    alert(textStatus);
+                }
+            });
+    });
+    $("#personel_assign").click(function () {
+        $.ajax(
+            {
+                url: "/EvaluationHierarchy/PersonalAssignPartial",
+                contentType: 'aplication/json;charset=utf-8',
+                type: "GET",
+                datatype: 'html',
+
+                success: function (data, textStatus, jqXHR) {
+                    debugger;
+                    //$("#department_creation").html(data);
+                    $("#modalPlace").html(data);
+                    //$.getScript('/assets/scripts/core/app.js', function () {
+                    //    App.init();
+                    //});
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("erorr");
+                    alert(jqXHR);
+                    alert(textStatus);
+                }
+            });
+    });
+    $("#employee_status_changeBtn").click(function () {
+        $.ajax(
+            {
+                url: "/EvaluationHierarchy/EmployeeStatusChangePartial",
+                contentType: 'aplication/json;charset=utf-8',
+                type: "GET",
+                datatype: 'html',
+
+                success: function (data, textStatus, jqXHR) {
+                    debugger;
+                    //$("#department_creation").html(data);
+                    $("#modalPlace").html(data);
+                    //$.getScript('/assets/scripts/core/app.js', function () {
+                    //    App.init();
+                    //});
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("erorr");
+                    alert(jqXHR);
+                    alert(textStatus);
+                }
+            });
+    });
+
+    $("#delete_departmentBtn").click(function () {
+        $.ajax(
+            {
+                url: "/EvaluationHierarchy/DeleteDepartmentPartial",
+                contentType: 'aplication/json;charset=utf-8',
+                type: "GET",
+                datatype: 'html',
+
+                success: function (data, textStatus, jqXHR) {
+                    debugger;
+                    //$("#department_creation").html(data);
+                    $("#modalPlace").html(data);
+                    //$.getScript('/assets/scripts/core/app.js', function () {
+                    //    App.init();
+                    //});
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("erorr");
+                    alert(jqXHR);
+                    alert(textStatus);
+                }
+            });
+    });
+
+    $("#edit_departmentBtn").click(function () {
+        $.ajax(
+            {
+                url: "/EvaluationHierarchy/EditDepartmentPartial",
+                contentType: 'aplication/json;charset=utf-8',
+                type: "GET",
+                datatype: 'html',
+
+                success: function (data, textStatus, jqXHR) {
+                    $("#modalPlace").html(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("erorr");
+                    alert(jqXHR);
+                    alert(textStatus);
+                }
+            });
+    });
+</script>
+}

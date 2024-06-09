@@ -1,0 +1,282 @@
+﻿@{
+    Layout = null;
+}
+
+<form method="post" id="performConfirmationFrm" class="form-horizontal">
+    <div class="modal fade department modalClass" id="performConfirmationModal" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 id="sabt_hazine_personnel" class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        تایید/عدم تایید وظایف اختصاص داده شده توسط مربی
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+
+                        @*<div class="alert alert-block alert-info fade in">
+                                <button type="button" class="close" data-dismiss="alert"></button>
+                                <h4 class="alert-heading">روش وزن دهی</h4>
+                                <p id="weightWayInfo">
+
+                                </p>
+                            </div>*@
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">
+                                        تایید/عدم تایید
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select id="EvaluationAcceptanceStatusId" name="EvaluationAcceptanceStatusId" class="form-control">
+                                                <option></option>
+                                                <option value="1">تایید</option>
+                                                <option value="4">عدم تایید</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="taskRow"></div>
+
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="performConfirmationBTN">ذخیره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+<script type="text/html" id="appendTask">
+    <div class="row">
+        <!--/span-->
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="col-md-12">
+                    نام وظیفه:
+                </label>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group">
+                <label evaluationId="{3}" col-md-12">
+                    {1}
+                </label>
+            </div>
+        </div>
+        <div class="col-md-5 hidden refutationCauseDiv">
+            <div class="form-group">
+                <label class="control-label col-md-4">
+                    علت
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-8">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <textarea name="refutationCause{0}" id="refutationCause{0}" class="form-control refutationCause" rows="4">{5}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script>
+
+    $(document).ready(function () {
+        var index;;
+        var finalResult = false;
+        var template = jQuery.validator.format($.trim($("#appendTask").html()));
+        var length = dt.rows('.selected').data().length;
+        var evaluationArr = [];
+        var selector;
+        if (length > 0) {
+            selector = "#TaskAssignmentTable >tbody>tr.selected";
+        } else {
+            selector = "#TaskAssignmentTable >tbody>tr";
+        }
+        var row;
+        $(selector).each(function (i, tr) {
+            row = dt.row(tr);
+            //console.log(dt.row(tr));
+            //row.child(row.data().fullName).show()
+            //alert(row.data().fullName)
+            if (row.data().RoleName != "PlanningAdmin" && row.data().RoleName != "HRAdmin" && (row.data().EvaluationAcceptanceStatusId == 1 || row.data().EvaluationAcceptanceStatusId == 4)) {
+                index = i++;
+                $(template(index, row.data().TaskTitle, row.data().TaskId, row.data().EvaluationId, row.data().PeriodDefinitoionId, row.data().RefutationCause == null ? '' : row.data().RefutationCause)).appendTo("#taskRow");
+                evaluationArr.push(row.data().EvaluationId);
+                finalResult = true;
+            }
+        })
+        //console.log(evaluationArr);
+        if (!finalResult) {
+            alert("فقط وظایفی که اختصاص دهنده آن مربی و وضعیت آن تفاهم یا نامشخص باشد قابلیت تایید یا عدم تایید دارند.");
+        }
+        else if (finalResult) {
+            $('#performConfirmationModal').modal('show');
+
+            $("#performConfirmationBTN").click(function () {
+                //alert('dpCreationSubmit');
+                //var postdata2 = $(this).serializeArray();
+                var form = $("#performConfirmationFrm");
+                form.validate({
+                    //console.log($('#registerform').serializeArray());
+                    errorElement: 'span', //default input error message container
+                    errorClass: 'help-block', // default input error message class
+                    focusInvalid: false, // do not focus the last invalid input
+                    ignore: "",
+                    rules: {
+                        EvaluationAcceptanceStatusId: {
+                            required: true,
+                        }
+                    },
+                    messages: {
+                        EvaluationAcceptanceStatusId: {
+                            required: "پر کردن این فیلد الزامی می باشد"
+                        }
+                    },
+                    invalidHandler: function (event, validator) { //display error alert on form submit
+                        //                    success2.hide();
+                        //                    error2.show();
+                        //                    App.scrollTo(error2, -200);
+                    },
+                    errorPlacement: function (error, element) { // render error placement for each input type
+                        var icon = $(element).parent('.input-icon').children('i');
+                        icon.removeClass('fa-check').addClass("fa-warning");
+                        icon.attr("data-original-title", error.text()).tooltip();
+                    },
+                    highlight: function (element) { // hightlight error inputs
+                        $(element)
+                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                    },
+
+                    unhighlight: function (element) { // revert the change done by hightlight
+
+                    },
+
+                    success: function (label, element) {
+                        var icon = $(element).parent('.input-icon').children('i');
+                        $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                        icon.removeClass("fa-warning").addClass("fa-check");
+                    },
+
+                    submitHandler: function (form) {
+                        //                    success2.show();
+                        //                    error2.hide();
+                    }
+                })
+                if (form.valid() == false) {
+                    //console.log($('#registerform').serializeArray());
+
+                    return false;
+                } else {
+                    var PerformConfirmationViewList = [];
+                    //$("#articleSubmit").addClass('disabled');
+                    // $("#dpCreationSubmit").attr("disabled", "disabled");
+                    $("#taskRow .row").each(function () {
+                        var PerformConfirmationView = {};
+                        PerformConfirmationView.EvaluationId2 = $(this).find("label[evaluationId]").attr("evaluationId");
+                        PerformConfirmationView.EvaluationAcceptanceStatusId = $('#EvaluationAcceptanceStatusId').children('option:selected').val();
+                        if ($('#EvaluationAcceptanceStatusId').children('option:selected').val() == 4) {
+                            PerformConfirmationView.RefutationCause = $(this).find("textarea").val();
+                        }
+                        PerformConfirmationViewList.push(PerformConfirmationView);
+                    });
+                    var btn = $("#performConfirmationBTN");
+                    btn.button('loading');
+                    //var postdata = new FormData(this);
+                    //var postdata = $('#scoreAssignmentFrm').serializeArray();
+
+                    //console.log(postdata);
+                    $.ajax(
+                        {
+                            datatype: "json",
+                            //data:postdata,
+                            url: "/EmployeeTaskAssignment/PerformTaskConfirmation",
+                            //url : formURL,
+                            //                        data: postdata2,
+                            data: JSON.stringify(PerformConfirmationViewList),
+                            //data: "firstName=" + $("fn").val(),
+                            //cache: false,
+                            contentType: 'application/json; charset=utf-8',
+                            //contentType: false,
+                            //processData: false,
+                            type: "POST",
+
+                            success: function (data, textStatus, jqXHR) {
+                                if (data > 0) {
+                                    $("#performConfirmationModal").modal("hide")
+                                    dt.ajax.url("/EmployeeTaskAssignment/GetAssignedTaskList");
+                                    dt.ajax.reload();
+                                    //resetFormValidation();
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.success("اطلاعات مورد نظر با موفقیت ثبت گردید.");
+                                } else if (data == 0) {
+                                    toastr.options.timeOut = "15000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.error("اطلاعات مورد نظر ثبت نگردید.");
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert("erorr");
+                                alert(jqXHR);
+                                alert(textStatus);
+                            }
+                        }).always(function () {
+                            $("#performConfirmationBTN").button('reset');
+                        });
+                    //$.getScript('/assets/javascript/articleForm.js', function () {
+                    //    ArticleForm.init(postdata);
+                    //    $("#articleForm")[0].reset();
+                    //});
+                    // e.preventDefault(e);
+                }
+            });
+            $("#EvaluationAcceptanceStatusId").on("change", function () {
+                if ($(this).children('option:selected').val() == 4) {
+                    $(".refutationCauseDiv").removeClass("hidden");
+                    $(".refutationCause").removeAttr("disabled");
+
+                } else {
+                    $(".refutationCauseDiv").addClass("hidden");
+                    $(".refutationCause").attr("disabled", "disabled");
+                }
+            });
+            $("#performConfirmationBTN").trigger("click");
+            $('.refutationCause').each(function (i, d) {
+                $(this).rules("add", {
+                    required: true,
+                    messages: {
+                        required: "پرکردن این فیلد الزامی می باشد",
+                    }
+                });
+            });
+        }
+    });
+</script>

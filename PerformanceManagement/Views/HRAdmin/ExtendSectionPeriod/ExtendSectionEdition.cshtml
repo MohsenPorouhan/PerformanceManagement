@@ -1,0 +1,384 @@
+﻿@{
+    Layout = null;
+}
+@model PerformanceManagement.Models.HRAdmin.ExtendSectionPeriodView
+
+<form method="post" id="editExtendPeriodFrm" class="form-horizontal">
+    <input type="hidden" value="@Model.ExtendSectionPeriodId" name="extendSectionPeriodId" id="extendSectionPeriodId" />
+    <div class="modal fade department modalClass" id="editExtendPeriodModal" tabindex="" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        ویرایش تمدید زمانی @Model.SectionName مربوط به @Model.PeriodTitle
+
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">
+                                        تاریخ شروع
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <input type="text" value="@Model.DateFrom" name="dateFrom" id="dateFrom" class="form-control dateFrom" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">
+                                        تاریخ پایان
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <input type="text" value="@Model.DateTo" name="dateTo" id="dateTo" class="form-control dateTo" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.StatusCode == 3)
+                        {
+                            var scoreScheduleTypeTitle = "";
+                            var from = "";
+                            var to = "";
+                            DateTimeCustom dateTimeCustom = new DateTimeCustom();
+                            @foreach (var item in Model.ExtendScoreScheduleViews)
+                            {
+                                switch (item.ScoreScheduleTypeId)
+                                {
+                                    case 1:
+                                        scoreScheduleTypeTitle = "خود ارزیابی";
+                                        from = "selfScoreDateFrom";
+                                        to = "selfScoreDateTo";
+                                        break;
+                                    case 2:
+                                        scoreScheduleTypeTitle = "سایرارزیاب";
+                                        from = "participantScoreDateFrom";
+                                        to = "participantScoreDateTo";
+                                        break;
+                                    case 3:
+                                        scoreScheduleTypeTitle = "مربی سطح 1";
+                                        from = "coacher1ScoreDateFrom";
+                                        to = "coacher1ScoreDateTo";
+                                        break;
+                                    case 4:
+                                        scoreScheduleTypeTitle = "مربی سطح 2";
+                                        from = "coacher2ScoreDateFrom";
+                                        to = "coacher2ScoreDateTo";
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                <script>
+                                    var hasFinalPeriod = true;
+                                    $("#@from").datepicker({
+                                        onSelect: function (dateText, inst) {
+                                            $("#@to").datepicker('option', 'minDate',
+                                                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+                                        },
+                                        showWeek: true,
+                                        showButtonPanel: true,
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        dateFormat: "yy/mm/dd"
+                                    });
+                                    $("#@to").datepicker({
+                                        showWeek: true,
+                                        showButtonPanel: true,
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        dateFormat: "yy/mm/dd"
+                                    });
+                                </script>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class='form-group'>
+                                            <label class="control-label col-md-4">
+                                                @scoreScheduleTypeTitle از
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-8">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" value="@dateTimeCustom.MiladiToShamsi(item.DateFrom.Date).Substring(0, 11)" name="@from" id="@from" class="form-control @from" placeholder="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class='form-group'>
+                                            <label class="control-label col-md-4">
+                                                @scoreScheduleTypeTitle تا
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-8">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" value="@dateTimeCustom.MiladiToShamsi(item.DateTo.Date).Substring(0, 11)" id="@to" name="@to" class="form-control @to" placeholder="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="editExtendPeriodBTN">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+<script>
+    $('#editExtendPeriodModal').modal('show');
+    $("#dateFrom").datepicker({
+        onSelect: function (dateText, inst) {
+            $("#dateTo").datepicker('option', 'minDate',
+                new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+        },
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    $("#dateTo").datepicker({
+        showWeek: true,
+        showButtonPanel: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy/mm/dd"
+    });
+    var rules = {
+        dateFrom: {
+            required: true
+        },
+        dateTo: {
+            required: true
+        }
+    }
+    var messages = {
+        dateFrom: {
+            required: "پر کردن این فیلد الزامی می باشد"
+        },
+        dateTo: {
+            required: "پر کردن این فیلد الزامی می باشد"
+        }
+    }
+    if (typeof hasFinalPeriod !== 'undefined') {
+        if (hasFinalPeriod) {
+            rules = {
+                dateFrom: {
+                    required: true
+                },
+                dateTo: {
+                    required: true
+                },
+                selfScoreDateFrom: {
+                    required: true
+                },
+                selfScoreDateTo: {
+                    required: true
+                },
+                participantScoreDateFrom: {
+                    required: true
+                },
+                participantScoreDateTo: {
+                    required: true
+                },
+                coacher1ScoreDateFrom: {
+                    required: true
+                },
+                coacher1ScoreDateTo: {
+                    required: true
+                },
+                coacher2ScoreDateFrom: {
+                    required: true
+                },
+                coacher2ScoreDateTo: {
+                    required: true
+                }
+            }
+            messages = {
+                dateFrom: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                dateTo: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                selfScoreDateFrom: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                selfScoreDateTo: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                participantScoreDateFrom: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                participantScoreDateTo: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                coacher1ScoreDateFrom: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                coacher1ScoreDateTo: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                coacher2ScoreDateFrom: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                coacher2ScoreDateTo: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            }
+        }
+    }
+
+
+    $("#editExtendPeriodFrm").submit(function (e) {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        //debugger;
+
+        var form = $('#editExtendPeriodFrm');
+
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: rules,
+            messages: messages,
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+            //$("#articleSubmit").addClass('disabled');
+            var btn = $("#editExtendPeriodBTN");
+            btn.button('loading');
+            var postdata = new FormData(this);
+            //listOfSubTask = JSON.stringify(listOfSubTask);
+            //var postdata = $(this).serializeArray();
+            //postdata.append(JSON.stringify(listOfSubTask));
+            //console.log(postdata);
+            $.ajax(
+                {
+                    //data:postdata,
+                    url: '/ExtendSectionPeriod/ExtendSectionEdition',
+                    //url : formURL,
+                    //data: postdata2,
+                    data: postdata,
+                    //data: "firstName=" + $("fn").val(),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: "post",
+
+                    success: function (data, textStatus, jqXHR) {
+                        var message = "";
+                        if (data > 0) {
+                            message += "<span>اطلاعات  مورد نظر با موفقیت ویرایش گردید</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success(message);
+                            dt.ajax.reload();
+                            $("#editExtendPeriodFrm")[0].reset();
+                            $("#editExtendPeriodModal").modal("hide");
+                        }
+                        else if (data == 0) {
+                            message += "<span>اطلاعات  مورد نظر ویرایش نگردید..</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        } else if (data == "invalidDateRange") {
+                            message += "<span>بازه های زمانی نامعتبر می باشند</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        }
+                        //$("#periodDefinitionTable").DataTable().destroy();
+                        //show_dataTable();
+                        //dt.ajax.url("/TaskAssignment/GetAssignedTaskList");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#editExtendPeriodBTN").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            e.preventDefault(e);
+        }
+    });
+</script>

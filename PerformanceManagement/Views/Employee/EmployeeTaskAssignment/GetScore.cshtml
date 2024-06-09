@@ -1,0 +1,191 @@
+﻿@{
+    Layout = null;
+}
+@model List<ScoreView>
+@if (ViewBag.type == 1)
+{
+    <table class="table table-striped table-bordered table-hover" id="sample_dt">
+        <thead>
+            <tr>
+                @if (ViewBag.hasCriteria > 0)
+                {
+                    <th id="th1">
+                        نام شاخص
+                    </th>
+                }
+                else
+                {
+                    <th id="th1">
+                        نام وظیفه
+                    </th>
+                }
+                <th id="th2">
+                    نمره مربی سطح1
+                </th>
+                <th id="th2">
+                    نمره مربی سطح2
+                </th>
+                @if (ViewBag.hasParticipant > 0 && ViewBag.participantConfirmation ?? false)
+                {
+                    <th id="th4">
+                        نمره سایرارزیاب
+                    </th>
+                }
+                <th id="th5">
+                    خود ارزیابی
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @if (ViewBag.hasCriteria > 0)
+                    {
+                        <td>@item.CriteriaTitle</td>
+                    }
+                    else
+                    {
+                        <td>@item.Title</td>
+                    }
+                    <td>@item.score1</td>
+                    <td>@item.score2</td>
+
+                    @if (ViewBag.hasParticipant > 0 && ViewBag.participantConfirmation ?? false)
+                    {
+                        <td>@item.participantScore</td>
+                    }
+                    <td>@item.selfScore</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else if (ViewBag.type == 3)
+{
+    <table class="table table-striped table-bordered table-hover" id="sample_dt3">
+        <thead>
+            <tr>
+                @if (ViewBag.hasCriteria > 0)
+                {
+                    <th id="th1">
+                        نام شاخص
+                    </th>
+                }
+                else
+                {
+                    <th id="th1">
+                        نام وظیفه
+                    </th>
+                }
+                <th id="th2">
+                    نمره ادمین برنامه ریزی
+                </th>
+                @if (ViewBag.hasParticipant > 0 && ViewBag.participantConfirmation ?? false)
+                {
+                    <th id="th4">
+                        نمره سایرارزیاب
+                    </th>
+                }
+                <th id="th5">
+                    خود ارزیابی
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @if (ViewBag.hasCriteria > 0)
+                    {
+                        <td>@item.CriteriaTitle</td>
+                    }
+                    else
+                    {
+                        <td>@item.Title</td>
+                    }
+                    <td>@item.planningAdminScore</td>
+
+                    @if (ViewBag.hasParticipant > 0 && ViewBag.participantConfirmation ?? false)
+                    {
+                        <td>@item.participantScore</td>
+                    }
+                    <td>@item.selfScore</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else if (ViewBag.type == 4)
+{
+    <table class="table table-striped table-bordered table-hover" id="sample_dt3">
+        <thead>
+            <tr>
+                @if (ViewBag.hasCriteria > 0)
+                {
+                    <th id="th1">
+                        نام شاخص
+                    </th>
+                }
+                else
+                {
+                    <th id="th1">
+                        نام وظیفه
+                    </th>
+                }
+                <th id="th2">
+                    نمره مربی سطح @ViewBag.coacherLevel
+                </th>
+                @if (ViewBag.hasParticipant > 0 && ViewBag.participantConfirmation ?? false)
+                {
+                    <th id="th4">
+                        نمره سایرارزیاب
+                    </th>
+                }
+                <th id="th5">
+                    خود ارزیابی
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @if (ViewBag.hasCriteria > 0)
+                    {
+                        <td>@item.CriteriaTitle</td>
+                    }
+                    else
+                    {
+                        <td>@item.Title</td>
+                    }
+
+                    @switch (ViewBag.coacherLevel)
+                    {
+                        case 2:
+                            <td>@item.score2</td>
+                            break;
+                        case 3:
+                            <td>@item.score3</td>
+                            break;
+                        case 4:
+                            <td>@item.score4</td>
+                            break;
+                        default:
+                            break;
+                    }
+
+
+                    @if (ViewBag.hasParticipant > 0 && ViewBag.participantConfirmation ?? false)
+                    {
+                        <td>@item.participantScore</td>
+                    }
+                    <td>@item.selfScore</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}

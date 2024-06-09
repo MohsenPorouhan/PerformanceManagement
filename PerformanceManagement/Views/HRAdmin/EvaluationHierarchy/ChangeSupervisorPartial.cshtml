@@ -1,0 +1,356 @@
+﻿@{
+    Layout = null;
+}
+<form method="post" id="supervisorChange" action="/EvaluationHierarchy/supervisorChange" class="form-horizontal modalClass">
+    <input type="hidden" name="currentSupervisorId" id="currentSupervisorId" />
+    <div class="row supervisor_change">
+        <!--/span-->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label id="mojri_name_label" class="control-label col-md-5">
+                    واحد مورد نظر
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-7">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select name="selectedDepartment" id="selectedDepartment" class="select2 form-control input-sm input-small"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label id="activity_type_label" class="control-label col-md-5">
+                    مسئول فعلی
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-7">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input id="currentSupervisor" disabled name="currentSupervisor"
+                               type="text" class="form-control input-sm input-small" placeholder="نمایش توسط سیستم">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/span-->
+    </div>
+
+    <div class="row supervisor_change">
+        <!--/span-->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label id="mojri_name_label" class="control-label col-md-5">
+                    مسئول جدید
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-7">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select name="newSupervisor" id="newSupervisor" class="select2 form-control input-sm input-small"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label id="mojri_name_label" class="control-label col-md-5">
+                    واحد اصلی/فرعی
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-7">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select name="positionType" id="positionType"
+                                class="select2 form-control input-sm input-small">
+                            <option></option>
+                            <option value="1">واحد اصلی</option>
+                            <option value="2">واحد فرعی</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--/span-->
+    </div>
+    <div class="row supervisor_change">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-5">
+                    رده سازمانی
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-7">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select name="positionId2" id="positionId2"
+                                class="select2 form-control input-sm input-small">
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $(".modal-dialog").draggable({
+        handle: ".modal-header"
+    });
+    $(".modal-header").css("cursor", "move");
+    $(".ChangeSupervisorPartialbtn").click(function () {
+        //alert('supervisorChangePlaceHolder');
+        var cause = $('#department_cause').children('option:selected').val();
+        if (cause == "2") {
+            debugger;
+            var form = $('#supervisorChange');
+            form.validate({
+                //console.log($('#registerform').serializeArray());
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    selectedDepartment: {
+                        required: true
+                    },
+                    newSupervisor: {
+                        required: true
+                    },
+                    positionType: {
+                        required: true
+                    },
+                    positionId2: {
+                        required: true
+                    }
+                },
+                messages: {
+                    selectedDepartment: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    newSupervisor: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    positionType: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    positionId2: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    }
+                },
+                invalidHandler: function (event, validator) { //display error alert on form submit
+                    //                    success2.hide();
+                    //                    error2.show();
+                    //                    App.scrollTo(error2, -200);
+                },
+                errorPlacement: function (error, element) { // render error placement for each input type
+                    var icon = $(element).parent('.input-icon').children('i');
+                    icon.removeClass('fa-check').addClass("fa-warning");
+                    icon.attr("data-original-title", error.text()).tooltip();
+                },
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+
+                },
+
+                success: function (label, element) {
+                    var icon = $(element).parent('.input-icon').children('i');
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                    icon.removeClass("fa-warning").addClass("fa-check");
+                },
+
+                submitHandler: function (form) {
+                    //                    success2.show();
+                    //                    error2.hide();
+                }
+            })
+            if (form.valid() == false) {
+                //console.log($('#registerform').serializeArray());
+                return false;
+            } else {
+                // $("#articleSubmit").addClass('disabled');
+                $("#dpCreationSubmit").attr("disabled", "disabled");
+                var btn = $("#dpCreationSubmit");
+                btn.button('loading');
+                console.log("setup");
+                //var postdata = new FormData(this);
+                var postdata = $("#supervisorChange").serializeArray();
+                console.log(postdata);
+                $.ajax(
+                    {
+                        //data:postdata,
+                        url: "/EvaluationHierarchy/ChangeSupervisor?departmentCause=" + cause,
+                        //url : formURL,
+                        //                        data: postdata2,
+                        data: postdata,
+                        //cache: false,
+                        //contentType: false,
+                        //processData: false,
+                        type: "post",
+
+                        success: function (data, textStatus, jqXHR) {
+                            ;
+                            //if ($.trim(data) === "yess")
+                            //alert("That's one I wanted. Excellent")
+                            //if (data > 0) {
+                            //    toastr.options.timeOut = "8000";
+                            //    toastr.options.positionClass = "toast-top-center";
+                            //    toastr.success("اطلاعات مورد نظر با موفقیت ویرایش گردید.");
+                            //    //$('#treeview').jstree(true).refresh(true);
+                            //    $('#treeview').jstree("destroy");
+                            //    show_jstree();
+                            //}
+
+
+                            var message = "";
+                            $(data).each(function (i, d) {
+                                if (d.saveChangeResult > 0) {
+                                    toastr.options.timeOut = "8000";
+                                    toastr.options.positionClass = "toast-top-center";
+                                    toastr.success("اطلاعات مورد نظر با موفقیت ثبت گردید.");
+                                    //$('#treeview').jstree(true).refresh(true);
+                                    $('#treeview').jstree("destroy");
+                                    show_jstree();
+                                }
+                                if (d.message != null) {
+                                    $(d.message).each(function (i, m) {
+                                        message += "<span>اطلاعات آقای " + m + "به دلیل عدم انتصاب یک نفر به دو واحد اصلی ثبت نگردید</span><br>";
+
+                                    })
+                                }
+                            });
+                            if (message != "") {
+                                toastr.options.timeOut = "15000";
+                                toastr.options.positionClass = "toast-top-center";
+                                toastr.info(message);
+                            }
+
+
+                            $("#supervisorChange")[0].reset();
+                            $("#department_creation").modal("hide")
+                            resetFormValidation();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("erorr");
+                            alert(jqXHR);
+                            alert(textStatus);
+                        }
+                    }).always(function () {
+                        $("#dpCreationSubmit").button('reset');
+                    });
+                //$.getScript('/assets/javascript/articleForm.js', function () {
+                //    ArticleForm.init(postdata);
+                //    $("#articleForm")[0].reset();
+                //});
+                //e.preventDefault(e);
+            }
+        }
+    });
+
+    $('#supervisorChangePlaceHolder .select2').select2({
+        placeholder: "انتخاب کنید",
+        allowClear: true
+    });
+
+    $('.supervisor_change').hide();
+
+
+    $("#selectedDepartment").click(function () {
+        $.ajax({
+            type: 'post',
+            url: '/EvaluationHierarchy/GetCurrentSupervisor',
+            data: { departmentId: $('#selectedDepartment').children('option:selected').val() },
+            success: function (data) {
+                //debugger;
+                $("#currentSupervisor").val(data.fullname);
+                $("#currentSupervisorId").val(data.peopleId);
+
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    });
+
+    //$('body').on('change', '#department_cause', function ()
+ $('#department_cause').on('change', function () {
+            if ($('#department_cause').children('option:selected').val() == "2") {
+                $('.supervisor_change').show();
+                $('.department_creation').hide();
+                $('.switch_department').hide();
+
+                $.ajax({
+                    type: 'get',
+                    url: '/EvaluationHierarchy/GetCurrentPEmployee',
+                    //data: { roleid: roleid },
+                    async: false,
+                    success: function (people2) {
+                        //alert(people2);
+                        $("#newSupervisor").empty();
+                        $("#newSupervisor").append("<option></option>");
+                        debugger;
+                        var arr = [];
+                        $(people2).each(function (i, p2) {
+                            $("#newSupervisor").append("<option value='" + p2.PeopleId + "'>" + p2.FirstName + " " + p2.LastName + "(" + p2.UserName + ")</option>");
+                        });
+
+                    },
+                    error: function (status) {
+                        alert("error");
+                    }
+                })
+
+                $.ajax({
+                    type: 'get',
+                    url: '/EvaluationHierarchy/GetDepartment',
+                    //data: { roleId: roleId },
+                    success: function (department) {
+                        $("#selectedDepartment").empty();
+                        $("#selectedDepartment").append("<option></option>");
+                        debugger;
+
+                        $(department).each(function (i, d) {
+                            //$("#selectedDepartment").select2("val", d.departmentId);
+                            $("#selectedDepartment").append("<option value='" + d.departmentId + "'>" + d.shortName + "</option>");
+                        })
+                    },
+                    error: function (status) {
+                        alert("Error");
+                    }
+                })
+                $.ajax({
+                    type: 'get',
+                    url: '/EvaluationHierarchy/GetPositionList',
+                    //data: { roleId: roleId },
+                    success: function (people) {
+                        $("#positionId2").empty();
+                        $("#positionId2").append("<option></option>");
+                        debugger;
+
+                        $(people).each(function (i, p) {
+                            $("#positionId2").append("<option value='" + p.jobId + "'>" + p.title + "</option>");
+                        })
+                    },
+                    error: function (status) {
+                        alert("Error");
+                    }
+                })
+            }
+        });
+</script>

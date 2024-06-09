@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+@model List<PerformanceManagement.Models.Coacher.View.RelatedTaskCompetencyView>
+
+<table class="table table-striped table-bordered table-hover" id="sample_dt">
+    <thead>
+        <tr>
+            <th hidden>
+                sensibleEventId
+            </th>
+            <th hidden>
+                TBEvalId
+            </th>
+            <th hidden>
+                TBId
+            </th>
+            <th>
+                نام
+            </th>
+            <th>
+                نوع
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td hidden>@item.SensibleEventId</td>
+                <td hidden>@item.TBEvalId</td>
+                <td hidden>@item.TBId</td>
+                <td>@item.Title</td>
+                <td>@item.Type</td>
+                @*<td><a href='#' onclick="getCriterias(@item.TaskId)" data-toggle='modal' class='criteriaOfTaskDivisionBtn'>شاخص ها</a></td>*@
+            </tr>
+        }
+
+    </tbody>
+</table>
+

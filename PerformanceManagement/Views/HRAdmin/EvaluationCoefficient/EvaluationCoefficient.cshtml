@@ -1,0 +1,804 @@
+﻿@{
+    ViewData["Title"] = "ضرایب ارزیابی";
+}
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-toastr/toastr-rtl.min.css" />
+
+    <link rel="stylesheet" href="/assets/advancedDataTable/jquery.dataTables.css" />
+    <link rel="stylesheet" href="/assets/advancedDataTable/buttons.dataTables.css" />
+    <style>
+        .btn-sm, .btn-xs {
+            margin: 2px;
+        }
+
+        td.details-control {
+            background: url('/assets/img/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+
+        tr.details td.details-control {
+            background: url('/assets/img/details_close.png') no-repeat center center;
+        }
+
+        .dataTable .details td, .dataTable .details th {
+            padding: 8px;
+            background: none;
+            border: 0;
+        }
+
+        .select2-container .select2-choice > .select2-chosen {
+            /*display: block;*/
+            overflow: initial;
+        }
+    </style>
+}
+
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <h3 class="page-title">
+            <small></small>
+
+        </h3>
+        <div class="clearfix"></div>
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="index.html">
+                    خانه
+                </a>
+                <i class="fa fa-angle-left"></i>
+            </li>
+            <li>
+                <a href="#">
+                    ضرایب ارزیابی
+                </a>
+            </li>
+            <li class="pull-right">
+                <div id="dashboard-report-range" class="dashboard-date-range tooltips" data-placement="top" data-original-title="Change dashboard date range">
+                    <i class="fa fa-calendar"></i>
+                    <span>
+                    </span>
+                    <i class="fa fa-angle-down"></i>
+                </div>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div class="modal fade" id="evaluation_coefficient" tabindex="" role="" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <button type="button" id="modal-close" class="close"
+                        data-dismiss="modal" aria-hidden="true"></button>
+                <h4 id="sabt_hazine_personnel" class="modal-title">
+                    <i class="fa fa-file-o"></i>
+                    ضرایب ارزیابی
+                </h4>
+            </div>
+            <form id="evaluationCoefficientForm" method="post" class="form-horizontal">
+                <div class="modal-body">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">
+                                        انتخاب دوره
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select name="periodDefinitionId" id="periodDefinitionId" class="form-control input-sm input-small"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="hidden">
+                                <a href="#tab_6_1" data-toggle="tab">
+                                    ضرایب ارزیابی با سایر ارزیاب
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="#tab_6_2" data-toggle="tab">
+                                    ضرایب ارزیابی بدون سایر ارزیاب
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade hidden" id="tab_6_1">
+                                <h3 class="form-section">وظایف</h3>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-5">
+                                                مربی سطح 1
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="level1CoacherTWith" id="level1CoacherTWith" class="form-control input-sm input-small" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                مربی سطح 2
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="level2CoacherTWith" id="level2CoacherTWith" class="form-control input-sm input-small" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                خودارزیابی
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="selfEvaluationTWith" id="selfEvaluationTWith" class="form-control input-sm input-small" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                سایر ارزیاب
+                                                <span class="required">
+
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="participantCoefficientT" id="participantCoefficientT" class="form-control input-sm input-small" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <h3 class="form-section">شایستگی رفتاری</h3>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                مربی سطح 1
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="level1CoacherBWith" id="level1CoacherBWith" class="form-control input-sm input-small" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                مربی سطح 2
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="level2CoacherBWith" id="level2CoacherBWith" class="form-control input-sm input-small" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                خودارزیابی
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="selfEvaluationBWith" id="selfEvaluationBWith" class="form-control input-sm input-small" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                سایر ارزیاب
+                                                <span class="required">
+
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="participantCoefficientB" id="participantCoefficientB" class="form-control input-sm input-small" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <!--/row-->
+                            </div>
+                            <div class="tab-pane active" id="tab_6_2">
+                                <h3 class="form-section">وظایف</h3>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                مربی سطح 1
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="level1CoacherTWithout" id="level1CoacherTWithout" class="form-control input-sm input-small" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                مربی سطح 2
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="level2CoacherTWithout" id="level2CoacherTWithout" class="form-control input-sm input-small" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                خودارزیابی
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="selfEvaluationTWithout" id="selfEvaluationTWithout" class="form-control input-sm input-small" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <h3 class="form-section">شایستگی رفتاری</h3>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                مربی سطح 1
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="level1CoacherBWithout" id="level1CoacherBWithout" class="form-control input-sm input-small" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                مربی سطح 2
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="level2CoacherBWithout" id="level2CoacherBWithout" class="form-control input-sm input-small" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="mojri_name_label" class="control-label col-md-5">
+                                                خودارزیابی
+                                                <span class="required">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="input-icon right">
+                                                    <i class="fa"></i>
+                                                    <input type="text" name="selfEvaluationBWithout" id="selfEvaluationBWithout" class="form-control input-sm input-small" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END FORM-->
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="evaluationCoefficientBtn">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="portlet blue box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>ضرایب ارزیابی
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                    <a href="#portlet-config" data-toggle="modal" class="config">
+                    </a>
+                    <a href="javascript:;" class="reload">
+                    </a>
+                    <a href="javascript:;" class="remove">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                <a id="" class="btn blue btn-sm pull-left" data-toggle="modal"
+                   href="#evaluation_coefficient">ضرایب ارزیابی</a>
+
+                <div class="clearfix">
+                </div>
+
+                <table class="table table-striped table-bordered table-hover" id="evaluationCoefficientTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                periodDefinition
+                            </th>
+                            <th>
+                                انتصاب به کد دوره
+                            </th>
+                            <th>
+                                نام دوره
+                            </th>
+                            <th>
+                                evaluationCoefficientId
+                            </th>
+                            <th>
+                                مربی سطح 1
+                            </th>
+                            <th>
+                                مربی سطح 2
+                            </th>
+                            <th>
+                                خودارزیابی
+                            </th>
+                            <th>
+                                سایرارزیاب
+                            </th>
+                            <th>
+                                انتصاب به بعد
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Plugins{
+    <script src="/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/assets/plugins/bootstrap-toastr/toastr.min.js"></script>
+    <script src="/assets/scripts/custom/ui-toastr.js"></script>
+
+    <script src="/assets/advancedDataTable/DataTables-1.10.19.js" type="text/javascript"></script>
+    <script src="/assets/advancedDataTable/Buttons-for-DataTables-1.5.2.js" type="text/javascript"></script>
+    <script src="/assets/advancedDataTable/buttons.print.js" type="text/javascript"></script>
+    <script src="/assets/advancedDataTable/buttons.ColVis.js" type="text/javascript"></script>
+    <script src="/assets/advancedDataTable/jsZip.js" type="text/javascript"></script>
+    <script src="/assets/advancedDataTable/pdfmake.js" type="text/javascript"></script>
+    <script src="/assets/advancedDataTable/pdfmake.font.js" type="text/javascript"></script>
+    <script src="/assets/advancedDataTable/buttons.html5.js" type="text/javascript"></script>
+}
+
+@section Scripts{
+    <script>
+        function resetFormValidation() {
+            $(".select2-chosen").html("");
+            //Begin of reset form validation
+            $(".input-icon .fa-warning").addClass('fa').removeClass('fa-warning');
+            $(".input-icon .fa-check").addClass('fa').removeClass('fa-check');
+            $(".alert-danger").hide();
+            $('.form-group').removeClass('has-error');
+            $('.form-group').removeClass('has-success');
+            //End of reset form validation
+        }
+        $.ajax({
+            type: 'get',
+            url: '/WeightWay/GetPeriodDefinition',
+            //data: { roleId: roleId },
+            success: function (periodDefinition) {
+                $("#periodDefinitionId").empty();
+                $("#periodDefinitionId").append("<option></option>");
+
+                $(periodDefinition).each(function (i, p) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $("#periodDefinitionId").append("<option value='" + p.periodDefinitoionId + "'>" + p.periodTitle + " (" + p.periodCode + ")</option>");
+                })
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+        $("#evaluationCoefficientForm").submit(function (e) {
+            //alert('dpCreationSubmit');
+            //var postdata2 = $(this).serializeArray();
+            //debugger;
+            var form = $('#evaluationCoefficientForm');
+            form.validate({
+                //console.log($('#registerform').serializeArray());
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    periodDefinitionId: {
+                        required: true
+                    },
+                    level1CoacherTWith: {
+                        required: true
+                    },
+                    level2CoacherTWith: {
+                        required: true
+                    },
+                    selfEvaluationTWith: {
+                        required: true
+                    },
+                    participantCoefficientT: {
+                        required: true
+                    },
+                    level1CoacherBWith: {
+                        required: true
+                    },
+                    level2CoacherBWith: {
+                        required: true
+                    },
+                    selfEvaluationBWith: {
+                        required: true
+                    },
+                    participantCoefficientB: {
+                        required: true
+                    },
+                    level1CoacherTWithout: {
+                        required: true
+                    },
+                    level2CoacherTWithout: {
+                        required: true
+                    },
+                    selfEvaluationTWithout: {
+                        required: true
+                    },
+                    level1CoacherBWithout: {
+                        required: true
+                    },
+                    level2CoacherBWithout: {
+                        required: true
+                    },
+                    selfEvaluationBWithout: {
+                        required: true
+                    }
+                },
+                messages: {
+                    periodDefinitionId: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    level1CoacherTWith: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    level2CoacherTWith: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    selfEvaluationTWith: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    participantCoefficientT: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    level1CoacherBWith: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    level2CoacherBWith: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    selfEvaluationBWith: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    participantCoefficientB: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    level1CoacherTWithout: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    level2CoacherTWithout: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    selfEvaluationTWithout: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    level1CoacherBWithout: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    level2CoacherBWithout: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    },
+                    selfEvaluationBWithout: {
+                        required: "پر کردن این فیلد الزامی می باشد"
+                    }
+                },
+                invalidHandler: function (event, validator) { //display error alert on form submit
+                    //                    success2.hide();
+                    //                    error2.show();
+                    //                    App.scrollTo(error2, -200);
+                },
+                errorPlacement: function (error, element) { // render error placement for each input type
+                    var icon = $(element).parent('.input-icon').children('i');
+                    icon.removeClass('fa-check').addClass("fa-warning");
+                    icon.attr("data-original-title", error.text()).tooltip();
+                },
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+
+                },
+
+                success: function (label, element) {
+                    var icon = $(element).parent('.input-icon').children('i');
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                    icon.removeClass("fa-warning").addClass("fa-check");
+                },
+
+                submitHandler: function (form) {
+                    //                    success2.show();
+                    //                    error2.hide();
+                }
+            })
+            if (form.valid() == false) {
+                //console.log($('#registerform').serializeArray());
+                return false;
+            } else {
+                //$("#articleSubmit").addClass('disabled');
+                $("#evaluationCoefficientBtn").attr("disabled", "disabled");
+                var btn = $("#evaluationCoefficientBtn");
+                btn.button('loading');
+                var postdata = new FormData(this);
+                //var postdata = $('#dpcreation').serializeArray();
+
+                //console.log(postdata);
+                $.ajax(
+                    {
+                        //data:postdata,
+                        url: "/EvaluationCoefficient/AddEvaluationCoefficient",
+                        //url : formURL,
+                        //data: postdata2,
+                        data: postdata,
+                        //data: "firstName=" + $("fn").val(),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        type: "post",
+
+                        success: function (data, textStatus, jqXHR) {
+                            //alert(data);
+                            //if ($.trim(data) === "yess")
+
+                            var message = "";
+                            var result = "";
+                            if (data == 0) {
+                                message += "<span>اطلاعات مورد نظر ثبت نگردید</span><br><br>";
+                            } else if (data == "invalidData") {
+                                message += "<span>مقادیر نامعتبر را اصلاح نمایید</span><br><br>";
+                            }
+                            else if (data >= 1) {
+                                result += "<span>اطلاعات مورد نظر با موفقیت ثبت گردید.</span><br><br>";
+                                toastr.options.timeOut = "15000";
+                                toastr.options.positionClass = "toast-top-center";
+                                toastr.success(result);
+                            }
+                            if (message != "") {
+                                toastr.options.timeOut = "15000";
+                                toastr.options.positionClass = "toast-top-center";
+                                toastr.info(message);
+                            }
+
+                            $("#evaluationCoefficientForm")[0].reset();
+                            resetFormValidation();
+                            $("#evaluation_coefficient").modal("hide");
+                            $("#evaluationCoefficientTable").DataTable().destroy();
+                            show_dataTable();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("erorr00000");
+                            alert(jqXHR);
+                            alert(textStatus);
+                        }
+                    }).always(function () {
+                        $("#evaluationCoefficientBtn").button('reset');
+                    });
+                //$.getScript('/assets/javascript/articleForm.js', function () {
+                //    ArticleForm.init(postdata);
+                //    $("#articleForm")[0].reset();
+                //});
+                e.preventDefault(e);
+            }
+        });
+        $('#evaluation_coefficient').on('hidden.bs.modal', function () {
+            $("#evaluationCoefficientForm")[0].reset();
+            resetFormValidation();
+        });
+
+        var dt;
+        function show_dataTable() {
+            dt = $('#evaluationCoefficientTable').DataTable({
+                dom: 'CT<"clearfix">lBfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel',
+                    'pdf',
+                    {
+                        extend: 'pdfHtml5',
+                        download: 'open',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    'colvis'
+                ],
+                columnDefs: [
+                    {
+                        targets: [-1],
+                        visible: false
+                    }
+                ],
+                //                "fnInitComplete": function (oSettings, json) {
+                //
+                //                },
+                "fnDrawCallback": function (oSettings) {
+                },
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                "columnDefs": [
+                    { "orderable": false, "targets": [0] }
+                ],
+                "serverSide": true,
+                "ajax": {
+                    "url": "/EvaluationCoefficient/GetEvaluationCoefficientList",
+                    "type": "POST",
+                    "contentType": 'application/json; charset=utf-8',
+                    "cache": false,
+                    "dataType": "json"
+                },
+                "aoColumns": [
+                    {
+                        "mData": "PeriodDefinitoionId", "sClass": "hidden"
+                    },
+                    {
+                        "mData": "PeriodCode"
+                    },
+                    {
+                        "mData": "PeriodTitle"
+                    },
+                    {
+                        "mData": "EvaluationCoefficientId", "sClass": "hidden"
+                    },
+                    { "mData": "level1CoacherTWith" },
+                    { "mData": "level2CoacherTWith" },
+                    { "mData": "selfEvaluationTWith" },
+                    {
+                        "mData": "participantCoefficientT",
+                        "render": function (data, type, row, meta) {
+                            if (data == "-1") {
+                                data = "ندارد";
+                            }
+                            return data;
+                        }
+                    },
+                    { "mData": "assignTo" }
+                ]
+            });
+
+        }
+
+        show_dataTable();
+    </script>
+}

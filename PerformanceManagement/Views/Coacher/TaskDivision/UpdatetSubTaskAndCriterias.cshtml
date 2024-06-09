@@ -1,0 +1,255 @@
+﻿@{
+    Layout = null;
+}
+@model List<PerformanceManagement.Models.Criteria>
+<form method="post" id="UpdatetSubTaskAndCriteriasFrm" class="form-horizontal">
+    <div class="modal fade department modalClass" id="UpdatetSubTaskAndCriteriasModal" tabindex="" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 id="sabt_hazine_personnel" class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        ویرایش @Model.FirstOrDefault().Task.Title و شاخص های آن
+
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">
+                                        نام زیر فعالیت
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <input type="text" taskId="@Model.FirstOrDefault().Task.TaskId" value="@Model.FirstOrDefault().Task.Title" name="taskTitle" id="taskTitle" class="form-control taskTitle" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @{ int i = 0;}
+                        @foreach (var item in Model)
+                        {
+                            i += 1;
+                            <div class="row criteria">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">
+                                            عنوان شاخص
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" criteriaId="@item.CriteriaId" value="@item.Title" name="criteriaTitle{@i}" id="criteriaTitle{@i}" class="form-control valueCheck" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">
+                                            حد شاخص
+                                            <span class="required">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" value="@item.LimitOfAdmission" name="limitOfAdmission{@i}" id="limitOfAdmission{@i}" class="form-control valueCheck" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="updateTaskCriteriaBTN">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+<script>
+    $('#UpdatetSubTaskAndCriteriasModal').modal('show');
+
+    $("#UpdatetSubTaskAndCriteriasFrm").submit(function (e) {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        //debugger;
+
+        var form = $('#UpdatetSubTaskAndCriteriasFrm');
+
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                taskTitle: {
+                    required: true
+                }
+            },
+            messages: {
+                taskTitle: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+
+            var TaskView = {};
+            var listOfCriteriaView = [];
+
+            TaskView.TaskId = $("#taskTitle").attr("taskId");
+            TaskView.TaskTitle = $("#taskTitle").val();
+
+            $(".criteria").each(function (i, d) {
+                var CriteriaView = {};
+
+                CriteriaView.CriteriaId = $(this).find("input[id^='criteriaTitle']").attr("criteriaId");
+                CriteriaView.Title = $(this).find("input[id^='criteriaTitle']").val();
+                CriteriaView.limitOfAdmission = $(this).find("input[id^='limitOfAdmission']").val();
+
+                listOfCriteriaView.push(CriteriaView);
+            })
+            TaskView.CriteriaViews = listOfCriteriaView;
+
+            console.log(TaskView);
+            //$("#articleSubmit").addClass('disabled');
+            var btn = $("#updateTaskCriteriaBTN");
+            btn.button('loading');
+            //var postdata = new FormData(this);
+            //listOfSubTask = JSON.stringify(listOfSubTask);
+            //var postdata = $(this).serializeArray();
+            //postdata.append(JSON.stringify(listOfSubTask));
+            //console.log(postdata);
+            $.ajax(
+                {
+                    //data:postdata,
+                    url: '/TaskDivision/UpdatetSubTaskAndCriteria',
+                    //url : formURL,
+                    //data: postdata,
+                    data: JSON.stringify(TaskView),
+                    //data: "firstName=" + $("fn").val(),
+                    //cache: false,
+                    //contentType: false,
+                    //processData: false,
+                    datatype: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    type: 'POST',
+
+                    success: function (data, textStatus, jqXHR) {
+                        var message = "";
+                        debugger
+                        if (data > 0) {
+                            message += "<span>اطلاعات  مورد نظر با موفقیت ثبت گردید</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success(message);
+                            dt.ajax.reload();
+                            $("#UpdatetSubTaskAndCriteriasFrm")[0].reset();
+                            $("#UpdatetSubTaskAndCriteriasModal").modal("hide");
+                        }
+                        else if (data == 0) {
+                            message += "<span>اطلاعات  مورد نظر ثبت نگردید..</span><br><br>";
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(message);
+                        }
+                        //$("#periodDefinitionTable").DataTable().destroy();
+                        //show_dataTable();
+                        //dt.ajax.url("/TaskAssignment/GetAssignedTaskList");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#updateTaskCriteriaBTN").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            e.preventDefault(e);
+        }
+    });
+    //Begin of validation of form
+    var taskTitle = $("#taskTitle").val();
+    $("#taskTitle").val("");
+    $("#updateTaskCriteriaBTN").trigger('click');
+
+    $('.valueCheck').each(function (i, d) {
+        $(this).rules("add", {
+            required: true,
+            messages: {
+                required: "پرکردن این فیلد الزامی می باشد",
+            }
+        });
+    });
+    $("#taskTitle").val(taskTitle);
+    //$("#updateTaskCriteriaBTN").trigger('click');
+    //End of validation of form
+</script>

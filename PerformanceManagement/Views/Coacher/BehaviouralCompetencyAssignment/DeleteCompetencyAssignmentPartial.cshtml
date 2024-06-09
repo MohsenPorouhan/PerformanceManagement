@@ -1,0 +1,85 @@
+﻿@{
+    Layout = null;
+}
+@model PerformanceManagement.Models.Coacher.View.DeleteCompetencyView
+
+<form method="post" id="deleteCompetencyAssignmentFrm" class="form-horizontal">
+    <input type="hidden" value="@Model.EvaluationBehaviouralCompetencyId" name="evaluationBehaviouralCompetencyId" id="evaluationBehaviouralCompetencyId" />
+    <input type="hidden" value="@Model.HasParticipant" name="hasParticipant" id="hasParticipant" />
+    <div class="modal fade" id="deleteCompetencyAssignmentModal" tabindex="" role="" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        <span>حذف شایستگی رفتاری اختصاصی @Model.CompetencyTitle</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <b>آیا از حذف شایستگی رفتاری اختصاصی مورد نظر اطمینان دارید؟</b>
+                        <!--/row-->
+                    </div>
+                    <!-- END FORM-->
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="deleteCompetencyAssignmentBtn">بله</button>
+                    <button type="button" class="btn red input-sm input-small" id="no" data-dismiss="modal"><i class="fa fa-times"></i>خیر</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+<script>
+    $("#deleteCompetencyAssignmentModal").modal('show');
+    $("#deleteCompetencyAssignmentFrm").submit(function (e) {
+        $("#deleteCompetencyAssignmentBtn").attr("disabled", "disabled");
+        var btn = $("#deleteCompetencyAssignmentBtn");
+        btn.button('loading');
+        var postdata = new FormData(this);
+        $.ajax({
+            //data:postdata,
+            url: "/BehaviouralCompetencyAssignment/DeleteCompetencyAssignment",
+            //url : formURL,
+            //data: postdata2,
+            data: postdata,
+            //data: "firstName=" + $("fn").val(),
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: "post",
+            success: function (data) {
+                if (data == 0) {
+                    toastr.options.timeOut = "15000";
+                    toastr.options.positionClass = "toast-top-center";
+                    toastr.info("شایستگی رفتاری اختصاصی مورد نظر حذف نگردید");
+                } else if (data > 0) {
+                    toastr.options.timeOut = "15000";
+                    toastr.options.positionClass = "toast-top-center";
+                    toastr.success("شایستگی رفتاری اختصاصی مورد نظر حذف گردید");
+                    dt.ajax.reload();
+                } else {
+                    toastr.options.timeOut = "15000";
+                    toastr.options.positionClass = "toast-top-center";
+                    toastr.info(data);
+                }
+                $("#deleteCompetencyAssignmentModal").modal("hide");
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        }).always(function () {
+            $("#deleteCompetencyAssignmentBtn").button('reset');
+        });
+        e.preventDefault(e);
+    })
+</script>

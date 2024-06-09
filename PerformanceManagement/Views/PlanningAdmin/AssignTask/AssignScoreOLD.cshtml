@@ -1,0 +1,490 @@
+﻿@{
+    Layout = null;
+}
+
+<form method="post" id="assignWeightFrm" class="form-horizontal">
+    <div class="modal fade department modalClass" id="assignWeightModal" tabindex="" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 id="sabt_hazine_personnel" class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        ثبت نمره عملکردی اهداف رده سازمانی و معاونتی
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+
+                        <div class="alert alert-block alert-info fade in">
+                            <button type="button" class="close" data-dismiss="alert"></button>
+                            <h4 class="alert-heading">روش نمره دهی</h4>
+                            <p id="weightWayInfo">
+
+                            </p>
+                        </div>
+
+                        <div id="taskRow"></div>
+
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="assignScoreBTN">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div id="critriaPlaceHolder"></div>
+</form>
+<script type="text/html" id="addChild">
+    <div class="row">
+        <!--/span-->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-6">
+                    {1}
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-6">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" name="taskWeight{0}" id="taskWeight{0}" taskId="{2}" evaluationId="{3}" periodDefinitionId="{4}" class="form-control taskWeight input-small input-sm" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/span-->
+        <div class="col-md-6">
+            <button id="criteriaScoreBtn{0}" type="button" loadCriteria="false" index="{0}" data-toggle="modal" @*href="#criteriaModal{0}" *@ taskId="{2}" class="btn btn-link criteriaBtn">ثبت نمره عملکردی شاخص ها</button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="addCriteria">
+    <div class="modal fade department modalClass" taskId="{1}" id="criteriaModal{0}" tabindex="" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" id="modal-close" class="close"
+                            data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 id="sabt_hazine_personnel" class="modal-title">
+                        <i class="fa fa-file-o"></i>
+                        ثبت نمره برای شاخص های {2}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div id="criteriaRow{0}"></div>
+
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn green input-sm input-small ChangeSupervisorPartialbtn" id="assignScoreBTN" data-dismiss="modal">تایید</button>
+                    @*<button type="button" class="btn red input-sm input-small" id="cancel11" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>*@
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</script>
+<script type="text/html" id="addCriteriaRow">
+    <div class="row">
+        <!--/span-->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-6">
+                    {1}
+                    <span class="required">
+                        *
+                    </span>
+                </label>
+                <div class="col-md-6">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" name="criteriaWeight{0}" id="criteriaWeight{0}" criteriaId="{2}" class="form-control criteriaWeight input-small input-sm" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script>
+
+    //  $(document).ready(function () {
+    var i = 1;
+    var index;
+    var j = 1;
+    var index2;
+    var template = jQuery.validator.format($.trim($("#addChild").html()));
+
+    var template2 = jQuery.validator.format($.trim($("#addCriteria").html()));
+    var template3 = jQuery.validator.format($.trim($("#addCriteriaRow").html()));
+
+    var row;
+    var length = dt.rows('.selected').data().length;
+    var selector;
+    if (length > 0) {
+        selector = "#taskAssignmentTable >tbody>tr.selected";
+    } else {
+        selector = "#taskAssignmentTable >tbody>tr";
+    }
+    $(selector).each(function (i, tr) {
+        row = dt.row(tr);
+        //console.log(dt.row(tr));
+        //row.child(row.data().fullName).show()
+        //alert(row.data().fullName)
+        index = i++;
+        $(template(index, row.data().Title, row.data().TaskId, row.data().EvaluationId, row.data().PeriodDefinitoionId)).appendTo("#taskRow");
+        $(template2(index, row.data().TaskId, row.data().Title)).appendTo("#critriaPlaceHolder");
+
+        if (row.data().allocatorRoleName == "HRAdmin") {
+            $("#criteriaScoreBtn" + index).addClass("disabled");
+        }
+        $.ajax({
+            type: 'get',
+            url: '/Share/CriteiaCount',
+            data: { taskId: row.data().TaskId },
+            async: false,
+            success: function (data) {
+                if (data >= 1) {
+                    $("#taskWeight" + index).attr("disabled", "disabled");
+                } else if (data == 0) {
+                    $("#criteriaScoreBtn" + index).addClass("disabled");
+                }
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    })
+    var weightWay = "";
+    var numberScaleList = [];
+    $.ajax({
+        type: 'get',
+        url: '/Share/GetScoreWeightWay',
+        data: { periodDefinitionId: row.data().PeriodDefinitoionId },
+        async: false,
+        success: function (data) {
+            weightWay = data;
+            if (data == 1) {
+                $("#weightWayInfo").html("نمره دهی به صورت درصدی و بازه مجاز از 1 تا 100 می باشد.");
+            } else if (data == 2) {
+                $.ajax({
+                    type: 'get',
+                    url: '/Share/GetScoreLikertScale',
+                    data: { periodDefinitionId: row.data().PeriodDefinitoionId },
+                    async: false,
+                    success: function (data) {
+                        $("#weightWayInfo").html("نمره دهی به صورت طیف لیکرت می باشد. و بازه های مجاز جهت نمره دهی ");
+                        $(data).each(function (i, d) {
+                            numberScaleList.push(d.numberScale);
+                            $("#weightWayInfo").append(d.numberScale + ":" + d.titleScale + "  ");
+                        });
+                    },
+                    error: function (status) {
+                        alert("Error");
+                    }
+                })
+            }
+        },
+        error: function (status) {
+            alert("Error");
+        }
+    })
+
+    $('#assignWeightModal').modal('show');
+
+    $('.modalClass .select2').select2({
+        placeholder: "انتخاب کنید",
+        allowClear: true
+    });
+
+    $(".criteriaBtn").each(function () {
+        var index = $(this).attr("index");
+        var selector = $(this);
+        //$("#criteriaModal" + index).modal('show');
+        if ($(this).attr("loadCriteria") == "false") {
+            $.ajax({
+                type: 'get',
+                url: '/AssignTask/GetCriteriaDetails',
+                data: { taskId: $(this).attr("taskId") },
+                success: function (data) {
+                    $(data).each(function (i, d) {
+                        index2 = j++;
+                        $(template3(index2, d.title, d.criteriaId)).appendTo("#criteriaRow" + index);
+                        //console.log($("#criteriaWeight" + index2));
+                        $("#criteriaWeight" + index2).rules("add", {
+                            required: true,
+                            messages: {
+                                required: "پرکردن این فیلد الزامی می باشد",
+                            }
+                        });
+                        $("#criteriaWeight" + index2).rules("add", {
+                            number: true,
+                            messages: {
+                                number: "لطفا عدد وارد نمایید",
+                            }
+                        });
+
+                        if (weightWay == 1) {
+                            console.log(weightWay);
+                            $("#criteriaWeight" + index2).rules("add", {
+                                range: [1, 100],
+                                messages: {
+                                    range: "لطفا عددی بین 1 تا 100 وارد نمایید",
+                                }
+                            });
+                        } else if (weightWay == 2) {
+                            $("#criteriaWeight" + index2).rules("add", {
+                                range: [Math.min.apply(Math, numberScaleList), Math.max.apply(Math, numberScaleList)],
+                                messages: {
+                                    range: "لطفا عددی بین " + Math.min.apply(Math, numberScaleList) + " تا " + Math.max.apply(Math, numberScaleList) + " وارد نمایید",
+                                }
+                            });
+                        }
+                        //$('.criteriaWeight').each(function (i, d) {
+                        //    $(this).rules("add", {
+                        //        required: true,
+                        //        messages: {
+                        //            required: "پرکردن این فیلد الزامی می باشد",
+                        //        }
+                        //    });
+                        //});
+                    })
+                    $(selector).attr("loadCriteria", "true");
+                },
+                error: function (status) {
+                    alert("Error");
+                }
+            })
+        }
+
+    });
+
+
+    $(".criteriaBtn").click(function () {
+        var index = $(this).attr("index");
+        $("#criteriaModal" + index).modal('show');
+    });
+    var isTrue = false;
+    if ($("#taskWeight0").attr("disabled") == "disabled") {
+        $("#taskWeight0").removeAttr("disabled");
+        isTrue = true;
+    }
+    $("#assignScoreBTN").click(function () {
+        //alert('dpCreationSubmit');
+        //var postdata2 = $(this).serializeArray();
+        var form = $("#assignWeightFrm");
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                taskWeight0: {
+                    required: true,
+                }
+            },
+            messages: {
+                taskWeight0: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+
+            return false;
+        } else {
+            var listOfEvaluations = [];
+            var listOfCriteria = [];
+            var listOfScore = [];
+            var listOfCriteriaScore = [];
+            $("#taskRow input[type=text]").each(function () {
+                var evaluation = {};
+                var score = {}
+                evaluation.TaskId = $(this).attr("taskId");
+                if ($(this).attr("disabled") == "disabled") {
+                    score.score = -1;
+                }
+                else {
+                    score.score = $(this).val();
+                }
+                listOfScore.push(score);
+                evaluation.EvaluationId = $(this).attr("evaluationId");
+                evaluation.PeriodDefinitoionId = $(this).attr("periodDefinitionId");
+                evaluation.EvaluationScores = listOfScore;
+                listOfScore = [];
+                //$("#critriaPlaceHolder").find("div[id^='criteriaModal'],div[taskId='3']")
+                var criteria = $("#critriaPlaceHolder").find("div[taskId='" + $(this).attr("taskId") + "'] input")
+                $(criteria).each(function () {
+                    var criteria = {};
+                    var CriteriaWeightScore = {};
+                    criteria.CriteriaId = $(this).attr("criteriaId");
+                    //criteria.Weight = $(this).val();
+                    CriteriaWeightScore.Score = $(this).val();
+                    listOfCriteriaScore.push(CriteriaWeightScore);
+                    criteria.CriteriaWeightScores = listOfCriteriaScore;
+                    listOfCriteriaScore = [];
+                    listOfCriteria.push(criteria);
+                });
+                evaluation.CriteriaWeights = listOfCriteria;
+                listOfCriteria = [];
+                listOfEvaluations.push(evaluation);
+            });
+            //$("#articleSubmit").addClass('disabled');
+            // $("#dpCreationSubmit").attr("disabled", "disabled");
+            var btn = $("#assignScoreBTN");
+            btn.button('loading');
+            //var postdata = new FormData(this);
+            //var postdata = $('#assignWeightFrm').serializeArray();
+
+            //console.log(postdata);
+            $.ajax(
+                {
+                    datatype: "json",
+                    //data:postdata,
+                    url: "/AssignTask/AssignScore",
+                    //url : formURL,
+                    //                        data: postdata2,
+                    data: JSON.stringify(listOfEvaluations),
+                    //data: "firstName=" + $("fn").val(),
+                    //cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    //contentType: false,
+                    //processData: false,
+                    type: "POST",
+
+                    success: function (data, textStatus, jqXHR) {
+                        //if ($.trim(data) === "yess")
+                        //i = 1;
+                        //j = 1;
+                        if (data.result > 0) {
+                            //$("#dpcreation")[0].reset();
+                            $("#assignWeightModal").modal("hide")
+                            //resetFormValidation();
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.success("اطلاعات مورد نظر با موفقیت ثبت گردید.");
+                        } else if (data.result == 0) {
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.error("اطلاعات مورد نظر ثبت نگردید.");
+                        }
+                        else {
+                            toastr.options.timeOut = "15000";
+                            toastr.options.positionClass = "toast-top-center";
+                            toastr.info(data.result);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#assignScoreBTN").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            // e.preventDefault(e);
+        }
+    });
+    //Begin of validation of form
+    $("#assignScoreBTN").trigger('click');
+
+    $('.taskWeight').each(function (i, d) {
+        // alert("jhhjhed")
+        $(this).rules("add", {
+            required: true,
+            messages: {
+                required: "پرکردن این فیلد الزامی می باشد",
+            }
+        });
+        $(this).rules("add", {
+            number: true,
+            messages: {
+                number: "لطفا عدد وارد نمایید",
+            }
+        });
+        if (weightWay == 1) {
+            $(d).rules("add", {
+                range: [1, 100],
+                messages: {
+                    range: "لطفا عددی بین 1 تا 100 وارد نمایید",
+                }
+            });
+        } else if (weightWay == 2) {
+            $(this).rules("add", {
+                range: [Math.min.apply(Math, numberScaleList), Math.max.apply(Math, numberScaleList)],
+                messages: {
+                    range: "لطفا عددی بین " + Math.min.apply(Math, numberScaleList) + " تا " + Math.max.apply(Math, numberScaleList) + " وارد نمایید",
+                }
+            });
+        }
+    });
+
+    $("#assignScoreBTN").trigger('click');
+    if (isTrue) {
+        $("#taskWeight0").attr("disabled", "disabled");
+        $("#taskWeight0").prev().remove();
+    }
+        //End of validation of form
+    //});
+</script>

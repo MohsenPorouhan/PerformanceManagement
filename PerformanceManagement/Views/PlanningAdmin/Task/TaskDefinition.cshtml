@@ -1,0 +1,995 @@
+﻿@{
+    ViewData["Title"] = "تعریف هدف/KPI/برنامه عملیاتی";
+}
+@section Styles{
+    @*<link rel="stylesheet" type="text/css" href="/assets/plugins/jquery-multi-select/css/multi-select-rtl.css" />*@
+<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-toastr/toastr-rtl.min.css" />
+<link rel="stylesheet" type="text/css" href="/assets/plugins/select2v4/select2/dist/css/select2.css" />
+    @*<link rel="stylesheet" type="text/css" href="/assets/plugins/select2/select2-rtl.css" />
+<link id="select2-metronic" rel="stylesheet" type="text/css" href="/assets/plugins/select2/select2-metronic-rtl.css" />*@
+
+<link rel="stylesheet" href="/assets/advancedDataTable/jquery.dataTables.css" />
+<link rel="stylesheet" href="/assets/advancedDataTable/buttons.dataTables.css" />
+<style>
+    .btn-sm, .btn-xs {
+        margin: 2px;
+    }
+
+    td.details-control {
+        background: url('/assets/img/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.details td.details-control {
+        background: url('/assets/img/details_close.png') no-repeat center center;
+    }
+
+    .dataTable .details td, .dataTable .details th {
+        padding: 8px;
+        background: none;
+        border: 0;
+    }
+
+    .select2-container .select2-choice > .select2-chosen {
+        /*display: block;*/
+        overflow: initial;
+    }
+
+    .select2-container--open .select2-dropdown {
+        z-index: 99999999
+    }
+
+    table.dataTable tbody tr.selected td {
+        background-color: #B0BED9;
+    }
+</style>
+}
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <h3 class="page-title">
+            <small></small>
+            نام صفحه
+        </h3>
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="../index.html">
+                    خانه
+                </a>
+                <i class="fa fa-angle-left"></i>
+            </li>
+            <li>
+                <a href="#">
+                    مسیر مورد نظر
+                </a>
+            </li>
+            <li class="pull-right">
+                <div id="dashboard-report-range" class="dashboard-date-range tooltips" data-placement="top" data-original-title="Change dashboard date range">
+                    <i class="fa fa-calendar"></i>
+                    <span>
+                    </span>
+                    <i class="fa fa-angle-down"></i>
+                </div>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div class="modal fade" id="task_definition" tabindex="" aria-hidden="true">
+    <div class="modal-dialog modal-wide">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <button type="button" id="modal-close" class="close"
+                        data-dismiss="modal" aria-hidden="true"></button>
+                <h4 id="sabt_hazine_personnel" class="modal-title">
+                    <i class="fa fa-file-o"></i>
+                    تعریف هدف سازمانی/معاونتی
+                </h4>
+            </div>
+            <!-- BEGIN FORM-->
+            <form id="GoalForm" method="post" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="form-body">
+                        <div id="alert_danger" class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            پر کردن فيلدهاي ستاره دار اجباري مي باشد.
+                        </div>
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">
+                                        نوع
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-10">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select id="type" name="type"
+                                                    class="select2 form-control input-medium">
+                                                <option value=""></option>
+                                                <option value="1">هدف سازمانی</option>
+                                                <option value="2">هدف معاونتی</option>
+                                                @*
+                                                <option value="3">برنامه عملیاتی</option>*@
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label id="" class="control-label col-md-2">
+                                        متن هدف
+                                        <span class="required">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="col-md-10">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+
+                                            <input type="text" name="title" class="form-control" placeholder="متن هدف">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">
+                                        در راستای
+                                        <span class="required">
+
+                                        </span>
+                                    </label>
+                                    <div class="col-md-10">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            <select id="relatedWithTask" name="relatedWithTask" class="select2 form-control input-xlarge"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">
+                                        @*افزودن شاخص
+                                        <span class="required">
+                                            *
+                                        </span>*@
+                                    </label>
+                                    <div class="col-md-10">
+                                        <div class="right">
+                                            @*<i class="fa"></i>
+                                            <input id="guestInput" name="numberOfGuest" type="text" class="input-small form-control">*@
+                                            <a href="#" id="guestInput" class="btn green">
+                                                افزودن شاخص <i class="fa fa-plus"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--/span-->
+                            <!--/span-->
+                        </div>
+                        <div class="row">
+                            <h3 id="guestH3" class="form-section hidden">تعریف شاخص/شاخص ها</h3>
+                            @*<div id="guestTable" class="table-responsive hidden">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                #
+                                            </th>
+                                            <th class="text-center">
+                                                عنوان شاخص
+                                            </th>
+                                            <th class="text-center">
+                                                حد پذیرش
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody"></tbody>
+                                </table>
+                            </div>*@
+                            <div id="guestTable" class="hidden"></div>
+
+
+                            <!--/span-->
+                            <!--/span-->
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <!-- END FORM-->
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn green input-sm input-small" id="GoalBtn">ذخيره</button>
+                    <button type="button" class="btn red input-sm input-small" id="cancel" data-dismiss="modal"><i class="fa fa-times"></i>انصراف</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="portlet blue box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>تعریف هدف سازمانی/معاونتی
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                    <a href="#portlet-config" data-toggle="modal" class="config">
+                    </a>
+                    <a href="javascript:;" class="reload">
+                    </a>
+                    <a href="javascript:;" class="remove">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                <a id="task_definition_btn" class="btn blue btn-sm pull-left" data-toggle="modal"
+                   href="#task_definition">تعریف هدف سازمانی/معاونتی</a>
+
+                <div class="clearfix">
+                </div>
+                <table class="table table-striped table-bordered table-hover" id="taskDefinitionTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                TaskId
+                            </th>
+                            <th>
+                                periodDefinitionId
+                            </th>
+                            <th>
+                                کد دوره
+                            </th>
+                            <th>
+                                نام دوره
+                            </th>
+                            <th>
+                                نام
+                            </th>
+                            <th>
+                                نوع
+                            </th>
+                            <th>
+                                فعال/غیر فعال
+                            </th>
+                            <th>
+                                در راستای
+                            </th>
+                            <th>
+                                افزودن شاخص
+                            </th>
+                            <th>
+                                ویرایش
+                            </th>
+                            <th>
+                                حذف
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Plugins{
+<script src="/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+<script src="/assets/plugins/bootstrap-toastr/toastr.min.js"></script>
+<script src="/assets/scripts/custom/ui-toastr.js"></script>
+    @*
+<script type="text/javascript" src="/assets/plugins/select2/select2.min.js"></script>*@
+<script type="text/javascript" src="/assets/plugins/select2v4/select2/dist/js/select2.min.js"></script>
+<script src="/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+
+<script src="/assets/advancedDataTable/DataTables-1.10.19.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/Buttons-for-DataTables-1.5.2.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/buttons.print.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/buttons.ColVis.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/jsZip.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/pdfmake.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/pdfmake.font.js" type="text/javascript"></script>
+<script src="/assets/advancedDataTable/buttons.html5.js" type="text/javascript"></script>
+<script src="/assets/plugins/dist//jalali-moment.browser.js"></script>
+
+}
+
+@section Scripts{
+<script type="text/html" id="addChild">
+    @*
+    <tr>
+        <td>{0}</td>
+        <td>
+            <div class="form-group">
+                <div class="col-md-12 input-icon right">
+                    <i class="fa"></i>
+                    <input name="Criteria{0}" id="Criteria{0}" type="text" class="form-control input-small netCriteria" placeholder="عنوان شاخص">
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+                <div class="col-md-12 input-icon right">
+                    <i class="fa"></i>
+                    <input name="limitOfAdmission{0}" id="limitOfAdmission{0}" type="text" class="form-control input-small netlimitOfAdmission" placeholder="حد پذیرش">
+                </div>
+            </div>
+        </td>
+    </tr>*@
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label col-md-3">
+                    {0}-
+                    <span class="required">
+
+                    </span>
+                </label>
+                <div class="col-md-9">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <select id="criteriaType{0}" name="criteriaType{0}"
+                                class="select2 select2-2 form-control netCriteriaType">
+                            <option value=""></option>
+                            <option value="1">KRI</option>
+                            <option value="2">KPI</option>
+                            <option value="3">PI</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="form-group">
+                <div class="col-md-12 input-icon right">
+                    <i class="fa"></i>
+                    <input name="Criteria{0}" id="Criteria{0}" type="text" class="form-control netCriteria" placeholder="عنوان شاخص">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="col-md-12 input-icon right">
+                    <i class="fa"></i>
+                    <input name="calculationWay{0}" id="calculationWay{0}" type="text" class="form-control netCalculationWay" placeholder="نحوه محاسبه">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group">
+                <div class="col-md-12 input-icon right">
+                    <i class="fa"></i>
+                    <input name="limitOfAdmission{0}" id="limitOfAdmission{0}" type="text" class="form-control netlimitOfAdmission" placeholder="حد پذیرش">
+                </div>
+            </div>
+        </div>
+        <a href="#" index="{0}" class="btn btn-xs purple removeCriteriaBtnn">
+            <i class="fa fa-times"></i>
+        </a>
+    </div>
+    <hr />
+</script>
+<script>
+    var i = 1;
+    var template = jQuery.validator.format($.trim($("#addChild").html()));
+    $("#guestInput").click(function () {
+        $("#guestH3").removeClass("hidden");
+        $("#guestTable").removeClass("hidden");
+        //$(template(i++)).appendTo("#tableBody");
+        $(template(i++)).appendTo("#guestTable");
+
+        $('.netCriteriaType').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+        $('.netCriteria').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+        $('.netCalculationWay').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+        $('.netlimitOfAdmission').each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "پرکردن این فیلد الزامی می باشد",
+                }
+            });
+        });
+        $('.select2-2').select2({
+            placeholder: "نوع شاخص",
+            allowClear: true
+        });
+    });
+    $('.select2').select2({
+        placeholder: "انتخاب کنید",
+        allowClear: true
+    });
+    $("#GoalForm").submit(function (e) {
+        //var postdata2 = $(this).serializeArray();
+        var form = $('#GoalForm');
+        form.validate({
+            //console.log($('#registerform').serializeArray());
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                type: {
+                    required: true
+                },
+                title: {
+                    required: true
+                }
+            },
+            messages: {
+                type: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                },
+                title: {
+                    required: "پر کردن این فیلد الزامی می باشد"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                //                    success2.hide();
+                //                    error2.show();
+                //                    App.scrollTo(error2, -200);
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                //                    success2.show();
+                //                    error2.hide();
+            }
+        })
+        if (form.valid() == false) {
+            //console.log($('#registerform').serializeArray());
+            return false;
+        } else {
+            //$("#articleSubmit").addClass('disabled');
+            $("#GoalBtn").attr("disabled", "disabled");
+            var btn = $("#GoalBtn");
+            btn.button('loading');
+            var postdata = new FormData(this);
+            postdata.append("counter", i);
+
+            //var postdata = $('#dpcreation').serializeArray();
+
+            $.ajax(
+                {
+                    //data:postdata,
+                    url: "/Task/AddTask",
+                    //url : formURL,
+                    //data: postdata2,
+                    data: postdata,
+                    //data: "firstName=" + $("fn").val(),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: "post",
+
+                    success: function (data, textStatus, jqXHR) {
+                        //if ($.trim(data) === "yess")
+                        //alert("That's one I wanted. Excellent")
+                        //alert(data);
+                        var message = ""
+                        if (data > 0) {
+                            message += "<span>اطلاعات  مورد نظر با موفقیت ثبت گردید</span><br><br>";
+                        }
+                        else if (data == 0) {
+                            message += "<span>اطلاعات  مورد نظر ثبت نگردید..</span><br><br>";
+                        }
+                        toastr.options.timeOut = "15000";
+                        toastr.options.positionClass = "toast-top-center";
+                        toastr.success(message);
+                        $("#GoalForm")[0].reset();
+                        resetFormValidation();
+                        $("#task_definition").modal("hide");
+                        $("#taskDefinitionTable").DataTable().destroy();
+                        show_dataTable();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("erorr00000");
+                        alert(jqXHR);
+                        alert(textStatus);
+                    }
+                }).always(function () {
+                    $("#GoalBtn").button('reset');
+                });
+            //$.getScript('/assets/javascript/articleForm.js', function () {
+            //    ArticleForm.init(postdata);
+            //    $("#articleForm")[0].reset();
+            //});
+            e.preventDefault(e);
+        }
+    });
+
+    $('#task_definition').on('show.bs.modal', function () {
+        $("#GoalForm")[0].reset();
+        resetFormValidation();
+        $("#GoalBtn").trigger("click");
+        resetFormValidation();
+    });
+
+    $('#task_definition_btn').click(function () {
+        $.ajax({
+            type: 'get',
+            url: '/task/TaskList',
+            //data: { roleId: roleId },
+            async: false,
+            success: function (data) {
+                $('#relatedWithTask').empty();
+                $('#relatedWithTask').append("<option></option>");
+
+                $(data).each(function (i, d) {
+                    //$("#parentName").select2("val", d.departmentId);
+                    $('#relatedWithTask').append("<option value='" + d.TaskId + "'>" + d.Title + "</option>");
+                })
+                $('#relatedWithTask').select2({
+                    placeholder: "انتخاب کنید",
+                    allowClear: true
+                });
+            },
+            error: function (status) {
+                alert("Error0000");
+            }
+        })
+    })
+    function resetFormValidation() {
+        $(".select2-chosen").html("");
+        //Begin of reset form validation
+        $(".input-icon .fa-warning").addClass('fa').removeClass('fa-warning');
+        $(".input-icon .fa-check").addClass('fa').removeClass('fa-check');
+        $(".alert-danger").hide();
+        $('.form-group').removeClass('has-error');
+        $('.form-group').removeClass('has-success');
+        //End of reset form validation
+    }
+
+    $('#task_definition').on('hidden.bs.modal', function () {
+        $("#GoalForm")[0].reset();
+        resetFormValidation();
+        //$("#tableBody tr").remove();
+        $("#guestTable div[class=row]").remove()
+        $("#guestTable hr").remove()
+        $("#guestH3").addClass("hidden");
+        $("#guestTable").addClass("hidden");
+        $(".select2").val("").select2();
+        $('.select2').select2({
+            placeholder: "انتخاب کنید",
+            allowClear: true
+        });
+
+        i = 1;
+    });
+    function format(d) {
+        var r;
+        $.ajax({
+            url: "/task/GetCriteriaDetails",
+            type: "POST",
+            data: { taskId: d.TaskId },
+            async: false,
+            dataType: "html",
+            success: function (result) {
+                r = result;
+
+            }
+        });
+        return r;
+    }
+    var dt;
+    function show_dataTable() {
+        dt = $('#taskDefinitionTable').DataTable({
+            dom: 'CT<"clearfix">lBfrtip',
+            buttons: [
+                'copy', 'csv', 'excel',
+                'pdf',
+                {
+                    extend: 'pdfHtml5',
+                    download: 'open',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                'colvis'
+            ],
+            columnDefs: [
+                {
+                    targets: [-1],
+                    visible: false
+                }
+            ],
+            //                "fnInitComplete": function (oSettings, json) {
+            //
+            //                },
+            "fnDrawCallback": function (oSettings) {
+                // Array to track the ids of the details displayed rows
+                var detailRows = [];
+                $('.details-control').on('click', function () {
+                    var tr = $(this).closest('tr');
+                    var row = dt.row(tr);
+                    var idx = $.inArray(tr.attr('id'), detailRows);
+
+                    if (row.child.isShown()) {
+                        tr.removeClass('details');
+                        row.child.hide();
+
+                        // Remove from the 'open' array
+                        detailRows.splice(idx, 1);
+                    }
+                    else {
+                        tr.addClass('details');
+                        row.child(format(row.data())).show();
+
+                        // Add to the 'open' array
+                        if (idx === -1) {
+                            detailRows.push(tr.attr('id'));
+                        }
+                    }
+                });
+                // On each draw, loop over the `detailRows` array and show any child rows
+                dt.on('draw', function () {
+                    $.each(detailRows, function (i, id) {
+                        $('#' + id + ' td.details-control').trigger('click');
+                    });
+                });
+
+                $(".editTaskDefinitionBtn").click(function () {
+                    $('#taskDefinitionTable >tbody>tr').each(function () {
+                        $(this).removeClass('selected');
+                    })
+                    var tr = $(this).closest('tr');
+                    var row = dt.row(tr);
+                    $.ajax(
+                        {
+                            url: "/Task/EditTaskDefinition",
+                            contentType: 'aplication/json;charset=utf-8',
+                            type: "GET",
+                            datatype: 'html',
+                            data: {
+                                periodDefinitionId: row.data().PeriodDefinitoionId
+                                , title: row.data().Title
+                                , type: row.data().Type
+                                , taskId: row.data().TaskId
+                                , parentTaskId: row.data().ParentTaskId
+                            },
+                            success: function (data, textStatus, jqXHR) {
+                                $("#modalPlace").html(data);
+
+                                //if (data.notAllowed) {
+                                //    var message = "";
+                                //    message += "<span> جهت ویرایش وظایف شکسته شده تخصیصی، فقط از آنهایی که نیازآموشی یا سایرارزیاب دارند امکان پذیر می باشد. </span><br><br>" +
+                                //        "<span>وظایفی که فقط خود اختصاص دهنده آن هستید قابل ویرایش می باشد.</span><br><br>";
+                                //    toastr.options.timeOut = "15000";
+                                //    toastr.options.positionClass = "toast-top-center";
+                                //    toastr.info(message);
+                                //}
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert("erorr");
+                                alert(jqXHR);
+                                alert(textStatus);
+                            }
+                        });
+                });
+
+                $(".deleteTaskDefinitionBtn").click(function () {
+                    $('#taskDefinitionTable >tbody>tr').each(function () {
+                        $(this).removeClass('selected');
+                    })
+                    var tr = $(this).closest('tr');
+                    var row = dt.row(tr);
+                    $.ajax(
+                        {
+                            //data:postdata,
+                            url: '/Task/DeleteTaskDefinition',
+                            //url : formURL,
+                            //data: postdata,
+                            contentType: 'aplication/json;charset=utf-8',
+                            type: "GET",
+                            datatype: 'html',
+                            data: {
+                                periodDefinitoionId: row.data().PeriodDefinitoionId
+                                , taskId: row.data().TaskId
+                                , title: row.data().Title
+                            },
+                            //data: JSON.stringify(EvaluationView),
+                            //data: "firstName=" + $("fn").val(),
+                            //cache: false,
+                            //contentType: false,
+                            //processData: false,
+                            //datatype: 'json',
+                            //contentType: 'application/json; charset=utf-8',
+                            //type: 'POST',
+                            success: function (data, textStatus, jqXHR) {
+                                $("#modalPlace").html(data);
+
+                                //if (data.notAllowed) {
+                                //    var message = "";
+                                //    message += "<span>وظایفی که فقط خود اختصاص دهنده آن هستید قابل حذف می باشد.</span><br><br>";
+                                //    toastr.options.timeOut = "15000";
+                                //    toastr.options.positionClass = "toast-top-center";
+                                //    toastr.info(message);
+                                //}
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert("erorr");
+                                alert(jqXHR);
+                                alert(textStatus);
+                            }
+                        });
+                });
+
+                $(".relatedTaskBtn").click(function () {
+                    $('#taskDefinitionTable >tbody>tr').each(function () {
+                        $(this).removeClass('selected');
+                    })
+                    var tr = $(this).closest('tr');
+                    var row = dt.row(tr);
+                    $.ajax(
+                        {
+                            //data:postdata,
+                            url: '/Task/ViewRelatedTask',
+                            //url : formURL,
+                            //data: postdata,
+                            contentType: 'aplication/json;charset=utf-8',
+                            type: "GET",
+                            datatype: 'html',
+                            //data: {
+                            //    periodDefinitoionId: row.data().PeriodDefinitoionId
+                            //    , taskId: row.data().TaskId
+                            //    , title: row.data().Title
+                            //},
+                            //data: JSON.stringify(EvaluationView),
+                            //data: "firstName=" + $("fn").val(),
+                            //cache: false,
+                            //contentType: false,
+                            //processData: false,
+                            //datatype: 'json',
+                            //contentType: 'application/json; charset=utf-8',
+                            //type: 'POST',
+                            success: function (data, textStatus, jqXHR) {
+                                $("#modalPlace").html(data);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert("erorr");
+                                alert(jqXHR);
+                                alert(textStatus);
+                            }
+                        });
+                });
+                $(".addCriteriaBtn").click(function () {
+                    $('#taskDefinitionTable >tbody>tr').each(function () {
+                        $(this).removeClass('selected');
+                    })
+                    var tr = $(this).closest('tr');
+                    var row = dt.row(tr);
+                    $.ajax(
+                        {
+                            //data:postdata,
+                            url: '/Task/AddCriteria',
+                            //url : formURL,
+                            //data: postdata,
+                            contentType: 'aplication/json;charset=utf-8',
+                            type: "GET",
+                            datatype: 'html',
+                            data: {
+                                periodDefinitoionId: row.data().PeriodDefinitoionId
+                                , taskId: row.data().TaskId
+                                , title: row.data().Title
+                            },
+                            //data: JSON.stringify(EvaluationView),
+                            //data: "firstName=" + $("fn").val(),
+                            //cache: false,
+                            //contentType: false,
+                            //processData: false,
+                            //datatype: 'json',
+                            //contentType: 'application/json; charset=utf-8',
+                            //type: 'POST',
+                            success: function (data, textStatus, jqXHR) {
+                                $("#modalPlace").html(data);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert("erorr");
+                                alert(jqXHR);
+                                alert(textStatus);
+                            }
+                        });
+                });
+            },
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            "columnDefs": [
+                { "orderable": false, "targets": [0] }
+            ],
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "/task/GetTaskList",
+                "type": "Post",
+                //"contentType": 'application/json; charset=utf-8',
+                //"cache": false,
+                "dataType": "json"
+            },
+            "aoColumns": [
+                {
+                    "mData": "TaskId", "sClass": "hidden"
+                },
+                {
+                    "mData": "PeriodDefinitoionId", "sClass": "hidden"
+                },
+                {
+                    "mData": "PeriodCode"
+                },
+                {
+                    "mData": "PeriodTitle"
+                },
+                {
+                    "mData": "Title"
+                },
+                {
+                    "mData": "Type",
+                    "render": function (data, type, row, meta) {
+                        if (data == "1") {
+                            data = 'هدف سازمانی'
+                        }
+                        else if (data == "2") {
+                            data = 'هدف معاونتی'
+                        }
+                        //else if (data == "3") {
+                        //    data = 'برنامه عملیاتی'
+                        //}
+                        return data;
+                    }
+                },
+                {
+                    "mData": "IsActive",
+                    "render": function (data, type, row, meta) {
+                        if (data == true) {
+                            data = 'فعال'
+                        }
+                        else if (data == false) {
+                            data = 'غیرفعال'
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "mData": null,
+                    "render": function (data, type, row, meta) {
+                        data = "<a href='#' data-toggle='modal' class='btn relatedTaskBtn'>در راستای</a>";
+                        return data;
+                    }
+                },
+                {
+                    "mData": null,
+                    "render": function (data, type, row, meta) {
+                        data = "<a href='#' data-toggle='modal' class='btn addCriteriaBtn'><i class='fa fa-plus-square'></i></a>";
+                        return data;
+                    }
+                },
+                {
+                    "mData": null,
+                    "render": function (data, type, row, meta) {
+                        data = "<a href='#' data-toggle='modal' class='btn editTaskDefinitionBtn'><i class='fa fa-edit'></i></a>";
+                        return data;
+                    }
+                },
+                {
+                    "mData": null,
+                    "render": function (data, type, row, meta) {
+                        data = "<a href='#' data-toggle='modal' class='btn deleteTaskDefinitionBtn'><i class='fa fa-trash-o'></i></a>";
+                        return data;
+                    }
+                },
+                {
+                    "class": "details-control",
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ""
+                }
+            ]
+        });
+
+    }
+
+    show_dataTable();
+    $("#taskDefinitionTable tbody").on('click', 'tr', function () {
+        $(this).toggleClass('selected');
+    });
+
+    $('#guestTable').on('click', '.removeCriteriaBtnn', function () {
+        $(this).closest('div.row').next().remove();
+        $(this).closest('div.row').remove();
+    })
+
+    function CriteriaDeletion(criteriaId, title,periodDefinitionId) {
+        $.ajax({
+            type: 'get',
+            url: '/Task/DeleteCriteria',
+            data: {
+                CriteriaId: criteriaId,
+                Title: title,
+                PeriodDefinitionId: periodDefinitionId
+            },
+            success: function (data) {
+                $("#modalPlace").html(data);
+            },
+            error: function (status) {
+                alert("Error");
+            }
+        })
+    }
+</script>
+}
